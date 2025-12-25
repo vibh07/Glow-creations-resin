@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
                     
                     <!-- Left: Logo -->
-                    <a href="index.html" class="flex items-center gap-2 group text-decoration-none">
+                    <a href="home.html" class="flex items-center gap-2 group text-decoration-none">
                         <div class="w-9 h-9 rounded-full bg-[#74b814] flex items-center justify-center text-white font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
                             G
                         </div>
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="material-symbols-outlined text-[22px]">search</span>
                         </button>
                         
-                        <!-- 2. Wishlist Button (NEW ADDED) -->
+                        <!-- 2. Wishlist Button -->
                         <a href="wishlist.html" class="w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:text-red-500 hover:scale-105 transition-all shadow-sm group">
                             <span class="material-symbols-outlined text-[22px] group-hover:filled transition-all">favorite</span>
                         </a>
@@ -71,7 +71,6 @@ function initializeSearch() {
 
     if (!searchBtn || !overlay) return;
 
-    // Open Search
     searchBtn.addEventListener('click', () => {
         overlay.classList.remove('hidden');
         setTimeout(() => {
@@ -81,7 +80,6 @@ function initializeSearch() {
         }, 10);
     });
 
-    // Close Search Logic
     const closeSearch = () => {
         overlay.classList.add('opacity-0');
         container.classList.add('-translate-y-full');
@@ -92,65 +90,37 @@ function initializeSearch() {
     };
 
     if(closeBtn) closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
     
-    // Close on clicking outside
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeSearch();
-    });
-
-    // Enter Key se Search
     if(input) {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const query = input.value.trim();
-                if (query) {
-                    window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
-                }
+                if (query) window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
             }
         });
     }
 }
+
 // --- STATE MANAGEMENT ---
 let cart = JSON.parse(localStorage.getItem('glowCart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('glowWishlist')) || [];
 let orders = JSON.parse(localStorage.getItem('glowOrders')) || [];
 
 // --- CATEGORY DATA ---
-// --- CATEGORY DATA (Updated with Real Photos & New Order) ---
 const categoryData = [
-    {         name: "Rings", 
-        image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=ring"     },
-    {         name: "Pendants", 
-        image: "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=pendant"     },
-    {         name: "Bracelets", 
-        image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=bracelet"     },
-    {         name: "Bangles", 
-        image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=bangle"     },
-    {         name: "Keychains", 
-        image: "https://images.unsplash.com/photo-1588444650733-d0767b753fc8?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=keychain"     },
-    {         name: "Mangalsutra", 
-        image: "https://images.unsplash.com/photo-1610663428236-d44a2c51010c?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=mangalsutra"
-    },    {         name: "Keepsakes", 
-        image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=keepsake"     },
-    {         name: "Frames", 
-        image: "https://images.unsplash.com/photo-1583095117917-06df9a1415df?auto=format&fit=crop&q=80&w=200", 
-        link: "shop.html?cat=frame"     }
+    { name: "Rings", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=ring" },
+    { name: "Pendants", image: "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=pendant" },
+    { name: "Bracelets", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=bracelet" },
+    { name: "Bangles", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=bangle" },
+    { name: "Keychains", image: "https://images.unsplash.com/photo-1588444650733-d0767b753fc8?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=keychain" },
+    { name: "Mangalsutra", image: "https://images.unsplash.com/photo-1610663428236-d44a2c51010c?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=mangalsutra" },
+    { name: "Keepsakes", image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=keepsake" },
+    { name: "Frames", image: "https://images.unsplash.com/photo-1583095117917-06df9a1415df?auto=format&fit=crop&q=80&w=200", link: "shop.html?cat=frame" }
 ];
 
 // --- UTILITY FUNCTIONS ---
-const saveCart = () => { 
-    localStorage.setItem('glowCart', JSON.stringify(cart)); 
-    updateCartCount(); 
-    // Render immediately to ensure target exists for animation
-    renderFloatingCartUI();
-};
+const saveCart = () => { localStorage.setItem('glowCart', JSON.stringify(cart)); updateCartCount(); renderFloatingCartUI(); };
 const saveWishlist = () => { localStorage.setItem('glowWishlist', JSON.stringify(wishlist)); };
 const saveOrders = () => { localStorage.setItem('glowOrders', JSON.stringify(orders)); };
 
@@ -162,20 +132,15 @@ const updateCartCount = () => {
 
 // --- ANIMATION ENGINE ---
 const animateFlyToCart = (startElement) => {
-    // 1. Find the Image source (Product Image)
     const card = startElement.closest('.group') || startElement.closest('.bg-white') || startElement.closest('.relative');
     const sourceImg = card ? card.querySelector('img') : null;
-    
-    // 2. Find the Target (The Image Box inside Floating Cart)
     const targetImgBox = document.getElementById('floating-cart-img-target');
 
     if (sourceImg && targetImgBox) {
-        // Get positions
         const startRect = sourceImg.getBoundingClientRect();
         const endRect = targetImgBox.getBoundingClientRect();
-
-        // Create the flying image clone
         const flyingImg = sourceImg.cloneNode();
+        
         flyingImg.style.position = 'fixed';
         flyingImg.style.left = `${startRect.left}px`;
         flyingImg.style.top = `${startRect.top}px`;
@@ -183,27 +148,23 @@ const animateFlyToCart = (startElement) => {
         flyingImg.style.height = `${startRect.height}px`;
         flyingImg.style.borderRadius = '1rem';
         flyingImg.style.zIndex = '9999'; 
-        flyingImg.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)'; // Snappy smooth
+        flyingImg.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
         flyingImg.style.opacity = '1';
         flyingImg.style.pointerEvents = 'none';
-        flyingImg.style.boxShadow = '0 10px 25px -5px rgba(0,0,0,0.3)'; // Shadow for depth
+        flyingImg.style.boxShadow = '0 10px 25px -5px rgba(0,0,0,0.3)';
         
         document.body.appendChild(flyingImg);
-
-        // Trigger Animation (Next Frame)
         requestAnimationFrame(() => {
             flyingImg.style.left = `${endRect.left}px`;
             flyingImg.style.top = `${endRect.top}px`;
-            flyingImg.style.width = `${endRect.width}px`; // Match target size
+            flyingImg.style.width = `${endRect.width}px`;
             flyingImg.style.height = `${endRect.height}px`;
-            flyingImg.style.borderRadius = '0.5rem'; // Match target radius
+            flyingImg.style.borderRadius = '0.5rem';
             flyingImg.style.opacity = '0.8';
         });
 
-        // Cleanup after animation finishes
         setTimeout(() => {
             flyingImg.remove();
-            // Scale effect on the target image box
             targetImgBox.classList.add('animate-pop');
             setTimeout(() => targetImgBox.classList.remove('animate-pop'), 200);
         }, 600);
@@ -212,7 +173,6 @@ const animateFlyToCart = (startElement) => {
 
 // --- ACTION FUNCTIONS ---
 window.addToCart = (productId, quantity = 1) => {
-    // Capture the click event to find the button
     const clickEvent = window.event;
     const clickedElement = clickEvent ? clickEvent.target : null;
 
@@ -223,13 +183,8 @@ window.addToCart = (productId, quantity = 1) => {
     const existingItem = cart.find(item => item.id === parseInt(productId));
     if (existingItem) { existingItem.quantity += quantity; } else { cart.push({ ...product, quantity: quantity }); }
     
-    saveCart(); // This renders the floating UI
-    
-    // Trigger Animation if element found
-    if (clickedElement) {
-        animateFlyToCart(clickedElement);
-    }
-
+    saveCart();
+    if (clickedElement) animateFlyToCart(clickedElement);
     if(navigator.vibrate) navigator.vibrate(50);
     if (window.location.pathname.includes('cart.html')) renderCart();
 };
@@ -274,13 +229,12 @@ window.processCheckout = () => {
 };
 
 
-// --- BLINKIT STYLE FLOATING CART UI ---
+// --- FLOATING CART UI ---
 const renderFloatingCartUI = () => {
     let container = document.getElementById('floating-ui-container');
     if (!container) {
         container = document.createElement('div');
         container.id = 'floating-ui-container';
-        // Bottom padding increased to 115px for gap
         container.className = 'fixed bottom-[115px] left-0 right-0 z-40 px-4 flex flex-col gap-2 pointer-events-none transition-all duration-300';
         document.body.appendChild(container);
     }
@@ -298,61 +252,33 @@ const renderFloatingCartUI = () => {
     }
 
     let html = '';
-
-    // 1. Free Delivery Pill
     if (isFreeDelivery) {
         html += `
         <div class="pointer-events-auto mx-auto animate-slide-up-fade">
             <div class="bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-md border border-green-500/30 rounded-full px-4 py-2 shadow-lg flex items-center gap-2">
-                <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
-                    <span class="material-symbols-outlined text-white text-[14px] font-bold">check</span>
-                </div>
-                <div>
-                    <p class="text-xs font-bold text-[#151b0e] dark:text-white leading-none">Yay! You got FREE Delivery</p>
-                    <p class="text-[10px] text-gray-500 leading-none mt-0.5">No coupon needed</p>
-                </div>
-                <button onclick="document.getElementById('floating-ui-container').firstElementChild.remove()" class="ml-2 text-gray-400 hover:text-gray-600">
-                    <span class="material-symbols-outlined text-[16px]">close</span>
-                </button>
+                <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[14px] font-bold">check</span></div>
+                <div><p class="text-xs font-bold text-[#151b0e] dark:text-white leading-none">Yay! You got FREE Delivery</p><p class="text-[10px] text-gray-500 leading-none mt-0.5">No coupon needed</p></div>
+                <button onclick="document.getElementById('floating-ui-container').firstElementChild.remove()" class="ml-2 text-gray-400 hover:text-gray-600"><span class="material-symbols-outlined text-[16px]">close</span></button>
             </div>
         </div>`;
     } else {
         html += `
         <div class="pointer-events-auto mx-auto animate-slide-up-fade">
             <div class="bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full px-4 py-2 shadow-lg flex items-center gap-2">
-                <div class="w-5 h-5 rounded-full bg-gray-200 dark:bg-white/20 flex items-center justify-center shrink-0">
-                    <span class="material-symbols-outlined text-gray-500 dark:text-white text-[14px]">local_shipping</span>
-                </div>
+                <div class="w-5 h-5 rounded-full bg-gray-200 dark:bg-white/20 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-gray-500 dark:text-white text-[14px]">local_shipping</span></div>
                 <p class="text-xs font-bold text-[#151b0e] dark:text-white">Add <span class="text-primary">₹${amountNeeded}</span> for Free Delivery</p>
             </div>
         </div>`;
     }
 
-    // 2. Floating Cart Bar
     html += `
     <div onclick="window.location.href='cart.html'" class="pointer-events-auto mt-1 cursor-pointer animate-bounce-soft">
         <div class="bg-[#151b0e] dark:bg-white text-white dark:text-[#151b0e] rounded-2xl p-3 shadow-xl flex items-center justify-between relative overflow-hidden group">
-            
-            <!-- Left Side: Image & Info -->
             <div class="flex items-center gap-3 z-10">
-                <!-- TARGET FOR ANIMATION (Left Image Box) -->
-                <div id="floating-cart-img-target" class="w-10 h-10 rounded-lg bg-white/10 dark:bg-black/10 overflow-hidden border border-white/10 relative transition-transform">
-                    <img src="${lastItem ? lastItem.image : ''}" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xs font-medium opacity-80">${totalItems} Items</span>
-                    <span class="text-sm font-bold">₹${subtotal}</span>
-                </div>
+                <div id="floating-cart-img-target" class="w-10 h-10 rounded-lg bg-white/10 dark:bg-black/10 overflow-hidden border border-white/10 relative transition-transform"><img src="${lastItem ? lastItem.image : ''}" class="w-full h-full object-cover"></div>
+                <div class="flex flex-col"><span class="text-xs font-medium opacity-80">${totalItems} Items</span><span class="text-sm font-bold">₹${subtotal}</span></div>
             </div>
-
-            <!-- Right Side: View Cart -->
-            <div class="flex items-center gap-2 z-10">
-                <span class="text-sm font-bold">View Cart</span>
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                   <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
-                </div>
-            </div>
-
+            <div class="flex items-center gap-2 z-10"><span class="text-sm font-bold">View Cart</span><div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">shopping_bag</span></div></div>
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
         </div>
     </div>
@@ -363,19 +289,16 @@ const renderFloatingCartUI = () => {
         .animate-slide-up-fade { animation: slideUpFade 0.3s ease-out forwards; }
         .animate-bounce-soft { animation: bounceSoft 0.2s ease-in-out; }
         .animate-pop { animation: popScale 0.2s ease-out; }
-    </style>
-    `;
-
+    </style>`;
     container.innerHTML = html;
 };
 
 
-// --- BOTTOM NAVIGATION & MODAL RENDERER ---
+// --- BOTTOM NAVIGATION & MODAL ---
 const toggleCategoryModal = (show) => {
     const modal = document.getElementById('category-modal');
     const overlay = document.getElementById('cat-overlay');
     const sheet = document.getElementById('cat-sheet');
-    
     if (show) {
         modal.classList.remove('hidden');
         setTimeout(() => { overlay.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
@@ -387,70 +310,33 @@ const toggleCategoryModal = (show) => {
 
 const renderCategoryModal = () => {
     if(document.getElementById('category-modal')) return;
-    
-    // Exact colors from your reference image
     const greenBannerBg = "#EDF7E0"; 
     const greenIconBg = "#D4E8B8";
     
     const modalHTML = `
     <div id="category-modal" class="hidden relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
         <div id="cat-overlay" onclick="toggleCategoryModal(false)" class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0 ease-in-out"></div>
-        
-        <!-- Bottom Sheet Container -->
         <div id="cat-sheet" class="fixed bottom-0 left-0 right-0 z-[101] w-full bg-white dark:bg-[#1a2111] rounded-t-[2.5rem] shadow-2xl transform translate-y-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) max-h-[90vh] overflow-hidden flex flex-col">
-            
-            <!-- Handle Bar -->
-            <div class="w-full flex justify-center pt-3 pb-1" onclick="toggleCategoryModal(false)">
-                <div class="w-12 h-1.5 rounded-full bg-gray-200 dark:bg-white/20"></div>
-            </div>
-
-            <!-- Content Scrollable Area -->
+            <div class="w-full flex justify-center pt-3 pb-1" onclick="toggleCategoryModal(false)"><div class="w-12 h-1.5 rounded-full bg-gray-200 dark:bg-white/20"></div></div>
             <div class="px-6 pb-8 overflow-y-auto no-scrollbar">
-                
-                <!-- Header -->
                 <div class="flex items-start justify-between mb-8 mt-4">
-                    <div>
-                        <h3 class="text-4xl font-serif font-bold text-[#151b0e] dark:text-white tracking-tight mb-1">Explore</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Select a category to view</p>
-                    </div>
-                    <!-- Close Button -->
-                    <button onclick="toggleCategoryModal(false)" class="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-white/10 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors">
-                        <span class="material-symbols-outlined text-[20px] font-bold">close</span>
-                    </button>
+                    <div><h3 class="text-4xl font-serif font-bold text-[#151b0e] dark:text-white tracking-tight mb-1">Explore</h3><p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Select a category to view</p></div>
+                    <button onclick="toggleCategoryModal(false)" class="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-white/10 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition-colors"><span class="material-symbols-outlined text-[20px] font-bold">close</span></button>
                 </div>
-
-                <!-- Grid Layout (4 Columns) -->
                 <div class="grid grid-cols-4 gap-x-4 gap-y-6">
                     ${categoryData.map((cat, index) => `
                     <a href="${cat.link}" class="group flex flex-col items-center gap-2 animate-slide-up" style="animation-delay: ${index * 30}ms">
-                        <!-- Image Container (Squircle) -->
-                        <div class="relative w-[19vw] h-[19vw] max-w-[80px] max-h-[80px] sm:w-20 sm:h-20 rounded-[1.2rem] overflow-hidden bg-black shadow-sm group-hover:shadow-md transition-all duration-300 group-active:scale-95">
-                            <img src="${cat.image}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" alt="${cat.name}">
-                        </div>
-                        <!-- Label -->
+                        <div class="relative w-[19vw] h-[19vw] max-w-[80px] max-h-[80px] sm:w-20 sm:h-20 rounded-[1.2rem] overflow-hidden bg-black shadow-sm group-hover:shadow-md transition-all duration-300 group-active:scale-95"><img src="${cat.image}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" alt="${cat.name}"></div>
                         <span class="text-[11px] sm:text-xs font-bold text-center text-gray-600 dark:text-gray-300 tracking-wide group-hover:text-[#151b0e] dark:group-hover:text-white transition-colors">${cat.name}</span>
                     </a>`).join('')}
                 </div>
-
-                <!-- Green "Custom Orders" Banner -->
                 <div class="mt-8 rounded-2xl p-4 flex items-center justify-between cursor-pointer group hover:opacity-90 transition-opacity" style="background-color: ${greenBannerBg};">
                    <div class="flex items-center gap-4">
-                      <!-- Diamond Icon Box -->
-                      <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color: ${greenIconBg};">
-                         <span class="material-symbols-outlined filled text-[#5e9610] text-[22px]">diamond</span>
-                      </div>
-                      <!-- Text -->
-                      <div>
-                         <h4 class="font-bold text-[#151b0e] text-sm leading-tight">Custom Orders?</h4>
-                         <p class="text-[10px] text-gray-600 font-medium mt-0.5 leading-tight">We create personalized resin art just for you.</p>
-                      </div>
+                      <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color: ${greenIconBg};"><span class="material-symbols-outlined filled text-[#5e9610] text-[22px]">diamond</span></div>
+                      <div><h4 class="font-bold text-[#151b0e] text-sm leading-tight">Custom Orders?</h4><p class="text-[10px] text-gray-600 font-medium mt-0.5 leading-tight">We create personalized resin art just for you.</p></div>
                    </div>
-                   <!-- Arrow -->
                    <span class="material-symbols-outlined text-gray-400 group-hover:translate-x-1 transition-transform text-sm">arrow_forward_ios</span>
                 </div>
-                
-                <!-- Extra Space for Bottom Nav -->
                 <div class="h-20"></div>
             </div>
         </div>
@@ -461,7 +347,6 @@ const renderCategoryModal = () => {
         .no-scrollbar::-webkit-scrollbar { display: none; } 
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>`;
-    
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 };
 
@@ -469,18 +354,18 @@ const renderBottomNav = () => {
     const placeholder = document.getElementById('bottom-nav-placeholder');
     if (!placeholder) return;
     renderCategoryModal();
-    renderFloatingCartUI(); // Init Cart UI
+    renderFloatingCartUI();
 
     const path = window.location.pathname;
     const page = path.split("/").pop() || "home.html";
     const navItems = [
-        { name: "Home", icon: "home", action: () => window.location.href = 'home.html', isActive: ["home.html", "index.html"].some(p => page.includes(p)) },
+        { name: "Home", icon: "home", action: () => window.location.href = 'home.html', isActive: ["home.html", "home.html"].some(p => page.includes(p)) },
         { name: "Shop", icon: "storefront", action: () => window.location.href = 'shop.html', isActive: ["shop.html", "product.html", "cart.html", "wishlist.html"].some(p => page.includes(p)) },
         { name: "Category", icon: "category", action: () => toggleCategoryModal(true), isActive: false },
         { name: "My Order", icon: "inventory_2", action: () => window.location.href = 'orders.html', isActive: ["orders.html"].some(p => page.includes(p)) }
     ];
 
-    let navHTML = `<div class="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 pb-safe"><div class="w-full max-w-md bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-2xl shadow-black/10 p-2 flex items-center justify-between gap-1">`;
+    let navHTML = `<div class="fixed bottom-4 left-0 right-0 z-[50] flex justify-center px-4 pb-safe pointer-events-none"><div class="pointer-events-auto w-full max-w-md bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-2xl shadow-black/10 p-2 flex items-center justify-between gap-1">`;
     navItems.forEach((item, index) => {
         if (item.isActive) {
             navHTML += `<button id="nav-btn-${index}" class="flex flex-col items-center justify-center w-20 py-2 rounded-[1.5rem] bg-primary/10 text-primary transition-all shadow-sm"><span class="material-symbols-outlined filled text-[24px]">${item.icon}</span><span class="text-[10px] font-extrabold tracking-wide mt-0.5">${item.name}</span></button>`;
@@ -494,7 +379,7 @@ const renderBottomNav = () => {
 };
 
 
-// --- RENDER FUNCTIONS ---
+// --- RENDER FUNCTIONS FOR PAGES ---
 const renderShop = () => {
     const container = document.getElementById('shop-grid');
     if (!container) return;
@@ -557,16 +442,133 @@ const renderOrders = () => {
     container.innerHTML = orders.map(order => `<div class="bg-white dark:bg-white/5 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 mb-4"><div class="flex justify-between items-start mb-3"><div class="flex gap-3"><div class="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0"><img src="${order.items[0].image}" class="w-full h-full object-cover"></div><div><span class="px-2 py-0.5 rounded text-[10px] font-bold ${order.status === 'Processing' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-700'} uppercase tracking-wide">${order.status}</span><h4 class="font-bold text-sm mt-1">${order.items[0].name} ${order.items.length > 1 ? `<span class="text-gray-400 font-normal">+${order.items.length - 1} more</span>` : ''}</h4><p class="text-xs text-gray-500">Order #${order.id} • ${order.date}</p></div></div><span class="font-bold text-primary">₹${order.total}</span></div><div class="pt-3 border-t border-gray-100 dark:border-white/5 flex gap-2"><button class="flex-1 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-bold hover:bg-gray-50 dark:hover:bg-white/5">Track Order</button></div></div>`).join('');
 };
 
-// --- INIT ---
+
+// --- FOOTER RENDERER (NEW ADDED) ---
+// --- FOOTER RENDERER (Mobile Optimized & Fixed Icons) ---
+const renderFooter = () => {
+    if (document.getElementById('universal-footer')) return;
+    
+    // Fixed Social Icons (SVG Paths defined properly)
+    const generateSocialIcon = (platform) => {
+        let path = '';
+        // Solid fill icons for better visibility
+        if(platform === 'facebook') path = `<path fill="currentColor" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>`;
+        if(platform === 'instagram') path = `<path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.846-10.405a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/>`;
+        if(platform === 'twitter') path = `<path fill="currentColor" d="M22.162 5.656a8.384 8.384 0 0 1-2.402.658 4.196 4.196 0 0 0 1.839-2.315 8.386 8.386 0 0 1-2.655 1.015 4.182 4.182 0 0 0-7.126 3.814 11.874 11.874 0 0 1-8.62-4.37 4.168 4.168 0 0 0-.566 2.103c0 1.45.738 2.731 1.86 3.481a4.168 4.168 0 0 1-1.89-.523v.052a4.185 4.185 0 0 0 3.355 4.101 4.21 4.21 0 0 1-1.89.072A4.185 4.185 0 0 0 7.97 16.65a8.394 8.394 0 0 1-6.191 1.732 11.83 11.83 0 0 0 6.41 1.88c7.693 0 11.9-6.373 11.9-11.9 0-.18-.005-.362-.013-.54a8.496 8.496 0 0 0 2.087-2.165z"/>`;
+        if(platform === 'pinterest') path = `<path fill="currentColor" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.399.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.173 0 7.41 2.967 7.41 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/>`;
+        
+        return `<a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-[#74b814] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                ${path}
+            </svg>
+        </a>`;
+    };
+
+    const footerHTML = `
+    <!-- PB-36 ensures content is not hidden behind floating bottom nav -->
+    <footer id="universal-footer" class="bg-[#f9fafb] dark:bg-[#0d1108] border-t border-gray-200 dark:border-white/5 pt-12 pb-36 md:pb-10 text-[#151b0e] dark:text-gray-300 font-display transition-colors mt-auto">
+        <div class="max-w-7xl mx-auto px-5">
+            
+            <!-- Mobile Optimized Grid: 
+                 - Brand Info full width
+                 - Shop & Help side-by-side (2 cols) on mobile
+                 - Company full width or part of grid
+            -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10 mb-10">
+                
+                <!-- 1. Brand Section (Spans 2 cols on mobile for better focus) -->
+                <div class="col-span-2 md:col-span-1 space-y-4">
+                    <a href="home.html" class="flex items-center gap-2 group text-decoration-none">
+                        <div class="w-9 h-9 rounded-full bg-[#74b814] flex items-center justify-center text-white font-serif font-bold text-lg shadow-sm">G</div>
+                        <h2 class="text-2xl font-serif font-bold tracking-tight text-[#151b0e] dark:text-white">
+                            Glow<span class="text-[#74b814]">.</span>
+                        </h2>
+                    </a>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs">
+                        Handcrafted resin art made with love. Preserving memories in crystal clear beauty.
+                    </p>
+                    <!-- Icons Row -->
+                    <div class="flex gap-3 mt-4">
+                        ${generateSocialIcon('instagram')}
+                        ${generateSocialIcon('facebook')}
+                        ${generateSocialIcon('twitter')}
+                    </div>
+                </div>
+
+                <!-- 2. Shop Links -->
+                <div class="col-span-1">
+                    <h3 class="font-bold text-[#151b0e] dark:text-white mb-4 text-base">Shop</h3>
+                    <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <li><a href="shop.html?cat=ring" class="hover:text-[#74b814] transition-colors block py-1">Rings</a></li>
+                        <li><a href="shop.html?cat=pendant" class="hover:text-[#74b814] transition-colors block py-1">Pendants</a></li>
+                        <li><a href="shop.html?cat=keychain" class="hover:text-[#74b814] transition-colors block py-1">Keychains</a></li>
+                        <li><a href="shop.html?cat=frame" class="hover:text-[#74b814] transition-colors block py-1">Frames</a></li>
+                    </ul>
+                </div>
+
+                <!-- 3. Help Links -->
+                <div class="col-span-1">
+                    <h3 class="font-bold text-[#151b0e] dark:text-white mb-4 text-base">Support</h3>
+                    <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-[#74b814] transition-colors block py-1">Shipping</a></li>
+                        <li><a href="#" class="hover:text-[#74b814] transition-colors block py-1">Returns</a></li>
+                        <li><a href="#" class="hover:text-[#74b814] transition-colors block py-1">Track Order</a></li>
+                        <li><a href="#" class="hover:text-[#74b814] transition-colors block py-1">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- 4. Company/Contact (Spans 2 cols on mobile to fill gap) -->
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-bold text-[#151b0e] dark:text-white mb-4 text-base">Contact</h3>
+                    <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">mail</span>
+                            <a href="mailto:hello@glow.com" class="hover:text-[#74b814] transition-colors">hello@glow.com</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">call</span>
+                            <span>+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">location_on</span>
+                            <span>Mumbai, India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="border-t border-gray-200 dark:border-white/10 my-8"></div>
+
+            <!-- Bottom Copyright -->
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 pb-4 text-center md:text-left">
+                <p>&copy; 2025 Glow Creations.</p>
+                <div class="flex gap-6 justify-center">
+                    <a href="#" class="hover:text-[#74b814] transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-[#74b814] transition-colors">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>`;
+
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
+};
+
+// --- INIT (INITIALIZATION) ---
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
+    
+    // Header & Search Init runs at top of file automatically due to event listener
     updateCartCount();
     renderBottomNav(); 
+    renderFooter(); // Footer Injection Call
+
     if (path.includes('shop.html')) renderShop();
     if (path.includes('product.html')) renderProductDetail();
     if (path.includes('cart.html')) renderCart();
     if (path.includes('wishlist.html')) renderWishlist();
     if (path.includes('orders.html')) renderOrders();
+
     const checkoutBtn = document.getElementById('checkout-btn');
     if(checkoutBtn) checkoutBtn.addEventListener('click', processCheckout);
 });
