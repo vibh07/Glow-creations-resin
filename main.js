@@ -1,3 +1,10 @@
+// Add this style to hide scrollbar explicitly
+const style = document.createElement('style');
+style.innerHTML = `
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+`;
+document.head.appendChild(style);
 document.addEventListener("DOMContentLoaded", () => {
     
     // 1. Header Injection
@@ -380,21 +387,151 @@ const renderBottomNav = () => {
 
 
 // --- RENDER FUNCTIONS FOR PAGES ---
+// --- 1. RENDER TABS (Modified to run only once properly) ---
+const renderShopTabs = () => {
+    const container = document.getElementById('category-tabs-container');
+    if (!container) return;
+
+    // Categories List
+    const tabs = ["All", "Rings", "Pendants", "Bracelets", "Bangles", "Keychains", "Mangalsutra", "Keepsakes", "Frames"];
+    
+    // Get current category from URL
+    const params = new URLSearchParams(window.location.search);
+    const currentCat = params.get('cat') || "All";
+
+    // Styles
+    const activeClass = "bg-[#74b814] text-white border-[#74b814] font-bold shadow-md";
+    const inactiveClass = "bg-white dark:bg-white/5 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-[#74b814] hover:text-[#74b814]";
+
+    // Generate HTML
+    container.innerHTML = `
+        <div id="tabs-scroll-area" class="flex overflow-x-auto hide-scrollbar gap-3 px-4 py-2 select-none">
+            ${tabs.map(tab => {
+                // Check Active State
+                const isActive = currentCat.toLowerCase() === 'all' 
+                    ? tab === 'All' 
+                    : tab.toLowerCase().includes(currentCat.toLowerCase());
+
+                return `
+                <button 
+                    id="tab-btn-${tab}"
+                    onclick="filterShop('${tab}')"
+                    class="tab-button px-5 py-2 rounded-full border text-sm transition-all duration-300 whitespace-nowrap snap-center ${isActive ? activeClass : inactiveClass}">
+                    ${tab}
+                </button>`;
+            }).join('')}
+        </div>
+    `;
+
+    // Initial Scroll Position Fix (Page Load par active tab dikhane ke liye)
+    setTimeout(() => {
+        const activeBtn = document.querySelector(`#tabs-scroll-area .bg-\\[\\#74b814\\]`);
+        if(activeBtn) {
+            activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+        }
+    }, 100);
+};
+
+// --- 2. HANDLE CLICK (Smart Update - No Jump) ---
+window.filterShop = (category) => {
+    // 1. Update URL
+    const newUrl = new URL(window.location);
+    if (category === 'All') {
+        newUrl.searchParams.delete('cat');
+    } else {
+        let param = category.toLowerCase();
+        if(param.endsWith('s')) param = param.slice(0, -1); 
+        newUrl.searchParams.set('cat', param);
+    }
+    window.history.pushState({}, '', newUrl);
+
+    // 2. Update UI Classes (WITHOUT Re-rendering HTML)
+    const allBtns = document.querySelectorAll('.tab-button');
+    const activeClass = ["bg-[#74b814]", "text-white", "border-[#74b814]", "font-bold", "shadow-md"];
+    const inactiveClass = ["bg-white", "dark:bg-white/5", "text-gray-600", "dark:text-gray-300", "border-gray-200", "dark:border-white/10"];
+
+    allBtns.forEach(btn => {
+        // Reset sabhi buttons ko inactive state me
+        btn.classList.remove(...activeClass);
+        btn.classList.add(...inactiveClass);
+        
+        // Agar ye wahi button hai jo click hua, to active classes lagao
+        if (btn.innerText.trim() === category) {
+            btn.classList.remove(...inactiveClass);
+            btn.classList.add(...activeClass);
+            
+            // 3. Smooth Scroll to Center (Jadoo Yahan Hai ✨)
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    });
+
+    renderShopTabs();
+    renderShop();
+};
+
+// --- 3. UPDATED FUNCTION: RENDER SHOP GRID ---
+// --- UPDATED FUNCTION: RENDER SHOP GRID ---
 const renderShop = () => {
     const container = document.getElementById('shop-grid');
     if (!container) return;
+
     const params = new URLSearchParams(window.location.search);
-    const catFilter = params.get('cat');
+    const catFilter = params.get('cat'); // e.g., "ring"
+
     let displayProducts = products;
+
+    // 1. Target the specific Title ID now (Logo ko touch nahi karega)
+    const pageTitle = document.getElementById('shop-page-title');
+
+    // Filter Logic
     if (catFilter) {
-        displayProducts = products.filter(p => p.category.toLowerCase().replace(/\s/g, '').includes(catFilter));
-        const title = document.querySelector('h1');
-        if(title) title.innerText = catFilter.charAt(0).toUpperCase() + catFilter.slice(1);
+        displayProducts = products.filter(p => 
+            p.category.toLowerCase().includes(catFilter.toLowerCase()) || 
+            p.name.toLowerCase().includes(catFilter.toLowerCase())
+        );
+        
+        // Sirf 2nd Header ka text change hoga
+        if(pageTitle) pageTitle.innerText = catFilter.charAt(0).toUpperCase() + catFilter.slice(1) + " Collection";
+    } else {
+        // Default Text
+        if(pageTitle) pageTitle.innerText = "Our Collection";
     }
-    if(displayProducts.length === 0) { container.innerHTML = `<div class="col-span-full text-center py-10">No products found in this category.</div>`; return; }
+
+    // Empty State
+    if(displayProducts.length === 0) { 
+        container.innerHTML = `
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+                <span class="material-symbols-outlined text-6xl mb-2">search_off</span>
+                <p>No products found in this category.</p>
+                <button onclick="filterShop('All')" class="mt-4 text-[#74b814] font-bold underline">View All</button>
+            </div>`; 
+        return; 
+    }
+
+    // Render Cards (Wahi purana logic)
     container.innerHTML = displayProducts.map(product => {
         const isSaved = wishlist.includes(product.id);
-        return `<div class="bg-white dark:bg-white/5 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 relative group transition-transform hover:-translate-y-1 duration-300"><button onclick="toggleWishlist(${product.id})" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm ${isSaved ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors shadow-sm"><span class="material-symbols-outlined text-[18px] ${isSaved ? 'filled' : ''}">favorite</span></button><a href="product.html?id=${product.id}" class="block aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3 relative"><img src="${product.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></a><div class="px-1"><h3 class="text-sm font-bold text-[#151b0e] dark:text-white leading-tight mb-1 truncate">${product.name}</h3><div class="flex items-center justify-between mt-2"><div class="flex flex-col"><span class="text-xs text-gray-400 line-through">₹${product.originalPrice}</span><span class="text-base font-extrabold text-primary">₹${product.price}</span></div><button onclick="addToCart(${product.id})" class="w-8 h-8 rounded-lg bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-110 transition-transform shadow-md"><span class="material-symbols-outlined text-[20px]">add</span></button></div></div></div>`;
+        return `
+        <div class="bg-white dark:bg-white/5 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 relative group transition-transform hover:-translate-y-1 duration-300">
+            <button onclick="toggleWishlist(${product.id})" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm ${isSaved ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[18px] ${isSaved ? 'filled' : ''}">favorite</span>
+            </button>
+            <a href="product.html?id=${product.id}" class="block aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3 relative">
+                <img src="${product.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            </a>
+            <div class="px-1">
+                <h3 class="text-sm font-bold text-[#151b0e] dark:text-white leading-tight mb-1 truncate">${product.name}</h3>
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 line-through">₹${product.originalPrice}</span>
+                        <span class="text-base font-extrabold text-[#74b814]">₹${product.price}</span>
+                    </div>
+                    <button onclick="addToCart(${product.id})" class="w-8 h-8 rounded-lg bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                    </button>
+                </div>
+            </div>
+        </div>`;
     }).join('');
 };
 
@@ -562,6 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     renderBottomNav(); 
     renderFooter(); // Footer Injection Call
+    if (window.location.pathname.includes('shop.html')) {
+        renderShopTabs(); // <--- YE LINE ADD KAREIN
+        renderShop();
 
     if (path.includes('shop.html')) renderShop();
     if (path.includes('product.html')) renderProductDetail();
@@ -570,5 +710,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (path.includes('orders.html')) renderOrders();
 
     const checkoutBtn = document.getElementById('checkout-btn');
-    if(checkoutBtn) checkoutBtn.addEventListener('click', processCheckout);
+    if(checkoutBtn) checkoutBtn.addEventListener('click', processCheckout);}
 });
