@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Product Detail - Glow Creations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#74b814", "background-light": "#f7f8f6", "background-dark": "#1a2111", "surface-dark": "#242e18" }, fontFamily: { "display": ["Manrope", "sans-serif"] }, borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"}, }, }, }
+    </script>
+        <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style> .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; } .hide-scrollbar::-webkit-scrollbar { display: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); } body { min-height: max(884px, 100dvh); }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#151b0e] dark:text-[#e8ece5] font-display min-h-screen flex flex-col relative overflow-x-hidden pb-32">
+<!-- Universal Header Placeholder -->
+<div id="universal-header"></div>
+<div class="w-full max-w-7xl mx-auto min-h-screen relative">
+    
+    <!-- Top App Bar -->
+<div class="sticky top-[63px] z-[30] bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200/50 dark:border-white/5 transition-all">
+        <div class="flex items-center justify-between px-4 py-3">
+            <a href="javascript:history.back()" class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 transition-all text-[#151b0e] dark:text-white">
+                <span class="material-symbols-outlined text-2xl">arrow_back</span>
+            </a>
+            <h2 class="text-[#151b0e] dark:text-white text-base font-bold tracking-wide uppercase">Product Detail</h2>
+            <a href="cart.html" class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 transition-all text-[#151b0e] dark:text-white relative">
+                <span class="material-symbols-outlined text-2xl">shopping_bag</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 pt-16 px-0 md:flex md:gap-8 md:px-8 md:pt-24">
+        
+        <!-- Hero Gallery -->
+        <div class="w-full md:w-1/2 relative group">
+            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4 pb-6 pt-2 md:px-0">
+                <div class="snap-center shrink-0 w-[90vw] md:w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-sm relative">
+                    <div id="pd-image-main" class="w-full h-full bg-cover bg-center" style="background-color: #eee;"></div>
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-primary">Best Seller</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="md:w-1/2 md:pt-4">
+            <div class="px-5 md:px-0">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h1 id="pd-title" class="text-3xl font-extrabold tracking-tight text-[#151b0e] dark:text-white leading-tight mb-2">Loading...</h1>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="flex text-amber-400 text-sm">
+                                <span class="material-symbols-outlined text-[18px] filled">star</span><span class="material-symbols-outlined text-[18px] filled">star</span><span class="material-symbols-outlined text-[18px] filled">star</span><span class="material-symbols-outlined text-[18px] filled">star</span><span class="material-symbols-outlined text-[18px] filled">star_half</span>
+                            </span>
+                            <span class="text-sm text-gray-500">(142 reviews)</span>
+                        </div>
+                    </div>
+                    <span id="pd-price" class="text-2xl font-bold text-primary"></span>
+                </div>
+                <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
+                    Capture a memory in resin. This unique piece changes color with temperature.
+                </p>
+            </div>
+
+            <hr class="my-6 border-gray-200 dark:border-gray-800 mx-5 md:mx-0"/>
+
+            <div class="px-5 md:px-0 space-y-6">
+                <!-- Add to Cart Action -->
+                <div class="bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-4 mt-2 mb-6">
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm text-gray-500">Total Price</span>
+                        <span id="pd-total-price" class="text-2xl font-extrabold text-[#151b0e] dark:text-white"></span>
+                    </div>
+                    <!-- Dynamic ID for Button -->
+                    <button id="pd-add-btn" class="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation Placeholder -->
+<div id="bottom-nav-placeholder"></div>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

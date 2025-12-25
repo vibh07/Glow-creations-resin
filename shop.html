@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Shop - Glow Creations</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#74b814", "background-light": "#f7f8f6", "background-dark": "#1a2111", "accent-gold": "#D4AF37" }, fontFamily: { "display": ["Manrope", "sans-serif"], "serif": ["Playfair Display", "serif"] }, borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" }, }, }, }
+    </script>
+    <style>
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#151b0e] dark:text-white font-display pb-32 overflow-x-hidden selection:bg-primary selection:text-white">
+    <!-- Universal Header Placeholder -->
+    <div id="universal-header"></div>
+    <div class="w-full max-w-7xl mx-auto min-h-screen bg-background-light dark:bg-background-dark shadow-xl relative">
+        <!-- UPDATE THIS LINE in shop.html -->
+        <div
+            class="sticky top-[63px] z-[30] bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200/50 dark:border-white/5 transition-all">
+            <div class="flex items-center justify-between px-4 py-3">
+                <a href="home.html"
+                    class="flex items-center justify-center p-2 -ml-2 rounded-full text-[#151b0e] dark:text-white hover:bg-black/5 transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">arrow_back</span>
+                </a>
+                <h1 class="text-xl font-serif font-bold tracking-tight text-[#151b0e] dark:text-white">Our Collection
+                </h1>
+                <div class="flex items-center gap-1 -mr-2">
+                    <a href="cart.html"
+                        class="flex items-center justify-center p-2 rounded-full text-[#151b0e] dark:text-white hover:bg-black/5 transition-colors relative">
+                        <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="px-4 py-4 space-y-4">
+            <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">search</span>
+                <input type="text" placeholder="Search jewelry..." class="w-full bg-white dark:bg-white/5 border-none rounded-xl py-3 pl-12 pr-4 shadow-sm focus:ring-2 focus:ring-primary/50 placeholder-gray-400 text-sm font-medium">
+            </div>
+        </div> -->
+
+        <!-- Products Grid (Dynamic Content) -->
+        <div class="px-4 pb-4">
+            <div id="shop-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Javascript will load products here -->
+                <div class="col-span-2 text-center py-10">Loading Products...</div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Placeholder -->
+        <div id="bottom-nav-placeholder"></div>
+
+    </div>
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

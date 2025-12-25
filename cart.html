@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Your Bag - Glow Creations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#74b814", "background-light": "#f7f8f6", "background-dark": "#1a2111", "surface-dark": "#242e18" }, fontFamily: { "display": ["Manrope", "sans-serif"] }, borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"}, boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' } }, }, }
+    </script>
+        <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>.material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); } body { min-height: max(884px, 100dvh); }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#151b0e] dark:text-[#eef3e7] font-display antialiased overflow-x-hidden pb-32">
+<!-- Universal Header Placeholder -->
+<div id="universal-header"></div>
+<div class="w-full max-w-7xl mx-auto min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-[63px] z-[30] flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 py-4 shadow-sm">
+        <a href="shop.html" class="flex size-10 items-center justify-center rounded-full text-[#151b0e] dark:text-white hover:bg-black/5">
+            <span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold">Your Bag <span id="header-cart-count" class="text-sm font-medium text-primary ml-1">(0)</span></h1>
+        <div class="size-10"></div>
+    </header>
+
+    <main class="px-4 py-4 space-y-6 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
+        
+        <div class="md:col-span-2 space-y-4">
+            <!-- Free Shipping Banner -->
+            <div class="relative overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-r from-[#f4f9eb] to-white p-4 shadow-soft">
+                <div class="flex items-start gap-3">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined text-[20px]">local_shipping</span></div>
+                    <div><p class="text-sm font-bold">Free Shipping Unlocked! ✨</p><p class="text-xs text-gray-500">You've qualified for free priority shipping.</p></div>
+                </div>
+            </div>
+
+            <!-- Cart Items (Dynamic) -->
+            <div id="cart-items-container" class="space-y-4">
+                <!-- Javascript will load items here -->
+            </div>
+        </div>
+
+        <!-- Right Side: Summary -->
+        <div class="md:col-span-1">
+            <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-surface-dark p-5 space-y-4 shadow-sm">
+                <div class="flex justify-between items-center text-sm"><span class="text-gray-500">Subtotal</span><span id="cart-subtotal" class="font-bold">₹0</span></div>
+                <div class="flex justify-between items-center text-sm"><span class="text-gray-500">Shipping</span><div class="text-right"><span class="text-xs text-gray-400 line-through mr-2">₹50</span><span class="font-bold text-primary">Free</span></div></div>
+                <div class="flex justify-between items-center text-sm"><span class="text-gray-500">GST (18%)</span><span id="cart-tax" class="font-bold">₹0</span></div>
+                
+                <div class="my-2 border-t border-dashed border-gray-200"></div>
+                
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-lg font-bold">Total</span>
+                    <span id="cart-total" class="text-2xl font-extrabold">₹0</span>
+                </div>
+
+                <!-- Checkout Action -->
+                <div class="flex items-center justify-between gap-4 pt-4 border-t border-gray-100">
+                    <div class="flex flex-col"><span class="text-xs text-gray-500">Total amount</span><span id="cart-footer-total" class="text-xl font-bold">₹0</span></div>
+                    <button id="checkout-btn" class="flex-1 bg-primary hover:bg-primary/90 text-white rounded-xl py-3.5 px-6 font-bold shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-transform active:scale-95">
+                        Proceed to Checkout <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Bottom Navigation Placeholder -->
+<div id="bottom-nav-placeholder"></div>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>

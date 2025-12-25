@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Glow Creations - Home</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = { 
+            darkMode: "class", 
+            theme: { 
+                extend: { 
+                    colors: { "primary": "#74b814", "background-light": "#fcfdfa", "background-dark": "#1a2111", "surface": "#ffffff" }, 
+                    fontFamily: { "display": ["Manrope", "sans-serif"], "serif": ["Playfair Display", "serif"] }, 
+                    borderRadius: { "xl": "1.5rem", "2xl": "2rem" },
+                    boxShadow: { "soft": "0 10px 40px -10px rgba(0,0,0,0.08)" }
+                }, 
+            }, 
+        }
+    </script>
+    <style>
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .snap-x-mandatory { scroll-snap-type: x mandatory; }
+        .snap-center { scroll-snap-align: center; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#151b0e] dark:text-white font-display pb-32 overflow-x-hidden selection:bg-primary selection:text-white antialiased">
+<!-- Universal Header Placeholder -->
+<div id="universal-header"></div>
+    <!-- UNIVERSAL TOP NAV PLACEHOLDER -->
+    <div id="top-nav-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="space-y-8 pt-4">
+        <!-- 1. Auto-Sliding Hero Section -->
+        <div class="relative w-full px-4 group">
+            <div id="hero-slider" class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 rounded-[2rem]">
+                <!-- Slide 1 -->
+                <div class="snap-center shrink-0 w-full relative aspect-[16/10] overflow-hidden rounded-[2rem] shadow-soft">
+                    <img src="https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider border border-white/20 mb-3 inline-block">New Arrival</span>
+                        <h2 class="text-white text-3xl font-serif font-bold leading-tight mb-2">Nature Preserved <br>in Resin</h2>
+                        <a href="shop.html" class="inline-flex items-center gap-2 text-white font-bold text-sm hover:underline decoration-primary decoration-2 underline-offset-4">Shop Collection <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                    </div>
+                </div>
+                 <!-- Slide 2 -->
+                 <div class="snap-center shrink-0 w-full relative aspect-[16/10] overflow-hidden rounded-[2rem] shadow-soft">
+                    <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="px-3 py-1 rounded-full bg-primary/80 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider mb-3 inline-block">Best Seller</span>
+                        <h2 class="text-white text-3xl font-serif font-bold leading-tight mb-2">Custom Name <br>Keychains</h2>
+                        <a href="shop.html" class="inline-flex items-center gap-2 text-white font-bold text-sm hover:underline decoration-primary decoration-2 underline-offset-4">Order Yours <span class="material-symbols-outlined text-sm">edit</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Categories -->
+        <div class="pl-5">
+            <div class="flex items-center justify-between pr-5 mb-3">
+                <h3 class="text-lg font-bold">Categories</h3>
+                <span class="text-xs font-bold text-primary cursor-pointer">View All</span>
+            </div>
+            <div class="flex overflow-x-auto hide-scrollbar gap-4 pb-2 pr-5">
+                <a href="shop.html?cat=ring" class="flex flex-col items-center gap-2 shrink-0 group">
+                    <div class="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-primary to-yellow-200 group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full rounded-full border-2 border-white dark:border-[#1a2111] overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=150" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium">Rings</span>
+                </a>
+                <a href="shop.html?cat=pendant" class="flex flex-col items-center gap-2 shrink-0 group">
+                    <div class="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-primary to-yellow-200 group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full rounded-full border-2 border-white dark:border-[#1a2111] overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&q=80&w=150" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium">Pendants</span>
+                </a>
+                <a href="shop.html?cat=keychain" class="flex flex-col items-center gap-2 shrink-0 group">
+                    <div class="w-[72px] h-[72px] rounded-full p-[2px] bg-gray-200 dark:bg-white/10 group-hover:bg-primary transition-colors">
+                        <div class="w-full h-full rounded-full border-2 border-white dark:border-[#1a2111] overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1588444650733-d0767b753fc8?auto=format&fit=crop&q=80&w=150" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all">
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium">Keychains</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. Trending Now -->
+        <div class="bg-white dark:bg-white/5 py-6 border-y border-gray-100 dark:border-white/5">
+            <div class="px-5 mb-4 flex items-end justify-between">
+                <div>
+                    <span class="text-primary text-xs font-bold uppercase tracking-widest">Hot Picks</span>
+                    <h3 class="text-xl font-serif font-bold leading-none mt-1">Trending Now 🔥</h3>
+                </div>
+            </div>
+            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-5 gap-4">
+                <!-- Product Card Example -->
+                <div class="snap-center shrink-0 w-[160px] flex flex-col gap-2 group cursor-pointer" onclick="window.location.href='shop.html'">
+                    <div class="w-full aspect-[4/5] rounded-2xl bg-gray-100 relative overflow-hidden">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8OiCgv2--GpseGRGSCZ4qqbsemhJakfCsZkIZPZFxIHkvlwJ3pY_R7bejI17MgMxTFg-KX6Dv3yLlq3Q-D2ZBoHQKfXvccennioCFwrCDSWsTbQZMe8Vzsfe7W3qvxcv5p3b1bYjcraKBq4-vmZXo5foObezk-fP4HqYOX9L9T2-OgnS6J6mXhyxHo8dwsQfMcNZCUIqjMC4xpMn35-cirffymnI_OEWOzDwxiEKpnOyhn5na_21Ldi1p2w2FmwiZz-_11WEz2_A" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <button class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center shadow-md active:scale-90 transition-transform">
+                            <span class="material-symbols-outlined text-[18px]">add</span>
+                        </button>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm truncate">Galaxy Ring</h4>
+                        <span class="text-primary font-extrabold text-sm">₹450</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="h-8"></div>
+    </div>
+
+    <!-- Bottom Nav Placeholder -->
+    <div id="bottom-nav-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Hero Slider Script
+        const slider = document.getElementById('hero-slider');
+        if(slider) {
+            setInterval(() => {
+                const maxScroll = slider.scrollWidth - slider.clientWidth;
+                if(slider.scrollLeft >= maxScroll - 10) {
+                    slider.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    slider.scrollBy({ left: 300, behavior: 'smooth' });
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

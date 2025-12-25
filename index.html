@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Find Your Sparkle</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PREFETCHING -->
+    <link rel="prefetch" href="home.html">
+
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F8F6;
+            min-height: 100vh;
+            overflow-x: hidden; /* No horizontal scroll */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- BACKGROUND AMBIENCE (PC SPECIAL) --- */
+        .ambient-blob {
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(169, 128, 105, 0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatBlob 10s infinite ease-in-out alternate;
+            pointer-events: none;
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, 50px); }
+        }
+
+        /* --- MAIN LAYOUT WRAPPER --- */
+        .main-wrapper {
+            width: 100%;
+            max-width: 1400px; /* Limits width on huge 4k screens */
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* --- CONTENT SECTIONS --- */
+        
+        /* 1. IMAGE AREA */
+        .image-gallery {
+            position: relative;
+            width: 100%;
+            height: 50vh; /* Half screen on mobile */
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .img-box {
+            position: absolute;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 8px;
+        }
+        
+        /* Hover effects for PC */
+        .img-box:hover {
+            transform: scale(1.03) translateY(-5px);
+            z-index: 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Mobile Positioning */
+        .img-1 {
+            width: 55%; height: 70%;
+            top: 10%; left: 5%;
+            z-index: 2;
+        }
+        .img-2 {
+            width: 60%; height: 75%;
+            bottom: 5%; right: 5%;
+            z-index: 1;
+        }
+
+        /* 2. TEXT AREA */
+        .content-area {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); /* Auto scales text */
+            line-height: 1.1;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .accent-text { color: #A98069; }
+
+        p.subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: #666;
+            line-height: 1.6;
+            max-width: 500px;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+            margin-bottom: 40px;
+        }
+
+        /* 3. SLIDER AREA */
+        .action-area {
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center; /* Center on mobile */
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .slider-container {
+            width: 100%;
+            max-width: 400px; /* Max width for aesthetics */
+            height: 80px;
+            background: linear-gradient(135deg, #B58C75, #9E7460);
+            border-radius: 60px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(169, 128, 105, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.2s, width 0.3s;
+        }
+
+        .slider-container:hover { transform: translateY(-2px); }
+        .slider-container:active { transform: scale(0.98) translateY(0); }
+
+        .slider-text {
+            background: linear-gradient(to right, rgba(255,255,255,0.8) 0%, #fff 50%, rgba(255,255,255,0.8) 100%);
+            background-size: 200% auto;
+            color: #fff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            padding-left: 30px;
+            animation: shine 3s infinite linear;
+            user-select: none;
+        }
+
+        .slider-knob {
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+            touch-action: none;
+            animation: pulseKnob 2s infinite;
+        }
+        
+        .slider-knob svg {
+            width: 24px; height: 24px; fill: #A98069;
+            transition: transform 0.3s;
+        }
+        
+        .slider-knob:hover svg { transform: translateX(3px); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shine {
+            0% { background-position: -100px; }
+            100% { background-position: 200px; }
+        }
+        @keyframes pulseKnob {
+            0% { box-shadow: 0 0 0 0 rgba(169, 128, 105, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(169, 128, 105, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(169, 128, 105, 0); }
+        }
+
+        /* =========================================
+           RESPONSIVE LOGIC (THE MAGIC PART)
+           ========================================= */
+        
+        /* TABLET & LAPTOP (Landscape) */
+        @media (min-width: 768px) {
+            .main-wrapper {
+                flex-direction: row-reverse; /* Images Right, Text Left */
+                align-items: center;
+                padding: 50px;
+                gap: 50px;
+            }
+
+            /* Adjust Text Alignment */
+            .content-area {
+                width: 50%;
+                text-align: left;
+                align-items: flex-start; /* Align text to left */
+                padding-left: 5%;
+            }
+
+            .action-area {
+                justify-content: flex-start; /* Align slider to left */
+                padding: 0;
+            }
+
+            /* Adjust Images Layout for Wide Screen */
+            .image-gallery {
+                width: 50%;
+                height: 80vh;
+            }
+
+            .img-1 {
+                width: 350px; height: 450px;
+                top: 50%; left: 0;
+                transform: translateY(-60%);
+            }
+            
+            .img-2 {
+                width: 320px; height: 400px;
+                top: 60%; left: 250px;
+                transform: translateY(-40%);
+            }
+            
+            /* Reset animation transform specifically for desktop layout logic */
+            .img-1:hover { transform: translateY(-62%) scale(1.02); }
+            .img-2:hover { transform: translateY(-42%) scale(1.02); }
+        }
+
+        /* LARGE DESKTOP (1200px+) */
+        @media (min-width: 1200px) {
+             .img-1 { width: 400px; height: 500px; left: 10%; }
+             .img-2 { width: 380px; height: 450px; left: 45%; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Ambience -->
+    <div class="ambient-blob"></div>
+
+    <div class="main-wrapper">
+        
+        <!-- Right Side on Desktop / Top on Mobile -->
+        <div class="image-gallery">
+            <div class="img-box img-1">
+                <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Diamond Ring">
+            </div>
+            <div class="img-box img-2">
+                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Wedding Jewelry">
+            </div>
+        </div>
+
+        <!-- Left Side on Desktop / Bottom on Mobile -->
+        <div class="content-area">
+            <h1>Find Your <br><span class="accent-text">Perfect</span> Sparkle</h1>
+            <p class="subtitle">Elevate your elegance with our curated gems. Handcrafted for moments that last forever.</p>
+            
+            <div class="action-area">
+                <div class="slider-container" id="sliderContainer">
+                    <div class="slider-text" id="sliderText">Slide to Explore</div>
+                    <div class="slider-knob" id="sliderKnob">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const knob = document.getElementById('sliderKnob');
+        const container = document.getElementById('sliderContainer');
+        const text = document.getElementById('sliderText');
+        
+        let isDragging = false;
+        let startX = 0;
+        let containerWidth, knobWidth, maxMove;
+
+        // Dynamic Dimension Calculation (Crucial for Responsive)
+        function updateDimensions() {
+            containerWidth = container.offsetWidth;
+            knobWidth = knob.offsetWidth;
+            maxMove = containerWidth - knobWidth - 10;
+        }
+        
+        // Initial calc & update on window resize
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+
+        // --- EVENTS ---
+        knob.addEventListener('mousedown', startDrag);
+        knob.addEventListener('touchstart', startDrag, {passive: false});
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
+            knob.style.transition = 'none'; 
+            knob.style.animation = 'none'; // Stop pulsing while interacting
+            container.style.cursor = 'grabbing';
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            let clientX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+            let moveX = clientX - startX;
+            
+            if (moveX < 0) moveX = 0;
+            if (moveX > maxMove) moveX = maxMove;
+
+            knob.style.transform = `translate3d(${moveX}px, -50%, 0)`;
+            
+            // Fade logic
+            let opacity = 1 - (moveX / (maxMove * 0.6));
+            text.style.opacity = opacity < 0 ? 0 : opacity;
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            container.style.cursor = 'default';
+
+            const transformMatrix = window.getComputedStyle(knob).transform;
+            let currentX = 0;
+            if (transformMatrix !== 'none') {
+                currentX = parseFloat(transformMatrix.split(',')[4]); 
+            }
+
+            // Success Threshold
+            if (currentX > maxMove * 0.70) {
+                // SUCCESS
+                knob.style.transition = 'transform 0.1s ease-out';
+                knob.style.transform = `translate3d(${maxMove}px, -50%, 0)`;
+                container.style.background = '#A98069';
+                text.style.opacity = 0;
+
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 100);
+            } else {
+                // FAIL / BOUNCE BACK
+                knob.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                knob.style.transform = `translate3d(0, -50%, 0)`;
+                text.style.opacity = 1;
+                knob.style.animation = 'pulseKnob 2s infinite';
+            }
+        }
+    </script>
+</body>
+</html>
