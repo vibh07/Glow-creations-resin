@@ -9,7 +9,8 @@
         tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#74b814", "background-light": "#f7f8f6", "background-dark": "#1a2111", "surface-dark": "#242e18" }, fontFamily: { "display": ["Manrope", "sans-serif"] }, borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"}, }, }, }
     </script>
         <link rel="stylesheet" href="style.css">
-
+    <!-- Celebration Animation Library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <style> .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; } .hide-scrollbar::-webkit-scrollbar { display: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); } body { min-height: max(884px, 100dvh); }</style>
@@ -66,8 +67,100 @@
             </div>
 
             <hr class="my-6 border-gray-200 dark:border-gray-800 mx-5 md:mx-0"/>
+            <!-- Customization Ritual Section -->
+<div class="px-5 md:px-0 mt-8 space-y-8">
+    <div class="flex items-center gap-2">
+        <div class="h-[1px] flex-1 bg-gray-200"></div>
+        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Personalization Ritual</span>
+        <div class="h-[1px] flex-1 bg-gray-200"></div>
+    </div>
 
+    <!-- 1. Select Base Material -->
+    <div class="space-y-3">
+        <label class="text-sm font-bold text-gray-700 flex items-center gap-2">
+            Select Your Aura (Base) <span class="text-primary text-[10px]">●</span>
+        </label>
+        <div class="flex gap-4">
+            <button onclick="selectBase('Golden', this)" class="base-chip group flex-1 flex flex-col items-center gap-2 p-3 rounded-2xl border-2 border-gray-100 hover:border-primary transition-all">
+                <div class="w-8 h-8 rounded-full bg-[#FFD700] shadow-inner ring-2 ring-offset-2 ring-transparent group-[.active]:ring-primary"></div>
+                <span class="text-[10px] font-bold">Golden</span>
+            </button>
+            <button onclick="selectBase('Silver', this)" class="base-chip group flex-1 flex flex-col items-center gap-2 p-3 rounded-2xl border-2 border-gray-100 hover:border-primary transition-all">
+                <div class="w-8 h-8 rounded-full bg-[#C0C0C0] shadow-inner"></div>
+                <span class="text-[10px] font-bold">Silver</span>
+            </button>
+            <button onclick="selectBase('Copper', this)" class="base-chip group flex-1 flex flex-col items-center gap-2 p-3 rounded-2xl border-2 border-gray-100 hover:border-primary transition-all">
+                <div class="w-8 h-8 rounded-full bg-[#B87333] shadow-inner"></div>
+                <span class="text-[10px] font-bold">Copper</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. Preservation Source Cards -->
+    <div class="space-y-3">
+        <label class="text-sm font-bold text-gray-700">Source of Preservation</label>
+        <div class="grid grid-cols-1 gap-3">
+            <label class="relative cursor-pointer group">
+                <input type="radio" name="source" value="own" class="peer hidden" onchange="toggleInstruction(true)">
+                <div class="p-4 rounded-2xl border-2 border-gray-100 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 peer-checked:text-primary">
+                        <span class="material-symbols-outlined">auto_stories</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold">I will send my own materials</p>
+                        <p class="text-[10px] text-gray-400">Flowers, DNA, Fabric, or Memories</p>
+                    </div>
+                </div>
+            </label>
+            <label class="relative cursor-pointer group">
+                <input type="radio" name="source" value="shop" class="peer hidden" onchange="toggleInstruction(false)" checked>
+                <div class="p-4 rounded-2xl border-2 border-gray-100 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <span class="material-symbols-outlined">local_florist</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold">Use Glow Creations' Collection</p>
+                        <p class="text-[10px] text-gray-400">Our signature dried flora & pigments</p>
+                    </div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- 3. Conditional Instruction Box (Hidden by default) -->
+    <div id="instruction-box" class="hidden animate-slide-up-fade">
+        <div class="bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-400 p-5 rounded-r-2xl space-y-3">
+            <h4 class="text-amber-800 dark:text-amber-200 text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">info</span> Preservation Guidelines
+            </h4>
+            <div class="space-y-2 text-[11px] text-amber-700 dark:text-amber-300 font-medium">
+                <div class="flex gap-2"><span>🌸</span> <p><strong>Roses/Flora:</strong> Wrap in tissue paper only. (No Polythene! It causes fungus).</p></div>
+                <div class="flex gap-2"><span>❄️</span> <p><strong>DNA/Milk:</strong> 10-15ml in a double-sealed bag with an ice pack.</p></div>
+                <div class="flex gap-2 text-primary font-bold"><span>📍</span> <p>Ship to: Glow Studio, H-402, Jaipur, Rajasthan - 302012</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Design Preferences -->
+    <div class="space-y-3">
+        <label class="text-sm font-bold text-gray-700">Design Dreams</label>
+        <textarea placeholder="e.g. 'Galaxy theme with some gold glitter and a name at the back...'" class="w-full rounded-2xl border-gray-100 bg-gray-50 focus:ring-primary focus:border-primary text-sm p-4 h-24 transition-all"></textarea>
+    </div>
+
+    <!-- 5. Add-ons -->
+    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">edit_calendar</span>
+            <div>
+                <p class="text-sm font-bold">Add Name/Date</p>
+                <p class="text-[10px] text-gray-400">+ ₹99 Extra Cost</p>
+            </div>
+        </div>
+        <input type="checkbox" class="w-6 h-6 rounded-lg text-primary focus:ring-primary border-gray-300">
+    </div>
+</div>
             <div class="px-5 md:px-0 space-y-6">
+                
                 <!-- Add to Cart Action -->
                 <div class="bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-4 mt-2 mb-6">
                     <div class="flex justify-between items-end">
