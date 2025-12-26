@@ -394,7 +394,11 @@ const renderCart = () => {
     const container = document.getElementById('cart-items-container');
     if (!container) return;
     if (cart.length === 0) { container.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-60"><span class="material-symbols-outlined text-6xl mb-2">shopping_bag</span><p>Your bag is empty</p><a href="shop.html" class="mt-4 text-primary font-bold underline">Start Shopping</a></div>`; updateCartTotals(); return; }
-    container.innerHTML = cart.map(item => `<div class="flex gap-4 rounded-2xl bg-white dark:bg-surface-dark p-3 shadow-sm border border-gray-100 dark:border-white/5"><div class="aspect-square w-24 rounded-lg bg-gray-100 overflow-hidden shrink-0"><img src="${item.image}" class="h-full w-full object-cover"></div><div class="flex flex-1 flex-col justify-between py-1"><div><div class="flex justify-between items-start"><h3 class="font-bold text-[#151b0e] dark:text-white leading-tight line-clamp-2">${item.name}</h3><button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 p-1"><span class="material-symbols-outlined text-[20px]">close</span></button></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${item.category}</p></div><div class="flex items-center justify-between"><div class="flex items-center rounded-lg border border-gray-200 dark:border-white/10 h-8"><button onclick="updateQuantity(${item.id}, -1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-50"><span class="material-symbols-outlined text-[16px]">remove</span></button><input class="w-8 bg-transparent text-center text-sm font-bold border-none p-0 focus:ring-0" readonly type="number" value="${item.quantity}"/><button onclick="updateQuantity(${item.id}, 1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-50"><span class="material-symbols-outlined text-[16px]">add</span></button></div><p class="text-base font-bold text-primary">₹${item.price * item.quantity}</p></div></div></div>`).join('');
+    container.innerHTML = cart.map(item => `<div class="flex gap-4 rounded-2xl bg-white dark:bg-surface-dark p-3 shadow-sm border border-gray-100 dark:border-white/5"><div class="aspect-square w-24 rounded-lg bg-gray-100 overflow-hidden shrink-0"><img src="${item.image}" class="h-full w-full object-cover"></div><div class="flex flex-1 flex-col justify-between py-1"><div><div class="flex justify-between items-start"><h3 class="font-bold text-[#151b0e] dark:text-white leading-tight line-clamp-2">${item.name}</h3><button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 p-1"><span class="material-symbols-outlined text-[20px]">close</span></button></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+    ${item.details ? 
+      `Shape: ${item.details.shape} • Color: ${item.details.color}` : 
+      item.category}
+</p></div><div class="flex items-center justify-between"><div class="flex items-center rounded-lg border border-gray-200 dark:border-white/10 h-8"><button onclick="updateQuantity(${item.id}, -1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-50"><span class="material-symbols-outlined text-[16px]">remove</span></button><input class="w-8 bg-transparent text-center text-sm font-bold border-none p-0 focus:ring-0" readonly type="number" value="${item.quantity}"/><button onclick="updateQuantity(${item.id}, 1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-50"><span class="material-symbols-outlined text-[16px]">add</span></button></div><p class="text-base font-bold text-primary">₹${item.price * item.quantity}</p></div></div></div>`).join('');
     updateCartTotals();
 };
 const renderWishlist = () => {
@@ -840,3 +844,175 @@ const renderTutorialModal = () => {
     </div>`;
     document.body.insertAdjacentHTML('beforeend', tutorialHTML);
 };
+// ==========================================
+// CUSTOM CREATOR STUDIO LOGIC
+// ==========================================
+
+// ==========================================
+// MODERN STUDIO LOGIC (UPDATED)
+// ==========================================
+
+let customOrder = {
+    category: '',
+    type: 'standard', 
+    shape: '',
+    size: '',
+    color: '',
+    note: ''
+};
+
+// 1. SELECT CATEGORY (Visual Card Effect)
+function selectCategory(catName, type, element) {
+    customOrder.category = catName;
+    customOrder.type = type;
+
+    // Reset all cards
+    document.querySelectorAll('.cat-card').forEach(card => {
+        card.classList.remove('selected', 'border-primary', 'bg-primary/5');
+        card.querySelector('span.material-symbols-outlined').classList.remove('text-primary');
+    });
+
+    // Activate clicked card
+    element.classList.add('selected', 'border-primary', 'bg-primary/5');
+    
+    // Slight Delay for Animation feel then move to next step
+    setTimeout(() => {
+        // Logic for next steps
+        const shapeSection = document.getElementById('shape-section');
+        const stdShapeMsg = document.getElementById('standard-shape-msg');
+        const sizeInputs = document.getElementById('custom-size-inputs');
+        const stdSizeMsg = document.getElementById('standard-size-msg');
+        
+        if (type === 'standard') {
+            shapeSection.classList.add('hidden');
+            stdShapeMsg.classList.remove('hidden');
+            document.getElementById('selected-cat-name').innerText = catName;
+            customOrder.shape = "Standard Shape";
+            
+            sizeInputs.classList.add('hidden');
+            stdSizeMsg.classList.remove('hidden');
+            stdSizeMsg.classList.add('flex'); // Maintain flex layout
+            customOrder.size = "Standard Free Size";
+        } else {
+            shapeSection.classList.remove('hidden');
+            stdShapeMsg.classList.add('hidden');
+            customOrder.shape = ""; 
+            
+            sizeInputs.classList.remove('hidden');
+            stdSizeMsg.classList.add('hidden');
+            stdSizeMsg.classList.remove('flex');
+            updateSize('length', 50); 
+        }
+        
+        goToStep(2);
+    }, 400); // 400ms delay for visual feedback
+}
+
+// 2. SHAPE SELECTION
+function selectShape(shape) {
+    customOrder.shape = shape;
+    document.querySelectorAll('.shape-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+        if(btn.innerText.includes(shape)) {
+            btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
+        }
+    });
+}
+
+// 3. SIZE UPDATE
+function updateSize(dim, val) {
+    document.getElementById(`${dim}-val`).innerText = val + " mm";
+    const l = document.querySelector('input[oninput*="length"]')?.value || 50;
+    const w = document.querySelector('input[oninput*="width"]')?.value || 50;
+    customOrder.size = `${l}mm x ${w}mm`;
+}
+
+// 4. COLOR SELECTION
+function selectColor(color) {
+    customOrder.color = color;
+    document.querySelectorAll('.color-btn').forEach(btn => {
+        btn.classList.remove('selected', 'ring-4', 'ring-primary/30');
+        if(btn.getAttribute('title') === color) {
+            btn.classList.add('selected', 'ring-4', 'ring-primary/30');
+        }
+    });
+}
+
+// 5. NAVIGATION & ANIMATION
+function goToStep(stepNum) {
+    // Validation
+    if(stepNum === 3) {
+        if(customOrder.type === 'custom' && !customOrder.shape) return alert("Please pick a shape!");
+        if(!customOrder.color) return alert("Please select a finish!");
+        updateSummary();
+    }
+
+    // Hide all contents with fade out
+    document.querySelectorAll('.step-content').forEach(el => {
+        el.classList.add('hidden', 'opacity-0');
+    });
+
+    // Show target content with fade in
+    const target = document.getElementById(`step-${stepNum}`);
+    target.classList.remove('hidden');
+    // Small timeout to allow display:block to apply before opacity transition
+    setTimeout(() => target.classList.remove('opacity-0'), 50);
+
+    // Update Progress Bar UI
+    const line = document.getElementById('line-progress');
+    const bubble2 = document.getElementById('step-bubble-2');
+    const bubble3 = document.getElementById('step-bubble-3');
+
+    if(stepNum === 1) {
+        line.style.width = "0%";
+        bubble2.classList.remove('bg-primary', 'text-white', 'scale-110');
+        bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
+    } else if(stepNum === 2) {
+        line.style.width = "50%";
+        bubble2.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
+        bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
+    } else if(stepNum === 3) {
+        line.style.width = "100%";
+        bubble2.classList.add('bg-primary', 'text-white');
+        bubble3.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
+    }
+}
+
+// 6. SUMMARY & ADD TO CART
+function updateSummary() {
+    document.getElementById('sum-cat').innerText = customOrder.category;
+    document.getElementById('sum-shape').innerText = customOrder.shape;
+    document.getElementById('sum-size').innerText = customOrder.size;
+    document.getElementById('sum-color').innerText = customOrder.color;
+}
+
+function addToCartCustom() {
+    const note = document.getElementById('custom-note').value;
+    if(!note) return alert("Please describe your design idea.");
+    
+    customOrder.note = note;
+
+    const newCustomItem = {
+        id: Date.now(),
+        name: `Custom ${customOrder.category}`,
+        category: "Customized Piece",
+        price: 999,
+        image: 'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=200',
+        quantity: 1,
+        details: { ...customOrder }
+    };
+
+    cart.push(newCustomItem);
+    saveCart();
+    
+    // Confetti & Feedback
+    triggerCelebration();
+    const toast = document.getElementById('toast');
+    if(toast) {
+        toast.querySelector('h4').innerText = "Magic Created! ✨";
+        toast.classList.remove('translate-y-32');
+        setTimeout(() => toast.classList.add('translate-y-32'), 3000);
+    }
+    
+    setTimeout(() => window.location.href = 'cart.html', 1500);
+}
