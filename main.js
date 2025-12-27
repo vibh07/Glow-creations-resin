@@ -8,26 +8,36 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 // --- 1. HEADER INJECTION & SEARCH ---
+// --- 1. HEADER INJECTION & SEARCH ---
 document.addEventListener("DOMContentLoaded", () => {
     const headerPlaceholder = document.getElementById("universal-header");
     if (headerPlaceholder) {
         headerPlaceholder.innerHTML = `
-            <div class="fixed top-0 left-0 right-0 z-[40] bg-[#fcfdfa]/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 transition-all shadow-sm">
-                <div class="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
+            <!-- Modified Height: h-[60px] on mobile, h-[72px] on desktop -->
+            <div class="fixed top-0 left-0 right-0 z-[40] bg-[#fcfdfa]/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 transition-all shadow-sm h-[60px] md:h-[72px] flex items-center">
+                <div class="flex items-center justify-between px-4 w-full max-w-7xl mx-auto">
                     <a href="home.html" class="flex items-center gap-2 group text-decoration-none">
-                        <div class="w-9 h-9 rounded-full bg-[#74b814] flex items-center justify-center text-white font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">G</div>
-                        <h1 class="text-xl font-serif font-bold tracking-tight text-[#151b0e] dark:text-white">Glow<span class="text-[#74b814]">.</span></h1>
+                        <!-- Smaller Logo: w-8 h-8 on mobile -->
+                        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#74b814] flex items-center justify-center text-white font-serif font-bold text-base md:text-lg shadow-sm group-hover:scale-105 transition-transform">G</div>
+                        <h1 class="text-lg md:text-xl font-serif font-bold tracking-tight text-[#151b0e] dark:text-white">Glow<span class="text-[#74b814]">.</span></h1>
                     </a>
-                    <div class="flex items-center gap-3">
-                        <button id="nav-search-btn" class="w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:scale-105 transition-transform shadow-sm"><span class="material-symbols-outlined text-[22px]">search</span></button>
-                        <a href="wishlist.html" class="w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:text-red-500 hover:scale-105 transition-all shadow-sm group"><span class="material-symbols-outlined text-[22px] group-hover:filled transition-all">favorite</span></a>
-                        <button onclick="toggleProfileModal(true)" class="w-10 h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-    <span class="material-symbols-outlined text-[20px]">person</span>
-</button>
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <!-- Smaller Icons: w-8 h-8 on mobile -->
+                        <button id="nav-search-btn" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:scale-105 transition-transform shadow-sm">
+                            <span class="material-symbols-outlined text-[18px] md:text-[22px]">search</span>
+                        </button>
+                        <a href="wishlist.html" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:text-red-500 hover:scale-105 transition-all shadow-sm group">
+                            <span class="material-symbols-outlined text-[18px] md:text-[22px] group-hover:filled transition-all">favorite</span>
+                        </a>
+                        <!-- Profile Button -->
+                        <button onclick="toggleProfileModal(true)" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+                            <span class="material-symbols-outlined text-[18px] md:text-[20px]">person</span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="h-[72px] w-full"></div>
+            <div class="h-[60px] md:h-[72px] w-full"></div>
+            <!-- Search Overlay (Same as before) -->
             <div id="search-overlay" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
                 <div class="bg-white dark:bg-[#1a2111] w-full p-4 rounded-b-3xl shadow-xl transform -translate-y-full transition-transform duration-300" id="search-container">
                     <div class="flex items-center gap-3">
@@ -157,10 +167,48 @@ window.updateQuantity = (productId, change) => {
     const item = cart.find(item => item.id === parseInt(productId));
     if (item) { item.quantity += change; if (item.quantity < 1) { removeFromCart(productId); return; } saveCart(); renderCart(); }
 };
-window.processCheckout = () => {
+// Replace your existing processCheckout function
+
+window.processCheckout = async () => {
     if(cart.length === 0) return alert("Your cart is empty!");
-    const newOrder = { id: Math.floor(Math.random() * 90000) + 10000, date: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }), items: [...cart], total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0), status: "Processing" };
-    orders.unshift(newOrder); saveOrders(); cart = []; saveCart(); alert("Order placed successfully!"); window.location.href = 'orders.html';
+    
+    const user = auth.currentUser;
+    if(!user) return alert("Please Login to Place Order");
+
+    const orderId = Math.floor(Math.random() * 90000) + 10000;
+    const orderDate = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+    const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    const newOrder = { 
+        id: orderId, 
+        date: orderDate, 
+        items: [...cart], 
+        total: orderTotal, 
+        status: "Processing",
+        userId: user.uid,
+        userEmail: user.email
+    };
+
+    // 1. Update Local Orders
+    orders.unshift(newOrder); 
+    saveOrders(); 
+    
+    try {
+        // 2. SAVE ORDER TO DATABASE (users/UID/orders/ORDER_ID)
+        await set(ref(db, 'users/' + user.uid + '/orders/' + orderId), newOrder);
+        
+        // Clear Cart
+        cart = []; 
+        saveCart(); 
+        
+        alert("Order placed successfully! Saved to Database."); 
+        window.location.href = 'orders.html';
+
+    } catch (error) {
+        console.error("Order DB Error:", error);
+        alert("Order placed locally (Sync error).");
+        window.location.href = 'orders.html';
+    }
 };
 
 // --- 6. ANIMATION ENGINE ---
@@ -463,16 +511,23 @@ const triggerCelebration = () => {
 };
 
 // --- 2. FLOATING CART UI ---
+// ==========================================
+// FLOATING CART UI (Updated: Compact & Lower Position)
+// ==========================================
 const renderFloatingCartUI = () => {
     try {
         let container = document.getElementById('floating-ui-container');
         if (!container) { 
             container = document.createElement('div'); 
             container.id = 'floating-ui-container'; 
-container.className = 'fixed bottom-[105px] left-0 right-0 z-40 px-4 flex flex-col items-center gap-2 pointer-events-none transition-all duration-300';            document.body.appendChild(container); 
+            
+            // UPDATED POSITION:
+            // bottom-[70px]: Mobile navigation bar ke just upar (Nav height ~60px + gap)
+            // md:bottom-[85px]: Desktop ke liye thoda upar
+            container.className = 'fixed bottom-[70px] md:bottom-[85px] left-0 right-0 z-40 px-4 flex flex-col items-center gap-1 pointer-events-none transition-all duration-300';            
+            document.body.appendChild(container); 
         }
         
-        // Safety check for cart variable
         if (typeof cart === 'undefined') return;
 
         const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0); 
@@ -486,58 +541,60 @@ container.className = 'fixed bottom-[105px] left-0 right-0 z-40 px-4 flex flex-c
         
         const lastItem = cart[cart.length - 1];
         const isFree = subtotal >= 500;
-
-        // Smart Celebration Logic
         const alreadyCelebrated = localStorage.getItem('glowHasCelebrated') === 'true';
+
+        // Celebration Logic
         if (isFree && !alreadyCelebrated) {
-            triggerCelebration();
+            if(typeof triggerCelebration === 'function') triggerCelebration();
             localStorage.setItem('glowHasCelebrated', 'true');
         } else if (!isFree) {
             localStorage.setItem('glowHasCelebrated', 'false');
         }
 
-        // Render Pill
+        // 1. Delivery Pill (Compact Version)
         let deliveryPill = '';
         if (isFree) {
             deliveryPill = `
             <div class="pointer-events-auto animate-slide-up-fade mb-1">
-                <div class="bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-md border-2 border-green-500/30 rounded-full px-4 py-2 shadow-lg flex items-center gap-3">
-                    <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-white text-[16px] font-bold">check</span>
+                <!-- Reduced padding (px-3 py-1) and font size -->
+                <div class="bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-md border border-green-500/30 rounded-full px-3 py-1 shadow-lg flex items-center gap-2">
+                    <div class="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-white text-[10px] font-bold">check</span>
                     </div>
-                    <div class="flex flex-col">
-                        <p class="text-[13px] font-bold text-[#151b0e] dark:text-white leading-none">FREE Delivery Unlocked! ✨</p>
-                    </div>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-gray-400"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                    <p class="text-[10px] font-bold text-[#151b0e] dark:text-white leading-none">FREE Delivery! ✨</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-1 text-gray-400"><span class="material-symbols-outlined text-[14px]">close</span></button>
                 </div>
             </div>`;
         } else {
             deliveryPill = `
             <div class="pointer-events-auto animate-slide-up-fade mb-1">
-                <div class="bg-white/90 dark:bg-[#1a2111]/90 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full px-4 py-2 shadow-md flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary text-[18px]">local_shipping</span>
-                    <p class="text-[11px] font-bold text-[#151b0e] dark:text-white">Add <span class="text-primary font-black">₹${500 - subtotal}</span> more for <span class="uppercase">Free Delivery</span></p>
+                <div class="bg-white/90 dark:bg-[#1a2111]/90 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full px-3 py-1 shadow-md flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[14px]">local_shipping</span>
+                    <p class="text-[10px] font-bold text-[#151b0e] dark:text-white">Add <span class="text-primary font-black">₹${500 - subtotal}</span> for Free Delivery</p>
                 </div>
             </div>`;
         }
 
-        // Render Black Bar
+        // 2. Black Cart Bar (Smaller & Compact)
         const cartBar = `
-        <div onclick="window.location.href='cart.html'" class="pointer-events-auto cursor-pointer animate-bounce-soft w-full max-w-[340px]">
-            <div class="bg-[#151b0e] dark:bg-white text-white dark:text-[#151b0e] rounded-2xl p-2 px-4 shadow-2xl flex items-center justify-between relative overflow-hidden group border border-white/10">
-                <div class="flex items-center gap-3 z-10">
-                    <div id="floating-cart-img-target" class="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shadow-sm">
+        <div onclick="window.location.href='cart.html'" class="pointer-events-auto cursor-pointer animate-bounce-soft w-full max-w-[300px]"> <!-- Reduced max-width -->
+            <!-- Reduced padding (p-1.5 px-3) -->
+            <div class="bg-[#151b0e] dark:bg-white text-white dark:text-[#151b0e] rounded-[1rem] p-1.5 px-3 shadow-2xl flex items-center justify-between relative overflow-hidden group border border-white/10">
+                <div class="flex items-center gap-2 z-10">
+                    <!-- Smaller Image (w-8 h-8) -->
+                    <div id="floating-cart-img-target" class="w-8 h-8 rounded-lg overflow-hidden border border-white/10 shadow-sm">
                         <img src="${lastItem.image}" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-medium opacity-70 uppercase tracking-wider">${totalItems} Items</span>
-                        <span class="text-sm font-bold">₹${subtotal}</span>
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-[9px] font-medium opacity-70 uppercase tracking-wider">${totalItems} Item${totalItems > 1 ? 's' : ''}</span>
+                        <span class="text-xs font-bold">₹${subtotal}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 z-10">
-                    <span class="text-xs font-bold uppercase tracking-tight">View Cart</span>
-                    <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-                        <span class="material-symbols-outlined text-white text-[16px]">shopping_bag</span>
+                    <span class="text-[10px] font-bold uppercase tracking-tight">View Cart</span>
+                    <!-- Smaller Icon Circle (w-6 h-6) -->
+                    <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-[14px]">shopping_bag</span>
                     </div>
                 </div>
             </div>
@@ -579,43 +636,41 @@ const renderBottomNav = () => {
     const placeholder = document.getElementById('bottom-nav-placeholder');
     if (!placeholder) return;
     renderCategoryModal(); renderFloatingCartUI();
-    const path = window.location.pathname; const page = path.split("/").pop() || "home.html";
-    // Inside main.js -> renderBottomNav function
+    
+    const path = window.location.pathname; 
+    const page = path.split("/").pop() || "home.html";
 
-const navItems = [
-    { 
-        name: "Home", 
-        icon: "home", 
-        action: () => window.location.href = 'home.html', 
-        isActive: ["home.html", "home.html"].some(p => page.includes(p)) 
-    },
-    { 
-        name: "Shop", 
-        icon: "storefront", 
-        action: () => window.location.href = 'shop.html', 
-        isActive: ["shop.html", "product.html", "cart.html", "wishlist.html"].some(p => page.includes(p)) 
-    },
-    { 
-        name: "Category", 
-        icon: "category", 
-        action: () => toggleCategoryModal(true), 
-        isActive: false 
-    },
-    { 
-        // --- CHANGED THIS PART ---
-        name: "Account", // Renamed from "My Order" to "Account"
-        icon: "person",  // Changed icon to person
-        action: () => toggleProfileModal(true), // Opens the new popup
-        isActive: false // Usually modal buttons aren't "active" pages
-    }
-];
-    let navHTML = `<div class="fixed bottom-4 left-0 right-0 z-[50] flex justify-center px-4 pb-safe pointer-events-none"><div class="pointer-events-auto w-full max-w-md bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-2xl shadow-black/10 p-2 flex items-center justify-between gap-1">`;
+    const navItems = [
+        { name: "Home", icon: "home", action: () => window.location.href = 'home.html', isActive: ["home.html", "home.html"].some(p => page.includes(p)) },
+        { name: "Shop", icon: "storefront", action: () => window.location.href = 'shop.html', isActive: ["shop.html", "product.html", "cart.html", "wishlist.html"].some(p => page.includes(p)) },
+        { name: "Category", icon: "category", action: () => toggleCategoryModal(true), isActive: false },
+        { name: "Account", icon: "person", action: () => toggleProfileModal(true), isActive: false }
+    ];
+
+    // UPDATED HTML: Smaller padding (py-1), smaller text (text-[9px]), smaller icons (text-[20px])
+    let navHTML = `
+    <div class="fixed bottom-2 md:bottom-4 left-0 right-0 z-[50] flex justify-center px-4 pb-safe pointer-events-none">
+        <div class="pointer-events-auto w-full max-w-md bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl shadow-black/10 p-1 md:p-2 flex items-center justify-between gap-1">`;
+    
     navItems.forEach((item, index) => {
         const cls = item.isActive ? "bg-primary/10 text-primary" : "text-gray-400 dark:text-gray-500 hover:text-primary";
-        navHTML += `<button id="nav-btn-${index}" class="flex flex-col items-center justify-center ${item.isActive ? 'w-20' : 'w-16'} py-2 rounded-[1.5rem] transition-all shadow-sm ${cls}"><span class="material-symbols-outlined ${item.isActive ? 'filled' : ''} text-[24px]">${item.icon}</span><span class="text-[10px] font-bold tracking-wide mt-0.5">${item.name}</span></button>`;
+        // Smaller width/height for mobile
+        const sizeClass = item.isActive ? 'w-14 md:w-20' : 'w-12 md:w-16';
+        
+        navHTML += `
+        <button id="nav-btn-${index}" class="flex flex-col items-center justify-center ${sizeClass} py-1.5 md:py-2 rounded-[1.2rem] transition-all shadow-sm ${cls}">
+            <span class="material-symbols-outlined ${item.isActive ? 'filled' : ''} text-[20px] md:text-[24px]">${item.icon}</span>
+            <span class="text-[9px] md:text-[10px] font-bold tracking-wide mt-0.5">${item.name}</span>
+        </button>`;
     });
-    navHTML += `</div></div>`; placeholder.innerHTML = navHTML;
-    navItems.forEach((item, index) => { const btn = document.getElementById(`nav-btn-${index}`); if(btn) btn.onclick = item.action; });
+    
+    navHTML += `</div></div>`; 
+    placeholder.innerHTML = navHTML;
+    
+    navItems.forEach((item, index) => { 
+        const btn = document.getElementById(`nav-btn-${index}`); 
+        if(btn) btn.onclick = item.action; 
+    });
 };
 
 // --- 11. FOOTER ---
@@ -1099,6 +1154,9 @@ window.addToCartCustom = () => {
 // main.js
 
 // --- 1. FIREBASE IMPORTS (Ensure these are at the top) ---
+// main.js
+
+// --- 1. FIREBASE IMPORTS ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
     getAuth, 
@@ -1106,19 +1164,38 @@ import {
     signOut, 
     updateProfile, 
     signInWithEmailAndPassword,
-    updateEmail // <--- Ye naya add karna hai
+    updateEmail,
+    setPersistence,
+    browserLocalPersistence 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// --- PASTE YOUR FIREBASE CONFIG HERE IF NOT ALREADY IN MAIN.JS ---
+// NEW: Import Database functions
+import { 
+    getDatabase, 
+    ref, 
+    set, 
+    push, 
+    get,
+    child
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// --- YOUR CONFIGURATION ---
 const firebaseConfig = {
-    apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4", // Your Config
-    authDomain: "glow-creation.firebaseapp.com",
-    projectId: "glow-creation",
-    // ... rest of your config
+  apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4",
+  authDomain: "glow-creation.firebaseapp.com",
+  databaseURL: "https://glow-creation-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "glow-creation",
+  storageBucket: "glow-creation.firebasestorage.app",
+  messagingSenderId: "236856410532",
+  appId: "1:236856410532:web:2253fb7f215f7a232f8131",
+  measurementId: "G-34FVP1W4E1"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app); // Initialize Realtime Database
+
+// ... (Keep the Persistence logic here) ...
 
 // ... [KEEP ALL YOUR EXISTING CODE: cart, wishlist, products, renderShop, etc.] ...
 // ... [DO NOT DELETE EXISTING FUNCTIONS] ...
@@ -1305,6 +1382,8 @@ const updateProfileUI = () => {
 };
 
 // 4. Handle Save Changes (Updates Database/Auth)
+// Replace your existing saveProfileChanges function
+
 window.saveProfileChanges = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -1321,78 +1400,46 @@ window.saveProfileChanges = async (e) => {
     try {
         const updates = [];
 
-        // 1. Check if Name Changed
-        if (nameInput !== user.displayName) {
-            updates.push(updateProfile(user, { displayName: nameInput }));
-        }
+        if (nameInput !== user.displayName) updates.push(updateProfile(user, { displayName: nameInput }));
+        if (emailInput !== user.email) updates.push(updateEmail(user, emailInput));
 
-        // 2. Check if Email Changed
-        if (emailInput !== user.email) {
-            updates.push(updateEmail(user, emailInput));
-        }
-
-        // Wait for Firebase updates
-        if (updates.length > 0) {
-            await Promise.all(updates);
-        }
+        if (updates.length > 0) await Promise.all(updates);
         
-        // 3. Update Local Storage (Phone & Address)
+        // 1. Save to Local Storage (Keep for fast access)
         localStorage.setItem('glowUserPhone', phoneInput);
         localStorage.setItem(`address_${user.uid}`, addressInput);
 
-        // --- REALTIME UI UPDATE ---
-        
-        // A. Update Modal Header Texts immediately
+        // 2. SAVE TO REALTIME DATABASE (Sync Logic)
+        await set(ref(db, 'users/' + user.uid), {
+            username: nameInput,
+            email: emailInput,
+            phone: phoneInput,
+            address: addressInput,
+            lastUpdated: new Date().toISOString()
+        });
+
+        // UI Updates (Same as before)
         const nameHeader = document.getElementById('display-name-header');
         const emailHeader = document.getElementById('display-email-header');
         if(nameHeader) nameHeader.innerText = nameInput;
         if(emailHeader) emailHeader.innerText = emailInput;
 
-        // B. Update Nav Bar Avatar (Force Refresh)
-        // Hum manually 'onAuthStateChanged' wala logic trigger karenge
-        // taaki "S" icon turant badal jaye naye naam se.
-        const headerBtn = document.querySelector('#universal-header button');
-        const bottomNavBtn = document.getElementById('nav-btn-3');
-        
-        // Helper function wahi use karein jo pehle banaya tha
-        // (Make sure getAvatarHTML function global scope me ho)
-        if (typeof getAvatarHTML === 'function') {
-            if (headerBtn) headerBtn.innerHTML = getAvatarHTML(nameInput, "text-lg");
-            
-            if (bottomNavBtn) {
-                const iconContainer = bottomNavBtn.querySelector('div.w-6'); // Find container created previously
-                if(iconContainer) {
-                    iconContainer.innerHTML = getAvatarHTML(nameInput, "text-xs");
-                }
-            }
-        }
+        updateUserIcons(nameInput); // Update icons
 
-        // Success Feedback
         btn.innerText = "Saved Successfully!";
         btn.classList.add('bg-green-600', 'text-white');
-        
-        // Show Toast
-        const toast = document.getElementById('toast');
-        if(toast) {
-            toast.classList.remove('opacity-0', '-translate-y-10');
-            document.getElementById('toast-msg').innerText = "Profile Updated!";
-            setTimeout(() => toast.classList.add('opacity-0', '-translate-y-10'), 3000);
-        }
         
         setTimeout(() => {
             btn.innerText = "Save Changes";
             btn.classList.remove('bg-green-600');
-            // toggleProfileModal(false); // Optional: Close modal automatically
         }, 1500);
 
     } catch (error) {
         console.error(error);
         if (error.code === 'auth/requires-recent-login') {
-            alert("Security Alert: To change your email, please Logout and Login again.");
-        } else if (error.code === 'auth/email-already-in-use') {
-            alert("This email is already linked to another account.");
+            alert("Security Alert: To change Email, please Logout & Login again.");
         } else {
-            alert("Error updating: " + error.message);
+            alert("Error: " + error.message);
         }
         btn.innerText = "Save Changes";
     }
