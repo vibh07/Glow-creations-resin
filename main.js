@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="flex items-center gap-3">
                         <button id="nav-search-btn" class="w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:scale-105 transition-transform shadow-sm"><span class="material-symbols-outlined text-[22px]">search</span></button>
                         <a href="wishlist.html" class="w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 flex items-center justify-center text-gray-600 dark:text-gray-200 hover:text-red-500 hover:scale-105 transition-all shadow-sm group"><span class="material-symbols-outlined text-[22px] group-hover:filled transition-all">favorite</span></a>
-                        <a href="orders.html" class="w-10 h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md"><span class="material-symbols-outlined text-[20px]">person</span></a>
+                        <button onclick="toggleProfileModal(true)" class="w-10 h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+    <span class="material-symbols-outlined text-[20px]">person</span>
+</button>
                     </div>
                 </div>
             </div>
@@ -547,9 +549,25 @@ container.className = 'fixed bottom-[105px] left-0 right-0 z-40 px-4 flex flex-c
     }
 };
 
-const toggleCategoryModal = (show) => {
-    const modal = document.getElementById('category-modal'); const overlay = document.getElementById('cat-overlay'); const sheet = document.getElementById('cat-sheet');
-    if (show) { modal.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10); } else { overlay.classList.add('opacity-0'); sheet.classList.add('translate-y-full'); setTimeout(() => { modal.classList.add('hidden'); }, 300); }
+// Change 'const' to 'window.toggleCategoryModal'
+window.toggleCategoryModal = (show) => {
+    const modal = document.getElementById('category-modal'); 
+    const overlay = document.getElementById('cat-overlay'); 
+    const sheet = document.getElementById('cat-sheet');
+    
+    if (show) { 
+        modal.classList.remove('hidden'); 
+        setTimeout(() => { 
+            overlay.classList.remove('opacity-0'); 
+            sheet.classList.remove('translate-y-full'); 
+        }, 10); 
+    } else { 
+        overlay.classList.add('opacity-0'); 
+        sheet.classList.add('translate-y-full'); 
+        setTimeout(() => { 
+            modal.classList.add('hidden'); 
+        }, 300); 
+    }
 };
 const renderCategoryModal = () => {
     if(document.getElementById('category-modal')) return;
@@ -562,12 +580,35 @@ const renderBottomNav = () => {
     if (!placeholder) return;
     renderCategoryModal(); renderFloatingCartUI();
     const path = window.location.pathname; const page = path.split("/").pop() || "home.html";
-    const navItems = [
-        { name: "Home", icon: "home", action: () => window.location.href = 'home.html', isActive: ["home.html", "home.html"].some(p => page.includes(p)) },
-        { name: "Shop", icon: "storefront", action: () => window.location.href = 'shop.html', isActive: ["shop.html", "product.html", "cart.html", "wishlist.html"].some(p => page.includes(p)) },
-        { name: "Category", icon: "category", action: () => toggleCategoryModal(true), isActive: false },
-        { name: "My Order", icon: "inventory_2", action: () => window.location.href = 'orders.html', isActive: ["orders.html"].some(p => page.includes(p)) }
-    ];
+    // Inside main.js -> renderBottomNav function
+
+const navItems = [
+    { 
+        name: "Home", 
+        icon: "home", 
+        action: () => window.location.href = 'home.html', 
+        isActive: ["home.html", "home.html"].some(p => page.includes(p)) 
+    },
+    { 
+        name: "Shop", 
+        icon: "storefront", 
+        action: () => window.location.href = 'shop.html', 
+        isActive: ["shop.html", "product.html", "cart.html", "wishlist.html"].some(p => page.includes(p)) 
+    },
+    { 
+        name: "Category", 
+        icon: "category", 
+        action: () => toggleCategoryModal(true), 
+        isActive: false 
+    },
+    { 
+        // --- CHANGED THIS PART ---
+        name: "Account", // Renamed from "My Order" to "Account"
+        icon: "person",  // Changed icon to person
+        action: () => toggleProfileModal(true), // Opens the new popup
+        isActive: false // Usually modal buttons aren't "active" pages
+    }
+];
     let navHTML = `<div class="fixed bottom-4 left-0 right-0 z-[50] flex justify-center px-4 pb-safe pointer-events-none"><div class="pointer-events-auto w-full max-w-md bg-white/95 dark:bg-[#1a2111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-2xl shadow-black/10 p-2 flex items-center justify-between gap-1">`;
     navItems.forEach((item, index) => {
         const cls = item.isActive ? "bg-primary/10 text-primary" : "text-gray-400 dark:text-gray-500 hover:text-primary";
@@ -852,6 +893,10 @@ const renderTutorialModal = () => {
 // MODERN STUDIO LOGIC (UPDATED)
 // ==========================================
 
+// ==========================================
+// CUSTOM CREATOR STUDIO LOGIC (FIXED GLOBAL SCOPE)
+// ==========================================
+
 let customOrder = {
     category: '',
     type: 'standard', 
@@ -861,21 +906,22 @@ let customOrder = {
     note: ''
 };
 
-// 1. SELECT CATEGORY (Visual Card Effect)
-function selectCategory(catName, type, element) {
+// 1. SELECT CATEGORY
+window.selectCategory = (catName, type, element) => {
     customOrder.category = catName;
     customOrder.type = type;
 
     // Reset all cards
     document.querySelectorAll('.cat-card').forEach(card => {
         card.classList.remove('selected', 'border-primary', 'bg-primary/5');
-        card.querySelector('span.material-symbols-outlined').classList.remove('text-primary');
+        // Check if element exists before removing class to avoid errors
+        const icon = card.querySelector('span.material-symbols-outlined');
+        if(icon) icon.classList.remove('text-primary');
     });
 
     // Activate clicked card
     element.classList.add('selected', 'border-primary', 'bg-primary/5');
     
-    // Slight Delay for Animation feel then move to next step
     setTimeout(() => {
         // Logic for next steps
         const shapeSection = document.getElementById('shape-section');
@@ -884,32 +930,37 @@ function selectCategory(catName, type, element) {
         const stdSizeMsg = document.getElementById('standard-size-msg');
         
         if (type === 'standard') {
-            shapeSection.classList.add('hidden');
-            stdShapeMsg.classList.remove('hidden');
-            document.getElementById('selected-cat-name').innerText = catName;
+            if(shapeSection) shapeSection.classList.add('hidden');
+            if(stdShapeMsg) stdShapeMsg.classList.remove('hidden');
+            const catNameDisplay = document.getElementById('selected-cat-name');
+            if(catNameDisplay) catNameDisplay.innerText = catName;
             customOrder.shape = "Standard Shape";
             
-            sizeInputs.classList.add('hidden');
-            stdSizeMsg.classList.remove('hidden');
-            stdSizeMsg.classList.add('flex'); // Maintain flex layout
+            if(sizeInputs) sizeInputs.classList.add('hidden');
+            if(stdSizeMsg) {
+                stdSizeMsg.classList.remove('hidden');
+                stdSizeMsg.classList.add('flex');
+            }
             customOrder.size = "Standard Free Size";
         } else {
-            shapeSection.classList.remove('hidden');
-            stdShapeMsg.classList.add('hidden');
+            if(shapeSection) shapeSection.classList.remove('hidden');
+            if(stdShapeMsg) stdShapeMsg.classList.add('hidden');
             customOrder.shape = ""; 
             
-            sizeInputs.classList.remove('hidden');
-            stdSizeMsg.classList.add('hidden');
-            stdSizeMsg.classList.remove('flex');
-            updateSize('length', 50); 
+            if(sizeInputs) sizeInputs.classList.remove('hidden');
+            if(stdSizeMsg) {
+                stdSizeMsg.classList.add('hidden');
+                stdSizeMsg.classList.remove('flex');
+            }
+            window.updateSize('length', 50); 
         }
         
-        goToStep(2);
-    }, 400); // 400ms delay for visual feedback
-}
+        window.goToStep(2);
+    }, 400); 
+};
 
 // 2. SHAPE SELECTION
-function selectShape(shape) {
+window.selectShape = (shape) => {
     customOrder.shape = shape;
     document.querySelectorAll('.shape-btn').forEach(btn => {
         btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
@@ -917,18 +968,23 @@ function selectShape(shape) {
             btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
         }
     });
-}
+};
 
 // 3. SIZE UPDATE
-function updateSize(dim, val) {
-    document.getElementById(`${dim}-val`).innerText = val + " mm";
-    const l = document.querySelector('input[oninput*="length"]')?.value || 50;
-    const w = document.querySelector('input[oninput*="width"]')?.value || 50;
-    customOrder.size = `${l}mm x ${w}mm`;
-}
+window.updateSize = (dim, val) => {
+    const displayVal = document.getElementById(`${dim}-val`);
+    if(displayVal) displayVal.innerText = val + " Inch";
+    
+    const lInput = document.querySelector('input[oninput*="length"]');
+    const wInput = document.querySelector('input[oninput*="width"]');
+    
+    const l = lInput ? lInput.value : 50;
+    const w = wInput ? wInput.value : 50;
+    customOrder.size = `${l}Inch x ${w}Inch`;
+};
 
 // 4. COLOR SELECTION
-function selectColor(color) {
+window.selectColor = (color) => {
     customOrder.color = color;
     document.querySelectorAll('.color-btn').forEach(btn => {
         btn.classList.remove('selected', 'ring-4', 'ring-primary/30');
@@ -936,58 +992,67 @@ function selectColor(color) {
             btn.classList.add('selected', 'ring-4', 'ring-primary/30');
         }
     });
-}
+};
 
 // 5. NAVIGATION & ANIMATION
-function goToStep(stepNum) {
+window.goToStep = (stepNum) => {
     // Validation
     if(stepNum === 3) {
         if(customOrder.type === 'custom' && !customOrder.shape) return alert("Please pick a shape!");
         if(!customOrder.color) return alert("Please select a finish!");
-        updateSummary();
+        window.updateSummary();
     }
 
-    // Hide all contents with fade out
+    // Hide all contents
     document.querySelectorAll('.step-content').forEach(el => {
         el.classList.add('hidden', 'opacity-0');
     });
 
-    // Show target content with fade in
+    // Show target content
     const target = document.getElementById(`step-${stepNum}`);
-    target.classList.remove('hidden');
-    // Small timeout to allow display:block to apply before opacity transition
-    setTimeout(() => target.classList.remove('opacity-0'), 50);
+    if(target) {
+        target.classList.remove('hidden');
+        setTimeout(() => target.classList.remove('opacity-0'), 50);
+    }
 
     // Update Progress Bar UI
     const line = document.getElementById('line-progress');
     const bubble2 = document.getElementById('step-bubble-2');
     const bubble3 = document.getElementById('step-bubble-3');
 
-    if(stepNum === 1) {
-        line.style.width = "0%";
-        bubble2.classList.remove('bg-primary', 'text-white', 'scale-110');
-        bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
-    } else if(stepNum === 2) {
-        line.style.width = "50%";
-        bubble2.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
-        bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
-    } else if(stepNum === 3) {
-        line.style.width = "100%";
-        bubble2.classList.add('bg-primary', 'text-white');
-        bubble3.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
+    if(line && bubble2 && bubble3) {
+        if(stepNum === 1) {
+            line.style.width = "0%";
+            bubble2.classList.remove('bg-primary', 'text-white', 'scale-110');
+            bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
+        } else if(stepNum === 2) {
+            line.style.width = "50%";
+            bubble2.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
+            bubble3.classList.remove('bg-primary', 'text-white', 'scale-110');
+        } else if(stepNum === 3) {
+            line.style.width = "100%";
+            bubble2.classList.add('bg-primary', 'text-white');
+            bubble3.classList.add('bg-primary', 'text-white', 'scale-110', 'shadow-lg', 'shadow-primary/30');
+        }
     }
-}
+};
 
 // 6. SUMMARY & ADD TO CART
-function updateSummary() {
-    document.getElementById('sum-cat').innerText = customOrder.category;
-    document.getElementById('sum-shape').innerText = customOrder.shape;
-    document.getElementById('sum-size').innerText = customOrder.size;
-    document.getElementById('sum-color').innerText = customOrder.color;
-}
+window.updateSummary = () => {
+    const setProp = (id, val) => {
+        const el = document.getElementById(id);
+        if(el) el.innerText = val;
+    };
+    setProp('sum-cat', customOrder.category);
+    setProp('sum-shape', customOrder.shape);
+    setProp('sum-size', customOrder.size);
+    setProp('sum-color', customOrder.color);
+};
 
-function addToCartCustom() {
-    const note = document.getElementById('custom-note').value;
+window.addToCartCustom = () => {
+    const noteEl = document.getElementById('custom-note');
+    const note = noteEl ? noteEl.value : '';
+    
     if(!note) return alert("Please describe your design idea.");
     
     customOrder.note = note;
@@ -1002,17 +1067,453 @@ function addToCartCustom() {
         details: { ...customOrder }
     };
 
-    cart.push(newCustomItem);
-    saveCart();
+    // Global 'cart' variable should be accessible. 
+    // If 'cart' is defined with 'let cart = ...' in module scope, 
+    // make sure it is accessible or passed properly. 
+    // Assuming 'cart' is available in module scope here:
+    if (typeof cart !== 'undefined') {
+        cart.push(newCustomItem);
+        // Assuming saveCart is defined in module scope:
+        if (typeof saveCart === 'function') saveCart();
+    }
     
     // Confetti & Feedback
-    triggerCelebration();
+    if (typeof triggerCelebration === 'function') triggerCelebration();
+    
     const toast = document.getElementById('toast');
     if(toast) {
-        toast.querySelector('h4').innerText = "Magic Created! ✨";
+        const h4 = toast.querySelector('h4'); // Assuming toast structure
+        if(h4) h4.innerText = "Magic Created! ✨";
+        // Alternatively if using the toast structure from authentication:
+        const msg = document.getElementById('toast-msg');
+        if(msg) msg.innerText = "Magic Created! ✨";
+        
+        toast.classList.remove('opacity-0', '-translate-y-10'); // Adjust based on your toast CSS classes
+        // Or if using your specific logic:
         toast.classList.remove('translate-y-32');
         setTimeout(() => toast.classList.add('translate-y-32'), 3000);
     }
     
     setTimeout(() => window.location.href = 'cart.html', 1500);
-}
+};
+// main.js
+
+// --- 1. FIREBASE IMPORTS (Ensure these are at the top) ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+    getAuth, 
+    onAuthStateChanged, 
+    signOut, 
+    updateProfile, 
+    signInWithEmailAndPassword,
+    updateEmail // <--- Ye naya add karna hai
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+// --- PASTE YOUR FIREBASE CONFIG HERE IF NOT ALREADY IN MAIN.JS ---
+const firebaseConfig = {
+    apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4", // Your Config
+    authDomain: "glow-creation.firebaseapp.com",
+    projectId: "glow-creation",
+    // ... rest of your config
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ... [KEEP ALL YOUR EXISTING CODE: cart, wishlist, products, renderShop, etc.] ...
+// ... [DO NOT DELETE EXISTING FUNCTIONS] ...
+
+
+// ==========================================
+// NEW: PROFILE MODAL LOGIC
+// ==========================================
+
+// 1. Toggle the Profile Sheet
+window.toggleProfileModal = (show) => {
+    let modal = document.getElementById('profile-modal');
+    
+    // Create modal if it doesn't exist yet
+    if (!modal) {
+        renderProfileModalStructure();
+        modal = document.getElementById('profile-modal');
+    }
+
+    const overlay = document.getElementById('profile-overlay');
+    const sheet = document.getElementById('profile-sheet');
+
+    if (show) {
+        // Refresh data every time we open
+        updateProfileUI(); 
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Lock Scroll
+        setTimeout(() => { 
+            overlay.classList.remove('opacity-0'); 
+            sheet.classList.remove('translate-y-full'); 
+        }, 10);
+    } else {
+        overlay.classList.add('opacity-0'); 
+        sheet.classList.add('translate-y-full'); 
+        setTimeout(() => { 
+            modal.classList.add('hidden'); 
+            document.body.style.overflow = 'auto'; // Unlock Scroll
+        }, 300);
+    }
+};
+
+// 2. Render the Skeleton Structure (One time)
+const renderProfileModalStructure = () => {
+    const modalHTML = `
+    <div id="profile-modal" class="hidden relative z-[150]">
+        <div id="profile-overlay" onclick="toggleProfileModal(false)" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+        
+        <div id="profile-sheet" class="fixed bottom-0 left-0 right-0 z-[151] w-full bg-[#fcfdfa] dark:bg-[#1a2111] rounded-t-[2.5rem] shadow-2xl transform translate-y-full transition-transform duration-500 max-h-[90vh] overflow-y-auto no-scrollbar pb-safe">
+            
+            <!-- Drag Handle -->
+            <div class="w-full flex justify-center pt-3 pb-2" onclick="toggleProfileModal(false)">
+                <div class="w-12 h-1.5 rounded-full bg-gray-200 dark:bg-white/20"></div>
+            </div>
+
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-serif font-bold text-[#151b0e] dark:text-white">Account</h2>
+                    <button onclick="toggleProfileModal(false)" class="p-2 bg-gray-100 dark:bg-white/10 rounded-full"><span class="material-symbols-outlined text-sm">close</span></button>
+                </div>
+
+                <!-- DYNAMIC CONTENT CONTAINER -->
+                <div id="profile-content">
+                    <!-- Loading State -->
+                    <div class="flex justify-center py-10"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+};
+
+// 3. Logic to switch between Guest and User UI
+// main.js mein is function ko pura replace karein
+
+const updateProfileUI = () => {
+    const container = document.getElementById('profile-content');
+    const user = auth.currentUser;
+
+    if (user) {
+        // --- LOGGED IN USER VIEW ---
+        const savedPhone = localStorage.getItem('glowUserPhone') || '';
+        const savedAddress = localStorage.getItem(`address_${user.uid}`) || '';
+        const displayName = user.displayName || 'Glow User';
+        const email = user.email;
+        
+        // Photo Logic
+        const localPhoto = localStorage.getItem(`photo_${user.uid}`);
+        const photoURL = localPhoto || user.photoURL; 
+        const initial = displayName.charAt(0).toUpperCase();
+
+        let avatarHTML = '';
+        if (photoURL) {
+            avatarHTML = `<img src="${photoURL}" class="w-full h-full object-cover">`;
+        } else {
+            avatarHTML = `<span class="font-serif text-4xl font-bold text-primary">${initial}</span>`;
+        }
+
+        container.innerHTML = `
+            <div class="flex flex-col items-center mb-8">
+                <input type="file" id="profile-upload" accept="image/*" class="hidden" onchange="handleProfileImageUpload(event)">
+
+                <div class="relative group cursor-pointer" onclick="document.getElementById('profile-upload').click()">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-primary to-yellow-200 p-[3px]">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-[#1a2111] flex items-center justify-center overflow-hidden">
+                             ${avatarHTML}
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 right-0 bg-[#151b0e] text-white p-2 rounded-full shadow-md hover:bg-primary transition-colors">
+                        <span class="material-symbols-outlined text-xs">edit</span>
+                    </div>
+                </div>
+                <!-- Realtime Name Update Here -->
+                <h3 class="mt-3 text-xl font-bold" id="display-name-header">${displayName}</h3>
+                <p class="text-sm text-gray-500" id="display-email-header">${email}</p>
+            </div>
+
+            <form id="profile-edit-form" onsubmit="saveProfileChanges(event)" class="space-y-4">
+                
+                <!-- Name -->
+                <div class="bg-white dark:bg-white/5 p-3 rounded-2xl border border-gray-200 dark:border-white/10 focus-within:border-primary transition-colors">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Full Name</label>
+                    <input type="text" id="edit-name" value="${displayName}" class="w-full bg-transparent border-none p-0 text-sm font-bold focus:ring-0 text-[#151b0e] dark:text-white" placeholder="Enter Name">
+                </div>
+
+                <!-- Phone -->
+                <div class="bg-white dark:bg-white/5 p-3 rounded-2xl border border-gray-200 dark:border-white/10 focus-within:border-primary transition-colors">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Phone Number</label>
+                    <input type="tel" id="edit-phone" value="${savedPhone}" class="w-full bg-transparent border-none p-0 text-sm font-bold focus:ring-0 text-[#151b0e] dark:text-white" placeholder="Add Phone Number">
+                </div>
+
+                <!-- Email (UNLOCKED NOW) -->
+                <div class="bg-white dark:bg-white/5 p-3 rounded-2xl border border-gray-200 dark:border-white/10 focus-within:border-primary transition-colors">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Email Address</label>
+                    <input type="email" id="edit-email" value="${email}" class="w-full bg-transparent border-none p-0 text-sm font-bold text-[#151b0e] dark:text-white" placeholder="Update Email">
+                </div>
+
+                <!-- Address -->
+                <div class="bg-white dark:bg-white/5 p-3 rounded-2xl border border-gray-200 dark:border-white/10 focus-within:border-primary transition-colors">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Delivery Address</label>
+                    <textarea id="edit-address" rows="3" class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-[#151b0e] dark:text-white resize-none" placeholder="Enter your full address here...">${savedAddress}</textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="handleUserLogout()" class="flex-1 py-4 rounded-xl border border-red-200 text-red-500 font-bold text-sm hover:bg-red-50 dark:hover:bg-red-900/10">Logout</button>
+                    <button type="submit" id="save-profile-btn" class="flex-[2] py-4 rounded-xl bg-[#151b0e] dark:bg-white text-white dark:text-black font-bold text-sm shadow-lg active:scale-95 transition-transform">Save Changes</button>
+                </div>
+            </form>
+        `;
+    } else {        // ... (Guest User Code Same as before)
+         // --- GUEST / ANONYMOUS VIEW ---
+         container.innerHTML = `
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-4xl text-gray-400">person_off</span>
+                </div>
+                <h3 class="text-xl font-bold">Guest User</h3>
+                <p class="text-sm text-gray-500 mt-1">Log in to manage your profile, orders & wishlist.</p>
+            </div>
+
+            <!-- INLINE LOGIN FORM -->
+            <form onsubmit="handleInlineLogin(event)" class="space-y-4">
+                <div class="bg-white dark:bg-white/5 p-1 rounded-2xl border border-gray-200 dark:border-white/10 flex items-center px-4">
+                    <span class="material-symbols-outlined text-gray-400">mail</span>
+                    <input type="email" id="inline-email" required placeholder="Email Address" class="w-full bg-transparent border-none focus:ring-0 text-sm py-3">
+                </div>
+                <div class="bg-white dark:bg-white/5 p-1 rounded-2xl border border-gray-200 dark:border-white/10 flex items-center px-4">
+                    <span class="material-symbols-outlined text-gray-400">lock</span>
+                    <input type="password" id="inline-pass" required placeholder="Password" class="w-full bg-transparent border-none focus:ring-0 text-sm py-3">
+                </div>
+                
+                <button type="submit" id="inline-login-btn" class="w-full py-4 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/30 mt-4 active:scale-95 transition-transform">
+                    Login to Profile
+                </button>
+            </form>
+
+            <div class="mt-6 text-center border-t border-dashed border-gray-200 pt-6">
+                <p class="text-xs text-gray-400">Don't have an account?</p>
+                <button onclick="window.location.href='index.html'" class="text-primary font-bold text-sm mt-1">Create New Account</button>
+            </div>
+        `;
+    }
+};
+
+// 4. Handle Save Changes (Updates Database/Auth)
+window.saveProfileChanges = async (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const btn = document.getElementById('save-profile-btn');
+    const nameInput = document.getElementById('edit-name').value;
+    const phoneInput = document.getElementById('edit-phone').value;
+    const addressInput = document.getElementById('edit-address').value;
+    const emailInput = document.getElementById('edit-email').value;
+
+    btn.innerHTML = `<span class="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block"></span>`;
+    
+    try {
+        const updates = [];
+
+        // 1. Check if Name Changed
+        if (nameInput !== user.displayName) {
+            updates.push(updateProfile(user, { displayName: nameInput }));
+        }
+
+        // 2. Check if Email Changed
+        if (emailInput !== user.email) {
+            updates.push(updateEmail(user, emailInput));
+        }
+
+        // Wait for Firebase updates
+        if (updates.length > 0) {
+            await Promise.all(updates);
+        }
+        
+        // 3. Update Local Storage (Phone & Address)
+        localStorage.setItem('glowUserPhone', phoneInput);
+        localStorage.setItem(`address_${user.uid}`, addressInput);
+
+        // --- REALTIME UI UPDATE ---
+        
+        // A. Update Modal Header Texts immediately
+        const nameHeader = document.getElementById('display-name-header');
+        const emailHeader = document.getElementById('display-email-header');
+        if(nameHeader) nameHeader.innerText = nameInput;
+        if(emailHeader) emailHeader.innerText = emailInput;
+
+        // B. Update Nav Bar Avatar (Force Refresh)
+        // Hum manually 'onAuthStateChanged' wala logic trigger karenge
+        // taaki "S" icon turant badal jaye naye naam se.
+        const headerBtn = document.querySelector('#universal-header button');
+        const bottomNavBtn = document.getElementById('nav-btn-3');
+        
+        // Helper function wahi use karein jo pehle banaya tha
+        // (Make sure getAvatarHTML function global scope me ho)
+        if (typeof getAvatarHTML === 'function') {
+            if (headerBtn) headerBtn.innerHTML = getAvatarHTML(nameInput, "text-lg");
+            
+            if (bottomNavBtn) {
+                const iconContainer = bottomNavBtn.querySelector('div.w-6'); // Find container created previously
+                if(iconContainer) {
+                    iconContainer.innerHTML = getAvatarHTML(nameInput, "text-xs");
+                }
+            }
+        }
+
+        // Success Feedback
+        btn.innerText = "Saved Successfully!";
+        btn.classList.add('bg-green-600', 'text-white');
+        
+        // Show Toast
+        const toast = document.getElementById('toast');
+        if(toast) {
+            toast.classList.remove('opacity-0', '-translate-y-10');
+            document.getElementById('toast-msg').innerText = "Profile Updated!";
+            setTimeout(() => toast.classList.add('opacity-0', '-translate-y-10'), 3000);
+        }
+        
+        setTimeout(() => {
+            btn.innerText = "Save Changes";
+            btn.classList.remove('bg-green-600');
+            // toggleProfileModal(false); // Optional: Close modal automatically
+        }, 1500);
+
+    } catch (error) {
+        console.error(error);
+        if (error.code === 'auth/requires-recent-login') {
+            alert("Security Alert: To change your email, please Logout and Login again.");
+        } else if (error.code === 'auth/email-already-in-use') {
+            alert("This email is already linked to another account.");
+        } else {
+            alert("Error updating: " + error.message);
+        }
+        btn.innerText = "Save Changes";
+    }
+};
+
+// 5. Handle Inline Login inside Modal
+window.handleInlineLogin = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('inline-email').value;
+    const pass = document.getElementById('inline-pass').value;
+    const btn = document.getElementById('inline-login-btn');
+
+    btn.innerText = "Verifying...";
+    btn.disabled = true;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        // On success, onAuthStateChanged will trigger and update UI, but we force it here for smoothness
+        updateProfileUI();
+    } catch (error) {
+        alert("Login Failed: " + error.message);
+        btn.innerText = "Login to Profile";
+        btn.disabled = false;
+    }
+};
+
+// 6. Handle Logout
+window.handleUserLogout = async () => {
+    if(confirm("Are you sure you want to log out?")) {
+        await signOut(auth);
+        toggleProfileModal(false);
+        window.location.reload(); // Reload to reset all states
+    }
+};
+
+// --- UPDATE NAV BUTTON ACTIONS ---
+// This function overwrites your existing renderBottomNav action for the last button
+const originalRenderBottomNav = renderBottomNav; // Backup existing
+// We don't need to overwrite the function if we just change the onclick in the data or after render.
+// See Step 2 below for how we change the onclick.
+// ==========================================
+// DYNAMIC USER AVATAR IN NAV BAR (Top & Bottom)
+// ==========================================
+
+// 1. Helper Function to Generate Avatar HTML
+const getAvatarHTML = (name, sizeClass = "text-sm") => {
+    // Get First Letter (e.g. "S" from "Shaaswat")
+    const initial = name ? name.charAt(0).toUpperCase() : 'U';
+    
+    // Return the HTML for the Circle Avatar
+    return `
+    <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#74b814] to-yellow-200 p-[2px] shadow-sm animate-fade-in">
+        <div class="w-full h-full rounded-full bg-[#fcfdfa] dark:bg-[#1a2111] flex items-center justify-center">
+            <span class="font-serif font-bold text-[#74b814] ${sizeClass} leading-none pt-[1px]">${initial}</span>
+        </div>
+    </div>`;
+};
+
+// 2. Listen for Auth Changes
+onAuthStateChanged(auth, (user) => {
+    // Target Elements
+    const headerProfileBtn = document.querySelector('#universal-header button[onclick="toggleProfileModal(true)"]');
+    const bottomNavBtn = document.getElementById('nav-btn-3'); // Index 3 is Account tab
+
+    if (user) {
+        const userName = user.displayName || "User";
+        
+        // --- A. UPDATE TOP HEADER ICON ---
+        if (headerProfileBtn) {
+            // Replace inner HTML with Avatar (Size 40px automatically adapted by parent)
+            headerProfileBtn.innerHTML = getAvatarHTML(userName, "text-lg");
+            // Add border styling to parent button for extra finish
+            headerProfileBtn.classList.remove('bg-[#151b0e]', 'dark:bg-white', 'text-white', 'dark:text-black');
+            headerProfileBtn.classList.add('p-0', 'bg-transparent'); // Reset background
+        }
+
+        // --- B. UPDATE BOTTOM NAV ICON ---
+        if (bottomNavBtn) {
+            const iconSpan = bottomNavBtn.querySelector('.material-symbols-outlined');
+            
+            // Only replace if we haven't already (check if material symbol exists)
+            if (iconSpan) {
+                // Create a container for the avatar (24px size)
+                const avatarContainer = document.createElement('div');
+                avatarContainer.className = "w-6 h-6 mb-0.5"; 
+                avatarContainer.innerHTML = getAvatarHTML(userName, "text-xs");
+
+                // Replace the icon span with our avatar
+                bottomNavBtn.replaceChild(avatarContainer, iconSpan);
+            }
+        }
+    } else {
+        // OPTIONAL: Reset to default if logged out (Usually page reloads, but just in case)
+        if (headerProfileBtn) headerProfileBtn.innerHTML = `<span class="material-symbols-outlined text-[20px]">person</span>`;
+    }
+});
+// --- NEW: Handle Image Upload ---
+window.handleProfileImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const result = e.target.result;
+            const user = auth.currentUser;
+            
+            // Save to LocalStorage (Simple way without Database)
+            if(user) {
+                localStorage.setItem(`photo_${user.uid}`, result);
+                
+                // Update UI Immediately
+                updateProfileUI();
+                
+                // Show Success Toast
+                const toast = document.getElementById('toast');
+                if(toast) {
+                    toast.classList.remove('opacity-0', '-translate-y-10');
+                    document.getElementById('toast-msg').innerText = "Photo Updated!";
+                    setTimeout(() => toast.classList.add('opacity-0', '-translate-y-10'), 3000);
+                }
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+};
