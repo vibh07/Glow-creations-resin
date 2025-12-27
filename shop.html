@@ -7,7 +7,8 @@
     <title>Shop - Glow Creations</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link rel="stylesheet" href="style.css">
-
+    <!-- Celebration Animation Library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@600;700&amp;display=swap"
         rel="stylesheet" />
@@ -56,12 +57,14 @@
                     class="text-xl font-serif font-bold tracking-tight text-[#151b0e] dark:text-white">
                     Our Collection
                 </h1>
-                <div class="flex items-center gap-1 -mr-2">
-                    <a href="cart.html"
-                        class="flex items-center justify-center p-2 rounded-full text-[#151b0e] dark:text-white hover:bg-black/5 transition-colors relative">
-                        <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
-                    </a>
-                </div>
+                <!-- Right: Filter Button (Updated) -->
+<div class="flex items-center gap-1 -mr-2">
+    <button onclick="toggleSortModal(true)" class="flex items-center justify-center p-2 rounded-full text-[#151b0e] dark:text-white hover:bg-black/5 transition-colors relative group">
+        <span class="material-symbols-outlined text-[24px]">tune</span> <!-- Filter Icon -->
+        <!-- Optional: Dot indicator if filter is active -->
+        <span id="active-sort-dot" class="hidden absolute top-2 right-2 w-2 h-2 bg-[#74b814] rounded-full ring-2 ring-white dark:ring-[#1a2111]"></span>
+    </button>
+</div>
             </div>
         </div>
 
@@ -88,6 +91,50 @@
         <div id="bottom-nav-placeholder"></div>
 
     </div>
+    <!-- SORT MODAL (Hidden by default) -->
+<div id="sort-modal" class="hidden relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div id="sort-overlay" onclick="toggleSortModal(false)" class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0 ease-in-out"></div>
+    
+    <!-- Bottom Sheet -->
+    <div id="sort-sheet" class="fixed bottom-0 left-0 right-0 z-[101] w-full bg-white dark:bg-[#1a2111] rounded-t-[2rem] shadow-2xl transform translate-y-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) pb-safe overflow-hidden">
+        
+        <!-- Handle -->
+        <div class="w-full flex justify-center pt-3 pb-1" onclick="toggleSortModal(false)">
+            <div class="w-12 h-1.5 rounded-full bg-gray-200 dark:bg-white/20"></div>
+        </div>
+
+        <div class="px-6 pb-8 pt-2">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold font-serif text-[#151b0e] dark:text-white">Sort By</h3>
+                <button onclick="toggleSortModal(false)" class="p-1 bg-gray-100 dark:bg-white/10 rounded-full text-gray-500"><span class="material-symbols-outlined text-lg">close</span></button>
+            </div>
+
+            <!-- Sort Options -->
+            <div class="flex flex-col gap-2">
+                <button onclick="applySort('popular')" class="sort-option w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-transparent hover:border-[#74b814] group transition-all active:scale-95" data-value="popular">
+                    <span class="font-bold text-sm text-gray-700 dark:text-gray-200 group-hover:text-[#74b814]">Most Popular (Default)</span>
+                    <span class="material-symbols-outlined text-[#74b814] opacity-0 check-icon">check_circle</span>
+                </button>
+
+                <button onclick="applySort('newest')" class="sort-option w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-transparent hover:border-[#74b814] group transition-all active:scale-95" data-value="newest">
+                    <span class="font-bold text-sm text-gray-700 dark:text-gray-200 group-hover:text-[#74b814]">Newest First</span>
+                    <span class="material-symbols-outlined text-[#74b814] opacity-0 check-icon">check_circle</span>
+                </button>
+
+                <button onclick="applySort('low-high')" class="sort-option w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-transparent hover:border-[#74b814] group transition-all active:scale-95" data-value="low-high">
+                    <span class="font-bold text-sm text-gray-700 dark:text-gray-200 group-hover:text-[#74b814]">Price: Low to High</span>
+                    <span class="material-symbols-outlined text-[#74b814] opacity-0 check-icon">check_circle</span>
+                </button>
+
+                <button onclick="applySort('high-low')" class="sort-option w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-transparent hover:border-[#74b814] group transition-all active:scale-95" data-value="high-low">
+                    <span class="font-bold text-sm text-gray-700 dark:text-gray-200 group-hover:text-[#74b814]">Price: High to Low</span>
+                    <span class="material-symbols-outlined text-[#74b814] opacity-0 check-icon">check_circle</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="data.js"></script>
     <script src="main.js"></script>
 </body>
