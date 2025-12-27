@@ -30,9 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="material-symbols-outlined text-[18px] md:text-[22px] group-hover:filled transition-all">favorite</span>
                         </a>
                         <!-- Profile Button -->
-                        <button onclick="toggleProfileModal(true)" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-                            <span class="material-symbols-outlined text-[18px] md:text-[20px]">person</span>
-                        </button>
+                        <button id="header-profile-btn" onclick="toggleProfileModal(true)" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#151b0e] dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+    <span class="material-symbols-outlined text-[18px] md:text-[20px]">person</span>
+</button>
                     </div>
                 </div>
             </div>
@@ -169,6 +169,7 @@ window.updateQuantity = (productId, change) => {
 };
 // Replace your existing processCheckout function
 
+// Replace your old processCheckout function
 window.processCheckout = async () => {
     if(cart.length === 0) return alert("Your cart is empty!");
     
@@ -189,12 +190,13 @@ window.processCheckout = async () => {
         userEmail: user.email
     };
 
-    // 1. Update Local Orders
+    // 1. Local Update
     orders.unshift(newOrder); 
     saveOrders(); 
     
     try {
-        // 2. SAVE ORDER TO DATABASE (users/UID/orders/ORDER_ID)
+        // 2. SAVE ORDER TO DATABASE
+        // Path: users -> UID -> orders -> OrderID
         await set(ref(db, 'users/' + user.uid + '/orders/' + orderId), newOrder);
         
         // Clear Cart
@@ -1176,7 +1178,8 @@ import {
     set, 
     push, 
     get,
-    child
+    child,
+     update 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 // --- YOUR CONFIGURATION ---
@@ -1384,6 +1387,7 @@ const updateProfileUI = () => {
 // 4. Handle Save Changes (Updates Database/Auth)
 // Replace your existing saveProfileChanges function
 
+// Replace your old saveProfileChanges function
 window.saveProfileChanges = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -1400,17 +1404,23 @@ window.saveProfileChanges = async (e) => {
     try {
         const updates = [];
 
-        if (nameInput !== user.displayName) updates.push(updateProfile(user, { displayName: nameInput }));
-        if (emailInput !== user.email) updates.push(updateEmail(user, emailInput));
+        // 1. Firebase Auth Updates
+        if (nameInput !== user.displayName) {
+            updates.push(updateProfile(user, { displayName: nameInput }));
+        }
+        if (emailInput !== user.email) {
+            updates.push(updateEmail(user, emailInput));
+        }
 
         if (updates.length > 0) await Promise.all(updates);
         
-        // 1. Save to Local Storage (Keep for fast access)
+        // 2. Local Storage Updates
         localStorage.setItem('glowUserPhone', phoneInput);
         localStorage.setItem(`address_${user.uid}`, addressInput);
 
-        // 2. SAVE TO REALTIME DATABASE (Sync Logic)
-        await set(ref(db, 'users/' + user.uid), {
+        // 3. REALTIME DATABASE UPDATE
+        // 'update' use kar rahe hain taaki Orders delete na ho
+        await update(ref(db, 'users/' + user.uid), {
             username: nameInput,
             email: emailInput,
             phone: phoneInput,
@@ -1418,13 +1428,13 @@ window.saveProfileChanges = async (e) => {
             lastUpdated: new Date().toISOString()
         });
 
-        // UI Updates (Same as before)
+        // UI Updates
         const nameHeader = document.getElementById('display-name-header');
         const emailHeader = document.getElementById('display-email-header');
         if(nameHeader) nameHeader.innerText = nameInput;
         if(emailHeader) emailHeader.innerText = emailInput;
 
-        updateUserIcons(nameInput); // Update icons
+        updateUserIcons(nameInput); 
 
         btn.innerText = "Saved Successfully!";
         btn.classList.add('bg-green-600', 'text-white');
@@ -1437,7 +1447,7 @@ window.saveProfileChanges = async (e) => {
     } catch (error) {
         console.error(error);
         if (error.code === 'auth/requires-recent-login') {
-            alert("Security Alert: To change Email, please Logout & Login again.");
+            alert("Security: Please Logout & Login again to change Email.");
         } else {
             alert("Error: " + error.message);
         }
@@ -1499,41 +1509,53 @@ const getAvatarHTML = (name, sizeClass = "text-sm") => {
 };
 
 // 2. Listen for Auth Changes
-onAuthStateChanged(auth, (user) => {
-    // Target Elements
-    const headerProfileBtn = document.querySelector('#universal-header button[onclick="toggleProfileModal(true)"]');
-    const bottomNavBtn = document.getElementById('nav-btn-3'); // Index 3 is Account tab
+onAuthStateChanged(auth, async (user) => {
+    const currentPath = window.location.pathname;
 
     if (user) {
-        const userName = user.displayName || "User";
-        
-        // --- A. UPDATE TOP HEADER ICON ---
-        if (headerProfileBtn) {
-            // Replace inner HTML with Avatar (Size 40px automatically adapted by parent)
-            headerProfileBtn.innerHTML = getAvatarHTML(userName, "text-lg");
-            // Add border styling to parent button for extra finish
-            headerProfileBtn.classList.remove('bg-[#151b0e]', 'dark:bg-white', 'text-white', 'dark:text-black');
-            headerProfileBtn.classList.add('p-0', 'bg-transparent'); // Reset background
-        }
+        // --- LOGGED IN ---
+        console.log("User detected:", user.email);
 
-        // --- B. UPDATE BOTTOM NAV ICON ---
-        if (bottomNavBtn) {
-            const iconSpan = bottomNavBtn.querySelector('.material-symbols-outlined');
-            
-            // Only replace if we haven't already (check if material symbol exists)
-            if (iconSpan) {
-                // Create a container for the avatar (24px size)
-                const avatarContainer = document.createElement('div');
-                avatarContainer.className = "w-6 h-6 mb-0.5"; 
-                avatarContainer.innerHTML = getAvatarHTML(userName, "text-xs");
+        // A. Check/Create User in Realtime Database
+        try {
+            const userRef = ref(db, 'users/' + user.uid);
+            // 'get' function yahan use ho raha hai
+            const snapshot = await get(userRef);
 
-                // Replace the icon span with our avatar
-                bottomNavBtn.replaceChild(avatarContainer, iconSpan);
+            if (!snapshot.exists()) {
+                // First Time Login: Create Entry ('set' use ho raha hai)
+                await set(userRef, {
+                    username: user.displayName || "New User",
+                    email: user.email,
+                    phone: localStorage.getItem('glowUserPhone') || "",
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString()
+                });
+                console.log("New User Created in DB");
+            } else {
+                // Existing User: Update Last Login ('update' use ho raha hai)
+                await update(userRef, {
+                    lastLogin: new Date().toISOString()
+                });
+                console.log("User Synced with DB");
             }
+        } catch (error) {
+            console.error("DB Auto-Save Error:", error);
         }
+
+        // B. Redirect from Login Page to Home
+        if (currentPath.includes('index.html') || currentPath === '/' || currentPath.endsWith('/')) {
+            window.location.href = 'home.html';
+        }
+
+        // C. Update UI Icons
+        if (typeof updateUserIcons === 'function') {
+            updateUserIcons(user.displayName);
+        }
+
     } else {
-        // OPTIONAL: Reset to default if logged out (Usually page reloads, but just in case)
-        if (headerProfileBtn) headerProfileBtn.innerHTML = `<span class="material-symbols-outlined text-[20px]">person</span>`;
+        // --- LOGGED OUT ---
+        console.log("No user logged in.");
     }
 });
 // --- NEW: Handle Image Upload ---
@@ -1562,5 +1584,44 @@ window.handleProfileImageUpload = (event) => {
             }
         };
         reader.readAsDataURL(file);
+    }
+};
+(async () => {
+    try {
+        // Ye line 'setPersistence' aur 'browserLocalPersistence' ko use karegi
+        await setPersistence(auth, browserLocalPersistence);
+        console.log("Session Persistence Enabled");
+    } catch (error) {
+        console.error("Persistence Error:", error);
+    }
+})();
+// Helper: Update Header & Bottom Nav Icons
+// Is function ko pura replace karein
+
+const updateUserIcons = (name) => {
+    // CHANGE: Ab hum specifically ID se select kar rahe hain
+    const headerBtn = document.getElementById('header-profile-btn'); 
+    const bottomNavBtn = document.getElementById('nav-btn-3'); 
+    
+    if (typeof getAvatarHTML === 'function') {
+        const userName = name || "User";
+        
+        // Update Top Header Profile
+        if (headerBtn) {
+            headerBtn.innerHTML = getAvatarHTML(userName, "text-lg");
+            headerBtn.classList.add('p-0', 'bg-transparent');
+            headerBtn.classList.remove('bg-[#151b0e]', 'dark:bg-white', 'text-white');
+        }
+
+        // Update Bottom Nav Profile
+        if (bottomNavBtn) {
+            const iconSpan = bottomNavBtn.querySelector('.material-symbols-outlined');
+            if (iconSpan) {
+                const avatarContainer = document.createElement('div');
+                avatarContainer.className = "w-6 h-6 mb-0.5"; 
+                avatarContainer.innerHTML = getAvatarHTML(userName, "text-xs");
+                bottomNavBtn.replaceChild(avatarContainer, iconSpan);
+            }
+        }
     }
 };
