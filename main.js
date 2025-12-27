@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>`;
         initializeSearch();
+        
     }
 });
 
@@ -754,7 +755,7 @@ const renderFooter = () => {
 
 // --- INIT ---
 document.addEventListener('DOMContentLoaded', () => {
-    updateCartCount(); renderBottomNav(); renderFooter();
+    renderAnnouncementBar();updateCartCount(); renderBottomNav(); renderFooter();
     const path = window.location.pathname;
     if (path.includes('shop.html')) { renderShopTabs(); renderShop(); }
     if (path.includes('product.html')) renderProductDetail();
@@ -1168,7 +1169,8 @@ import {
     signInWithEmailAndPassword,
     updateEmail,
     setPersistence,
-    browserLocalPersistence 
+    browserLocalPersistence,
+     sendPasswordResetEmail 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // NEW: Import Database functions
@@ -1625,3 +1627,101 @@ const updateUserIcons = (name) => {
         }
     }
 };
+document.getElementById('forgot-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('forgot-email').value;
+    setLoading('forgot-btn', true);
+
+    try {
+        // Configure URL: Password reset ke baad wapas kahan aana hai
+        const actionCodeSettings = {
+            url: window.location.href, // Wapas login page par layega
+            handleCodeInApp: true
+        };
+
+        await sendPasswordResetEmail(auth, email, actionCodeSettings);
+        
+        console.log("Firebase sent success signal for:", email); // Console check karein
+        showToast("Reset Link Sent! Check Spam folder too.");
+        
+        setTimeout(() => {
+            switchScreen('login');
+            setLoading('forgot-btn', false, "Send Link");
+        }, 3000);
+
+    } catch (err) {
+        console.error("Forgot Password Error:", err);
+        showToast(err.message, "error");
+        setLoading('forgot-btn', false, "Send Link");
+    }
+});
+
+
+
+////////////////////////////////////
+// ==========================================
+// TOP STICKY ANNOUNCEMENT BAR
+// ==========================================
+// ==========================================
+// TOP STICKY ANNOUNCEMENT BAR (Paste at very bottom of main.js)
+// ==========================================
+function renderAnnouncementBar() {
+    console.log("Announcement Bar Started..."); // Debugging Line
+
+    // Agar pehle se bar hai to duplicate mat banao
+    if (document.getElementById('glow-announcement-bar')) return;
+
+    // 1. Create the Bar
+    const bar = document.createElement('div');
+    bar.id = 'glow-announcement-bar';
+    // z-index 1000 kar diya taaki sabse upar rahe
+    bar.className = 'fixed top-0 left-0 right-0 z-[1000] h-8 bg-gradient-to-r from-[#1a2111] via-[#74b814] to-[#1a2111] flex items-center justify-center overflow-hidden shadow-md';
+    bar.innerHTML = `
+        <div class="flex items-center gap-2 text-white animate-pulse">
+            <span class="material-symbols-outlined text-[14px] text-yellow-300">auto_awesome</span>
+            <p class="text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] text-center font-sans">
+                Glow Creations: Preserving Your Memories
+            </p>
+            <span class="material-symbols-outlined text-[14px] text-yellow-300">auto_awesome</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer"></div>
+        <style>
+            @keyframes shimmer { 100% { transform: translateX(100%); } }
+            .animate-shimmer { animation: shimmer 3s infinite; }
+        </style>
+    `;
+
+    // 2. Inject at Top of Body
+    document.body.prepend(bar);
+
+    // 3. Header Adjustment Logic (Retry 10 times)
+    let attempts = 0;
+    const adjustInterval = setInterval(() => {
+        attempts++;
+        const mainHeader = document.querySelector('#universal-header > div.fixed');
+        
+        if (mainHeader) {
+            // Header mil gaya, niche khiskao
+            mainHeader.style.top = '32px'; 
+            mainHeader.style.transition = 'top 0.3s ease';
+            
+            // Spacer ko bhi adjust karo
+            const spacer = document.querySelector('#universal-header > div.h-\\[60px\\]') || 
+                           document.querySelector('#universal-header > div.h-\\[72px\\]');
+            
+            if (spacer) {
+                const currentHeight = spacer.clientHeight || 60;
+                spacer.style.height = (currentHeight + 32) + 'px';
+            }
+            
+            console.log("Header Adjusted Successfully");
+            clearInterval(adjustInterval);
+        }
+
+        // 5 seconds ke baad band kar do
+        if (attempts > 50) clearInterval(adjustInterval);
+    }, 100);
+}
+
+// Make it global so HTML can use it if needed (optional)
+window.renderAnnouncementBar = renderAnnouncementBar;
