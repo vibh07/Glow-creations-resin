@@ -1,60 +1,146 @@
 const products = [
-    {
-        id: 1,
-        name: "Floral Resin Ring",
-        category: "Rings",
-        price: 399,
-        originalPrice: 599,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDJ22YCSIEDrH_7BBpveMM1KPYJBTQRJZxkG7AmMwUYflFJDUSgq3IJ-fu48pKsipdPKVUYo5JChdZ_ZvutAwITZXalrGWYJ_uBjw32BQbgO_RkYB5Ux7CvVzk7o8vUWJAy9IhJzBogUGCp3KGBHyW1KCDNbjou9ssazlc56a2dI-ne4oRN62rh8NFDm5e-j3vRCWA38XsMxKUO5QsdaZgTefC5gG6i-C6IQQX3Q7CMSO9H2PsXJvO6b_WUEHglzsyBtmZLDhgP0gk",
-        description: "Real dried flowers preserved in crystal clear resin. A piece of nature on your finger."
+    { 
+        id: 1, 
+        name: "Diamond Solitaire Ring", 
+        price: "1,200.00", 
+        image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=60", 
+        category: "Ring", 
+        isTrending: true 
     },
-    {
-        id: 2,
-        name: "Ocean Teardrop Pendant",
-        category: "Pendants",
-        price: 649,
-        originalPrice: 899,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA8IBzZ7eXTxxSQM0r0eJDnacYjppNttPlgAfl3GozNBxah_rHTPU4hnFMylOXoQgkbFNBmtnABeYQfyPRDhZjZE0Sg2vb7K9iPtOsTAGcm4-EkmTTFWJ4K2Aqer3BJvK_XZyIaVvtFcunjD1pwBrJzo-AMLc1Eh3919oWJqHqJbH9Ora62qiCctW-jowE9OyL1kAqG8iYTLsbylfQdJ5VTUSE7YZIQYI1Q51fZnRTfemeIHSEp2wyvNC9BVHk2hXtr5WzVFfFPkwQ",
-        description: "Capturing the depth of the ocean. This pendant shifts colors like the sea."
+    { 
+        id: 2, 
+        name: "Gold Stackable Band", 
+        price: "350.00", 
+        image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=500&q=60", 
+        category: "Ring", 
+        isTrending: false 
     },
-    {
-        id: 3,
-        name: "Gold Leaf Bangle",
-        category: "Bangles",
-        trending: true,
-        price: 999,
-        originalPrice: 1299,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBnh6QQpSkt3s0SIuF2bh3hxSJkKM4eUeu5h2qETRGVzJiE3iUyiaivRxP9cyyKhiILU9bTz0PdvKsEkarqH5dlHdywDVfV_ghB9gctwe0Du5Gf01pbspaZ8BdeauY43axCa2lJ7cQ975Sqof_izIfja1kQiR2gns1Mrt8AowjT8ul8PVpe_-dNYBhicJGE81ZKRD9Uss3iY0uazvm1m4e-rDAtVl9oEa7CmAIHN8hqNR4DW2rUCkkgfLFutb7rcgk9XKvNGoBgUeQ",
-        description: "Luxurious 24k gold leaf flakes embedded in high-quality resin."
+    { 
+        id: 3, 
+        name: "Rose Gold Heart Pendant", 
+        price: "450.00", 
+        image: "https://images.unsplash.com/photo-1602751584552-8ba43d4c3104?auto=format&fit=crop&w=500&q=60", 
+        category: "Pendant", 
+        isTrending: true 
     },
-    {
-        id: 4,
-        name: "Alphabet Keychain",
-        category: "Keychains",
-        trending: true,
-        price: 199,
-        originalPrice: 299,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAVDxsshVqt7JAJhAbnrZhHmwvr6a9L-rlVS5guLzB1AEy6wJZxSVDKmg2-LFQmJrF3GvOXcbV64DVBll7TfM2ZYgRlAqvHlSRBaL-qGiaQUYnnpVZnWLzI51sveh4uvxOiw5O4UT9IKfWQaj5tQ0h_w3LVeEKdfxHE9N5k5pAV5SbRKwGzQ_whwSswGgfPf2SiMj5IyUcY8lccaEAEzjenRy0_SCn9ue3lSJ27Rc_vmE00Wh9pGV12ZDInDVLsP8cFzpp9crhxSpw",
-        description: "Personalized alphabet keychains with glitter and pastel shades."
+    { 
+        id: 4, 
+        name: "Emerald Drop Necklace", 
+        price: "580.00", 
+        image: "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&w=500&q=60", 
+        category: "Pendant", 
+        isTrending: false 
     },
-    {
-        id: 5,
-        name: "Galaxy Resin Ring",
-        category: "Rings",
-        trending: true,
-        price: 450,
-        originalPrice: 600,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB8OiCgv2--GpseGRGSCZ4qqbsemhJakfCsZkIZPZFxIHkvlwJ3pY_R7bejI17MgMxTFg-KX6Dv3yLlq3Q-D2ZBoHQKfXvccennioCFwrCDSWsTbQZMe8Vzsfe7W3qvxcv5p3b1bYjcraKBq4-vmZXo5foObezk-fP4HqYOX9L9T2-OgnS6J6mXhyxHo8dwsQfMcNZCUIqjMC4xpMn35-cirffymnI_OEWOzDwxiEKpnOyhn5na_21Ldi1p2w2FmwiZz-_11WEz2_A",
-        description: "Swirls of cosmic colors trapped in a ring."
+    { 
+        id: 5, 
+        name: "Luxury Diamond Tennis Bracelet", 
+        price: "2,500.00", 
+        image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=500&q=60", 
+        category: "Bracelet", 
+        isTrending: true 
     },
-    {
-        id: 6,
-        name: "Magic Reveal Pendant",
-        category: "Pendants",
-        trending: true,
-        price: 135,
-        originalPrice: 180,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcbst4o6K52psLlFUDV3ejgx9fL2B3xCj8W6oAQ2tqvqo1BfsfuI-W0O9Hgxgr-8kgMmSs3VfzzKB6uvVuUCaPzvBwhLiOtSNG4Dsno87q3141JNAT0lvOuFuuuqskM6kQR5sb415_KBfcIOqtCGUnmIQ045LUwjNXhAOp5et456TvqJcG4VyXz_sJHbI3-TGPV1uY4Su2BtkZ3-okiPTQ4NWp54U2v-eyDdZXSZ39G1y_i41zl0jahuLGkV4ZMYViAWVlXUeitu4",
-        description: "Heat sensitive pendant that reveals a photo or color when warm."
+    { 
+        id: 6, 
+        name: "Silver Charm Bracelet", 
+        price: "85.00", 
+        image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=60", 
+        category: "Bracelet", 
+        isTrending: false 
+    },
+    { 
+        id: 7, 
+        name: "Traditional Gold Bangles", 
+        price: "950.00", 
+        image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=60", 
+        category: "Bangles", 
+        isTrending: true 
+    },
+    { 
+        id: 8, 
+        name: "Modern Rose Gold Kada", 
+        price: "420.00", 
+        image: "https://plus.unsplash.com/premium_photo-1681276170683-706111cf5963?auto=format&fit=crop&w=500&q=60", 
+        category: "Bangles", 
+        isTrending: false 
+    },
+    { 
+        id: 9, 
+        name: "Diamond Mangalsutra", 
+        price: "1,100.00", 
+        image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=60", 
+        category: "Mangalsutra", 
+        isTrending: true 
+    },
+    { 
+        id: 10, 
+        name: "Black Bead Gold Chain", 
+        price: "600.00", 
+        image: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&w=500&q=60", 
+        category: "Mangalsutra", 
+        isTrending: false 
+    },
+    { 
+        id: 11, 
+        name: "Custom Name Keychain", 
+        price: "25.00", 
+        image: "https://images.unsplash.com/photo-1582562124811-2867e69f88d7?auto=format&fit=crop&w=500&q=60", 
+        category: "Keychain", 
+        isTrending: false 
+    },
+    { 
+        id: 12, 
+        name: "Luxury Car Key Fob", 
+        price: "55.00", 
+        image: "https://images.unsplash.com/photo-1622219809260-ce065fc5277f?auto=format&fit=crop&w=500&q=60", 
+        category: "Keychain", 
+        isTrending: true 
+    },
+    { 
+        id: 13, 
+        name: "Silver Memory Box", 
+        price: "120.00", 
+        image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=60", 
+        category: "Keepsake", 
+        isTrending: true 
+    },
+    { 
+        id: 14, 
+        name: "Crystal Gift Item", 
+        price: "80.00", 
+        image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=500&q=60", 
+        category: "Keepsake", 
+        isTrending: false 
+    },
+    { 
+        id: 15, 
+        name: "Minimalist Metal Frame", 
+        price: "35.00", 
+        image: "https://images.unsplash.com/photo-1534349762913-961129fdebe2?auto=format&fit=crop&w=500&q=60", 
+        category: "Frames", 
+        isTrending: true 
+    },
+    { 
+        id: 16, 
+        name: "Vintage Gold Photo Frame", 
+        price: "45.00", 
+        image: "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=500&q=60", 
+        category: "Frames", 
+        isTrending: false 
+    },
+    { 
+        id: 17, 
+        name: "Designer iPhone Case", 
+        price: "40.00", 
+        image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=500&q=60", 
+        category: "Mobile Case", 
+        isTrending: true 
+    },
+    { 
+        id: 18, 
+        name: "Leather Phone Cover", 
+        price: "65.00", 
+        image: "https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=500&q=60", 
+        category: "Mobile Case", 
+        isTrending: false 
     }
 ];
