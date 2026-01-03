@@ -1,467 +1,910 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>Glow Creations - Access</title>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glow Creation - Luxury Jewellery</title>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: { 
-                        "primary": "#8BC34A", 
-                        "primary-dark": "#689F38",
-                        "deep-bg": "#000000", /* True Black for OLED */
-                        "glass-border": "rgba(255, 255, 255, 0.08)",
-                        "glass-surface": "rgba(255, 255, 255, 0.03)"
-                    },
-                    fontFamily: { 
-                        "sans": ["Manrope", "sans-serif"], 
-                        "serif": ["Playfair Display", "serif"] 
-                    },
-                    boxShadow: {
-                        'glow': '0 0 25px rgba(139, 195, 74, 0.15)',
-                        'input-focus': '0 0 0 2px rgba(139, 195, 74, 0.3)'
-                    }
-                },
-            },
-        }
-    </script>
     <style>
-        body {
-            background-color: #000;
-            background-image: radial-gradient(at 0% 0%, rgba(139, 195, 74, 0.15) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
-        }
-
-        /* --- MODERN INPUTS --- */
-        .modern-input-group {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
+        /* --- 1. RESET & VARIABLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        .modern-input-group:focus-within {
-            border-color: #8BC34A;
-            background: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 0 15px rgba(139, 195, 74, 0.1);
+        :root {
+            --primary-gold: #996515;
+            --light-gold: #F5E6C4;
+            --nav-bg: #1A1A1A;
+            --text-dark: #2c2c2c;
+            --text-light: #777;
+            --bg-grey: #dcdcdc;
         }
 
-        .modern-input {
-            width: 100%;
-            background-color: transparent !important;
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-            color: white;
-            padding-top: 24px;
-            padding-bottom: 8px;
-            padding-left: 16px;
-            padding-right: 16px;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 16px;
-            height: auto;
+        /* --- 2. LAYOUT --- */
+        body {
+            background-color: var(--bg-grey);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
         }
 
-        /* AUTOFILL FIX */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
-            -webkit-text-fill-color: white !important;
-            transition: background-color 5000s ease-in-out 0s;
+        .mobile-container {
+            width: 100%; max-width: 414px;
+            background-color: #fff; height: 95vh;
+            position: relative; border-radius: 30px;
+            overflow: hidden; /* Clips everything outside the phone frame */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .scrollable-content {
+            height: 100%; overflow-y: auto;
+            padding-bottom: 100px; /* Space for Bottom Nav */
+            scrollbar-width: none;
+        }
+        .scrollable-content::-webkit-scrollbar { display: none; }
+
+        /* --- 3. HEADER & SEARCH (STICKY GROUP) --- */
+        .fixed-header-group {
+            position: sticky; top: 0; z-index: 50;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding-bottom: 5px;
+        }
+
+        .header {
+            padding: 20px 20px 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo-box { display: flex; align-items: center; gap: 8px; }
+        .logo-icon-img { font-size: 22px; color: var(--primary-gold); }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #1a1a1a; }
+
+        /* Purana notification-btn style hata sakte hain ya replace kar dein */
+
+.header-profile-btn {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    background: #f9f9f9;
+    border: 1px solid #eee; /* Thoda border add kiya premium look ke liye */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #333;
+    font-size: 18px; /* Icon size adjust kiya */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-profile-btn:active {
+    background: #e0e0e0;
+    transform: scale(0.95);
+}
+
+        .search-section { padding: 5px 20px 15px 20px; display: flex; gap: 10px; background: #fff; }
+        .search-box {
+            flex: 1; background: #f9f9f9; border: 1px solid #eee; border-radius: 12px;
+            padding: 10px 15px; display: flex; align-items: center; gap: 10px; color: #888;
+        }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
+        .filter-btn {
+            background: var(--primary-gold); color: white; width: 45px;
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- 4. SECTIONS (Banner, Categories, Filters) --- */
+        .banner-wrapper { padding: 10px 20px; }
+        .banner {
+            background-color: #F8F3E6; border-radius: 20px; padding: 20px;
+            display: flex; position: relative; height: 160px; overflow: hidden;
+        }
+        .banner-content { z-index: 2; width: 65%; }
+        .banner h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 5px; }
+        .banner p { font-size: 11px; color: var(--text-light); margin-bottom: 15px; }
+        .shop-now-btn {
+            background: var(--primary-gold); color: white; border: none;
+            padding: 8px 18px; border-radius: 20px; font-size: 11px; cursor: pointer;
+        }
+        .banner-img {
+            width: 140px; height: 100%; object-fit: cover; position: absolute;
+            right: -10px; bottom: 0; mask-image: linear-gradient(to left, black 60%, transparent);
+        }
+
+        .section-header { padding: 10px 20px 5px; display: flex; justify-content: space-between; align-items: center; }
+        .section-title { font-weight: 700; font-size: 16px; }
+        .see-all { font-size: 12px; color: var(--primary-gold); font-weight: 500; }
+
+        .categories { display: flex; gap: 20px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        
+        .cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 65px; cursor: pointer; }
+        .cat-icon {
+            width: 55px; height: 55px; background: #fffcf5; border: 1px solid #efe5d0;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: var(--primary-gold); transition: transform 0.2s;
+        }
+        .cat-item:active .cat-icon { transform: scale(0.9); background: var(--primary-gold); color: #fff; }
+        .cat-name { font-size: 11px; font-weight: 500; color: #444; }
+
+        .filters { display: flex; gap: 10px; padding: 0 20px 15px; overflow-x: auto; scrollbar-width: none; }
+        .filters::-webkit-scrollbar { display: none; }
+        .filter-chip {
+            padding: 6px 18px; border-radius: 20px; border: 1px solid #eee;
+            font-size: 13px; white-space: nowrap; color: #666; cursor: pointer; background: #fff;
+        }
+        .filter-chip.active { background: var(--primary-gold); color: white; border-color: var(--primary-gold); }
+
+        /* --- 5. PRODUCTS --- */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+        .product-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative; }
+        
+        .prod-img-box { height: 180px; width: 100%; background: #f9f9f9; position: relative; }
+        .prod-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .fav-icon {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(255,255,255,0.9); width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 12px; color: #333; z-index: 5;
+        }
+        .fav-icon.active { color: red; background: #ffe5e5; }
+        .fav-icon.active i { font-weight: 900; }
+
+        .cart-btn-product {
+            position: absolute; bottom: 10px; right: 10px;
+            background: var(--primary-gold); color: white; width: 30px; height: 30px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 12px; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .prod-details { padding: 12px; }
+        .prod-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
+        .prod-price { font-size: 14px; font-weight: 700; color: var(--primary-gold); }
+
+        /* --- 6. BOTTOM NAV (Z-Index: 1000) --- */
+        .bottom-nav-container {
+            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; z-index: 1000;
+        }
+        .bottom-nav {
+            background: #1A1A1A; border-radius: 40px; height: 70px;
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 0 10px;
+        }
+        .nav-item {
+            color: #888; font-size: 20px; cursor: pointer; width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .nav-item.active {
+            background: #ffffff; color: var(--primary-gold);
+            transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* --- 7. OVERLAY (Z-Index: 1050) --- */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1050;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .overlay.active { opacity: 1; pointer-events: all; }
+
+        /* --- 8. POPUPS (Wishlist & Cart) (Z-Index: 1100) --- */
+        .wishlist-popup, .cart-popup {
+            position: absolute; bottom: -100%; left: 0; width: 100%;
+            background: #fff; border-top-left-radius: 30px; border-top-right-radius: 30px;
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.2); z-index: 1100;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; display: flex; flex-direction: column;
+        }
+        .wishlist-popup { height: 70%; }
+        .cart-popup { height: 85%; }
+        
+        .wishlist-popup.open, .cart-popup.open { bottom: 0; }
+
+        .popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .popup-title { font-size: 18px; font-weight: 700; color: var(--primary-gold); }
+        .close-popup { font-size: 24px; color: #888; cursor: pointer; }
+
+        .wishlist-grid, .cart-items-container { overflow-y: auto; scrollbar-width: none; }
+        .wishlist-grid::-webkit-scrollbar, .cart-items-container::-webkit-scrollbar { display: none; }
+        /* --- Wishlist Popup List Style (FIXED) --- */
+        
+        .wishlist-grid {
+            display: flex;             /* Grid hata diya */
+            flex-direction: column;    /* Ek ke neeche ek aayenge */
+            gap: 15px;
+            overflow-y: auto;          /* Scrollable */
+            padding-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .wishlist-grid::-webkit-scrollbar { display: none; }
+
+        /* New Wishlist Item Styling */
+        .wishlist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .wishlist-img {
+            width: 70px;
+            height: 70px;
             border-radius: 12px;
+            object-fit: cover;
         }
 
-        .modern-label {
-            position: absolute;
-            left: 16px;
-            top: 16px;
-            color: #9ca3af;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            pointer-events: none;
+        .wishlist-details {
+            flex: 1; /* Text beech mein rahega */
         }
 
-        .modern-input:focus ~ .modern-label,
-        .modern-input:not(:placeholder-shown) ~ .modern-label {
-            top: -7px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #8BC34A;
-            font-weight: 700;
-        }
+        .wishlist-title { font-size: 14px; font-weight: 600; color: #333; }
+        .wishlist-price { font-size: 13px; font-weight: 700; color: var(--primary-gold); margin-top: 2px; }
 
-        /* --- Social Buttons --- */
-        .social-btn {
+        .wishlist-remove-btn {
+            width: 35px;
+            height: 35px;
+            background: #fff0f0; /* Light Red Background */
+            color: #d32f2f;      /* Red Icon */
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            font-weight: 600;
+            cursor: pointer;
             font-size: 14px;
             transition: all 0.2s;
         }
-        .social-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
-        }
-        .social-btn:active { transform: scale(0.98); }
+        .wishlist-remove-btn:active { transform: scale(0.9); }
+        .cart-items-container { flex: 1; padding-bottom: 20px; }
 
-        /* Loader */
-        .loader {
-            border: 2px solid rgba(0,0,0,0.1);
-            border-top: 2px solid #000;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Cart Specifics */
+        .cart-item { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .cart-item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; }
+        .cart-item-details { flex: 1; }
+        .cart-custom-badge { font-size: 10px; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; color: #555; margin-top: 4px; display: inline-block; }
+        .cart-footer { border-top: 1px solid #eee; padding-top: 15px; }
+        .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-bottom: 15px; }
+        .place-order-btn { width: 100%; background: #1a1a1a; color: white; padding: 15px; border-radius: 15px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; }
 
-        /* Smooth View Switching */
-        .view-section {
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+        /* --- 9. CUSTOMIZATION MODALS (Z-Index: 2000+) --- */
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
         }
-        .view-section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+
+        .custom-wizard {
+            background: white; width: 90%; max-height: 80%; border-radius: 20px; padding: 20px;
+            display: flex; flex-direction: column; position: relative; overflow-y: auto;
         }
+
+        .step-container { display: none; }
+        .step-container.active { display: block; animation: fadeIn 0.3s; }
+        .wizard-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: var(--primary-gold); }
+        .wizard-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; }
+
+        .input-group { margin-bottom: 15px; }
+        .custom-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 13px; background: #f9f9f9; }
+        .file-upload-label { font-size: 11px; color: #666; margin-bottom: 5px; display: block; }
+
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .option-btn { border: 1px solid #ddd; padding: 10px; border-radius: 10px; text-align: center; font-size: 12px; cursor: pointer; }
+        .option-btn.selected { background: var(--primary-gold); color: white; border-color: var(--primary-gold); }
+
+        .color-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .color-swatch { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+        .color-swatch.selected { border-color: #000; transform: scale(1.1); }
+        
+        .wizard-actions { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-outline { background: transparent; border: 1px solid #ccc; padding: 8px 20px; border-radius: 20px; }
+        .btn-fill { background: var(--primary-gold); color: white; border: none; padding: 8px 20px; border-radius: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .empty-msg { grid-column: span 2; text-align: center; color: #888; margin-top: 50px; font-size: 14px; }
+        /* Auth Styles */
+.google-btn {
+    background: #fff; border: 1px solid #ddd; padding: 12px; 
+    width: 100%; border-radius: 30px; display: flex; 
+    align-items: center; justify-content: center; gap: 10px;
+    font-weight: 500; color: #555; cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s;
+}
+.google-btn:active { transform: scale(0.98); background: #f5f5f5; }
+.google-btn i { color: #DB4437; } /* Google Red Color */
+
+.logout-btn {
+    background: #ff4d4d; color: white; border: none; padding: 10px 25px;
+    border-radius: 20px; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; gap: 8px; margin: 0 auto;
+}
     </style>
 </head>
-<body class="text-white font-sans min-h-screen flex items-center justify-center relative overflow-hidden selection:bg-primary selection:text-black">
+<body>
 
-    <div class="w-full h-full flex flex-col lg:flex-row lg:h-screen">
+    <div class="mobile-container">
         
-        <!-- DESKTOP LEFT SIDE (Visual) -->
-        <div class="hidden lg:block lg:w-1/2 h-full relative overflow-hidden">
-            <div class="absolute inset-0 bg-black/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=2400" 
-                 class="w-full h-full object-cover scale-105" alt="Resin Art">
-            <div class="absolute bottom-16 left-16 z-20">
-                <h1 class="text-6xl font-serif font-bold leading-tight drop-shadow-lg">Glow <br> <span class="text-primary">Creations.</span></h1>
+        <!-- === SCROLLABLE CONTENT START === -->
+        <div class="scrollable-content">
+            
+            <!-- Fixed Header & Search Wrapper -->
+            <div class="fixed-header-group">
+                <div class="header">
+                    <div class="logo-box">
+                        <i class="fas fa-gem logo-icon-img"></i>
+                        <span class="logo-text">Glow creation</span>
+                    </div>
+                    <div class="header-profile-btn">
+                       <i class="far fa-user"></i> 
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i> 
+                        <input type="text" placeholder="Search rings, necklaces...">
+                    </div>
+                    <div class="filter-btn"><i class="fas fa-sliders-h"></i></div>
+                </div>
+            </div>
+
+            <!-- Banner -->
+            <div class="banner-wrapper">
+                <div class="banner">
+                    <div class="banner-content">
+                        <h2>Exclusive Gold Collection</h2>
+                        <p>30% Off on Premium Diamond Sets</p>
+                        <button class="shop-now-btn">Explore Now</button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="banner-img">
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="section-header">
+                <span class="section-title">Category</span> <span class="see-all">See All</span>
+            </div>
+            
+            <div class="categories">
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-ring"></i></div><span class="cat-name">Ring</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="far fa-gem"></i></div><span class="cat-name">Pendant</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-link"></i></div><span class="cat-name">Bracelet</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="far fa-dot-circle"></i></div><span class="cat-name">Bangles</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-infinity"></i></div><span class="cat-name">Mangalsutra</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-key"></i></div><span class="cat-name">Keychain</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-gift"></i></div><span class="cat-name">Keepsake</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="far fa-image"></i></div><span class="cat-name">Frames</span></div>
+                <div class="cat-item"><div class="cat-icon"><i class="fas fa-mobile-alt"></i></div><span class="cat-name">Mobile Case</span></div>
+            </div>
+
+            <!-- Trending Header -->
+            <div class="section-header">
+                <span class="section-title">Trending</span>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filters">
+                <div class="filter-chip active">All</div>
+                <div class="filter-chip">Gold</div>
+                <div class="filter-chip">Silver</div>
+                <div class="filter-chip">Diamond</div>
+                <div class="filter-chip">Newest</div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="productContainer">
+                <!-- Data inserted by JS -->
+            </div>
+
+        </div> 
+        <!-- === SCROLLABLE CONTENT END === -->
+
+
+        <!-- === FIXED LAYERS (OUTSIDE SCROLL) === -->
+
+        <!-- 1. Overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- 2. Wishlist Popup -->
+        <div class="wishlist-popup" id="wishlistPopup">
+            <div class="popup-header">
+                <span class="popup-title">My Favourites ❤️</span>
+                <span class="close-popup" id="closePopup"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="wishlist-grid" id="wishlistContainer">
+                <div class="empty-msg">No items loved yet!</div>
             </div>
         </div>
 
-        <!-- RIGHT SIDE (Form) -->
-        <div class="w-full lg:w-1/2 flex items-center justify-center relative z-20 px-4 py-8 h-screen lg:h-auto overflow-y-auto">
-            
-            <!-- Skip Button -->
-            <button onclick="window.location.href='home.html'" class="absolute top-6 right-6 lg:top-10 lg:right-10 flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white z-50">
-                Skip for now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+        <!-- 3. Cart Popup -->
+        <div class="cart-popup" id="cartPopup">
+            <div class="popup-header">
+                <span class="popup-title">Shopping Bag 🛍️</span>
+                <span class="close-popup" id="closeCart"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="cart-items-container" id="cartItemsList">
+                <!-- Cart Items -->
+            </div>
+            <div class="cart-footer">
+                <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+                <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
 
-            <!-- Main Card Container -->
-            <div class="w-full max-w-[420px] relative">
-                
-                <!-- Logo -->
-                <div class="flex flex-col items-center mb-8">
-                    <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-black font-serif font-bold text-3xl shadow-glow mb-6">G</div>
+        <!-- 4. Bottom Navigation -->
+        <div class="bottom-nav-container">
+            <div class="bottom-nav">
+                <div class="nav-item active" id="nav-home"><i class="fas fa-home"></i></div>
+                <div class="nav-item" id="nav-shop"><i class="fas fa-shopping-bag"></i></div>
+                <div class="nav-item" id="nav-heart"><i class="far fa-heart"></i></div>
+                <div class="nav-item" id="nav-profile"><i class="far fa-user"></i></div>
+            </div>
+        </div>
+
+        <!-- 5. Customization Prompt (Modal) -->
+        <div class="modal-overlay" id="promptModal">
+            <div style="background: white; padding: 25px; border-radius: 20px; text-align: center; width: 80%;">
+                <h3 style="margin-bottom: 10px;">Customize?</h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 13px;">Do you want to add personal touches?</p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn-outline" onclick="addToCartSimple()">No, Simple</button>
+                    <button class="btn-fill" onclick="startCustomization()">Yes, Customize</button>
                 </div>
+            </div>
+        </div>
 
-                <!-- 1. LOGIN FORM -->
-                <div id="login-view" class="view-section active">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-serif text-white">Welcome Back</h2>
-                        <p class="text-gray-400 text-sm mt-1">Sign in to continue your journey.</p>
+        <!-- 6. Customization Wizard (Modal) -->
+        <div class="modal-overlay" id="wizardModal">
+            <div class="custom-wizard">
+                <!-- Step 1: Category -->
+                <div class="step-container active" id="step1">
+                    <div class="wizard-title">Select Item Type</div>
+                    <div class="option-grid" id="catOptions"></div>
+                    <div class="wizard-actions"><button class="btn-outline" onclick="closeWizard()">Cancel</button></div>
+                </div>
+                <!-- Step 2: Shape -->
+                <div class="step-container" id="step2">
+                    <div class="wizard-title">Select Shape</div>
+                    <div class="option-grid" id="shapeOptions"></div>
+                    <div class="wizard-actions"><button class="btn-outline" onclick="prevStep(1)">Back</button></div>
+                </div>
+                <!-- Step 3: Size -->
+                <div class="step-container" id="step3">
+                    <div class="wizard-title">Select Size</div>
+                    <div id="sizeContent"></div>
+                    <div class="wizard-actions">
+                        <button class="btn-outline" onclick="prevStep(2)">Back</button>
+                        <button class="btn-fill" onclick="nextStep(4)">Next</button>
                     </div>
+                </div>
+                <!-- Step 4: Color -->
+                <div class="step-container" id="step4">
+                    <div class="wizard-title">Select Color</div>
+                    <div class="color-row">
+                        <div class="color-swatch" style="background: silver;" onclick="selectColor('Silver', this)"></div>
+                        <div class="color-swatch" style="background: #FFD700;" onclick="selectColor('Gold', this)"></div>
+                        <div class="color-swatch" style="background: #b87333;" onclick="selectColor('Copper', this)"></div>
+                    </div>
+                    <div class="wizard-actions">
+                        <button class="btn-outline" onclick="prevStep(3)">Back</button>
+                        <button class="btn-fill" onclick="nextStep(5)">Next</button>
+                    </div>
+                </div>
+                <!-- Step 5: Details -->
+                <div class="step-container" id="step5">
+                    <div class="wizard-title">Final Details</div>
+                    <div class="input-group">
+                        <label class="wizard-label">Instructions (Optional)</label>
+                        <textarea id="customNote" rows="3" class="custom-input" placeholder="Type specific details here..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="wizard-label">Add Reference Image (Optional)</label>
+                        <input type="file" id="refImage" accept="image/*" class="custom-input">
+                        <span class="file-upload-label">Upload a photo from your phone gallery</span>
+                    </div>
+                    <div class="input-group">
+                        <label class="wizard-label">Reference Link (Optional)</label>
+                        <input type="url" id="refLink" class="custom-input" placeholder="Paste link here...">
+                    </div>
+                    <div class="wizard-actions">
+                        <button class="btn-outline" onclick="prevStep(4)">Back</button>
+                        <button class="btn-fill" onclick="finalizeCustomCart()">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 7. AUTH LOGIN MODAL -->
+<div class="modal-overlay" id="authModal">
+    <div class="custom-wizard" style="text-align: center;">
+        <h3 style="margin-bottom: 10px; color: var(--primary-gold);">Welcome to Glow</h3>
+        <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Sign in to save your wishlist and orders.</p>
+        
+        <!-- Google Login Button -->
+        <button id="googleLoginBtn" class="google-btn">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
+        
+        <button class="btn-outline" onclick="closeAuthModal()" style="margin-top: 15px;">Cancel</button>
+    </div>
+</div>
 
-                    <form id="login-form" class="space-y-4">
-                        <div class="modern-input-group">
-                            <input type="email" id="login-email" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Email Address</label>
+<!-- 8. USER PROFILE MODAL (Logged In State) -->
+<div class="modal-overlay" id="userProfileModal">
+    <div class="custom-wizard" style="text-align: center;">
+        <img id="userPhoto" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-gold); margin-bottom: 10px;">
+        <h3 id="userName" style="font-size: 18px; margin-bottom: 5px;">User Name</h3>
+        <p id="userEmail" style="color: #777; font-size: 12px; margin-bottom: 20px;">email@example.com</p>
+        
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        <button class="btn-outline" onclick="closeUserModal()" style="margin-top: 15px;">Close</button>
+    </div>
+</div>
+
+    </div> <!-- Mobile Container End -->
+    <script src="data.js"></script>
+    <script type="module">
+  // 1. Imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; // Using stable v10
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // 2. Your Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4",
+    authDomain: "glow-creation.firebaseapp.com",
+    projectId: "glow-creation",
+    storageBucket: "glow-creation.firebasestorage.app",
+    messagingSenderId: "236856410532",
+    appId: "1:236856410532:web:2253fb7f215f7a232f8131",
+    measurementId: "G-34FVP1W4E1"
+  };
+
+  // 3. Initialize
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // --- UI Elements ---
+  const headerProfileBtn = document.querySelector('.header-profile-btn'); // Jo humne pichle step me banaya tha
+  const authModal = document.getElementById('authModal');
+  const userModal = document.getElementById('userProfileModal');
+  const googleBtn = document.getElementById('googleLoginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  // --- Functions ---
+  
+  // 1. Login with Google
+  googleBtn.addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+            alert("Welcome " + result.user.displayName + "!");
+            authModal.style.display = 'none';
+        }).catch((error) => {
+            console.error(error);
+            alert("Login Failed: " + error.message);
+        });
+  });
+
+  // 2. Logout
+  logoutBtn.addEventListener('click', () => {
+      signOut(auth).then(() => {
+          alert("Logged out successfully.");
+          userModal.style.display = 'none';
+      });
+  });
+
+  // 3. Monitor Login State (Jab user login/logout kare)
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          // User Logged In Hai
+          // Update Profile Icon in Header
+          headerProfileBtn.innerHTML = `<img src="${user.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+          
+          // Setup User Modal Data
+          document.getElementById('userPhoto').src = user.photoURL;
+          document.getElementById('userName').innerText = user.displayName;
+          document.getElementById('userEmail').innerText = user.email;
+
+          // Profile Click Action -> Open User Modal
+          headerProfileBtn.onclick = () => { userModal.style.display = 'flex'; };
+
+      } else {
+          // User Logged Out Hai
+          // Reset Profile Icon
+          headerProfileBtn.innerHTML = `<i class="far fa-user"></i>`;
+          
+          // Profile Click Action -> Open Login Modal
+          headerProfileBtn.onclick = () => { authModal.style.display = 'flex'; };
+      }
+  });
+
+  // 4. Global Close Functions (taaki HTML onclick kaam kare)
+  window.closeAuthModal = () => { authModal.style.display = 'none'; };
+  window.closeUserModal = () => { userModal.style.display = 'none'; };
+
+</script>
+    <!-- JAVASCRIPT -->
+    <script>
+           const productContainer = document.getElementById('productContainer');
+        const overlay = document.getElementById('overlay');
+        const cartPopup = document.getElementById('cartPopup');
+        const wishlistPopup = document.getElementById('wishlistPopup');
+        const promptModal = document.getElementById('promptModal');
+        const wizardModal = document.getElementById('wizardModal');
+
+        let wishlist = [];
+        let cart = [];
+        let currentProductToAdd = null;
+        let customData = {};
+
+        // --- 3. CORE FUNCTIONS ---
+
+        // Render Products
+        function loadProducts(dataList) {
+            // Check karein ki data load hua ya nahi
+            if (typeof products === 'undefined') {
+                productContainer.innerHTML = "<p style='padding:20px; text-align:center;'>Error: Data not loaded.</p>";
+                return;
+            }
+
+            if (!dataList || dataList.length === 0) {
+                productContainer.innerHTML = "<p style='padding:20px; text-align:center; grid-column:span 2'>No items found.</p>";
+                return;
+            }
+            let htmlContent = '';
+            dataList.forEach(product => {
+                const isLiked = wishlist.some(item => item.id === product.id) ? 'active' : '';
+                htmlContent += `
+                    <div class="product-card">
+                        <div class="prod-img-box">
+                            <span class="fav-icon ${isLiked}" onclick="toggleLike(${product.id}, this)">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                            </span>
+                            <span class="cart-btn-product" onclick="initiateAddToCart(${product.id})">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <img src="${product.image}" loading="lazy">
                         </div>
+                        <div class="prod-details">
+                            <div class="prod-title">${product.name}</div>
+                            <div class="prod-price">$${product.price}</div>
+                        </div>
+                    </div>`;
+            });
+            productContainer.innerHTML = htmlContent;
+        }
 
-                        <div class="modern-input-group">
-                            <input type="password" id="login-password" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Password</label>
+        // Reset Nav to Home
+        function resetNavToHome() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const navHome = document.getElementById('nav-home');
+            navItems.forEach(nav => {
+                nav.classList.remove('active');
+                const icon = nav.querySelector('i');
+                if (icon.classList.contains('fa-heart') || icon.classList.contains('fa-user') || icon.classList.contains('fa-comment-dots')) {
+                    icon.classList.remove('fas'); icon.classList.add('far');
+                }
+            });
+            navHome.classList.add('active');
+        }
+
+        // --- 4. CART & CUSTOMIZATION LOGIC ---
+
+        function initiateAddToCart(id) {
+            currentProductToAdd = products.find(p => p.id === id);
+            promptModal.style.display = 'flex'; // Z-Index 2000 handles overlay
+        }
+
+        function addToCartSimple() {
+            cart.push({ ...currentProductToAdd, isCustom: false });
+            promptModal.style.display = 'none';
+            alert("Added to Bag!");
+        }
+
+        function startCustomization() {
+            promptModal.style.display = 'none';
+            wizardModal.style.display = 'flex';
+            showStep(1); renderCategories(); customData = {};
+        }
+
+        function showStep(stepId) {
+            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + stepId).classList.add('active');
+        }
+        function nextStep(id) { showStep(id); }
+        function prevStep(id) { showStep(id); }
+        function closeWizard() { wizardModal.style.display = 'none'; }
+
+        // Wizard Option Rendering
+        const categoriesList = ['Ring', 'Pendant', 'Bracelet', 'Keychain', 'Frames', 'Bangles', 'Keepsake', 'Mangalsutra'];
+        function renderCategories() {
+            const c = document.getElementById('catOptions'); c.innerHTML = '';
+            categoriesList.forEach(cat => {
+                const btn = document.createElement('div'); btn.className = 'option-btn'; btn.innerText = cat;
+                btn.onclick = () => { customData.category = cat; renderShapes(cat); nextStep(2); };
+                c.appendChild(btn);
+            });
+        }
+
+        function renderShapes(cat) {
+            const c = document.getElementById('shapeOptions'); c.innerHTML = '';
+            if(['Ring','Pendant','Bracelet','Bangles','Mangalsutra'].includes(cat)){
+                const btn = document.createElement('div'); btn.className = 'option-btn selected'; btn.style.gridColumn="span 2"; btn.innerText="Standard Shape";
+                btn.onclick = () => { customData.shape = "Standard"; renderSize(cat); nextStep(3); }; c.appendChild(btn);
+            } else {
+                ['Round','Heart','Triangle','Square','Oval','Infinity'].forEach(s => {
+                    const btn = document.createElement('div'); btn.className = 'option-btn'; btn.innerText=s;
+                    btn.onclick = () => { customData.shape = s; renderSize(cat); nextStep(3); }; c.appendChild(btn);
+                });
+            }
+        }
+
+        function renderSize(cat) {
+            const c = document.getElementById('sizeContent'); c.innerHTML = '';
+            if(['Ring','Pendant','Bracelet','Bangles','Mangalsutra'].includes(cat)){
+                c.innerHTML = `<div class="option-btn selected" style="width:100%">Standard Size (Fit for All)</div>`; customData.size="Standard";
+            } else {
+                c.innerHTML = `<div class="range-box"><label class="wizard-label">Length: <span id="lenVal">50</span>mm</label><input type="range" min="10" max="200" value="50" oninput="document.getElementById('lenVal').innerText=this.value; customData.len=this.value;"></div>
+                               <div class="range-box"><label class="wizard-label">Width: <span id="widVal">50</span>mm</label><input type="range" min="10" max="200" value="50" oninput="document.getElementById('widVal').innerText=this.value; customData.wid=this.value;"></div>`;
+                customData.len=50; customData.wid=50;
+            }
+        }
+        window.selectColor = function(c, el) { customData.color = c; document.querySelectorAll('.color-swatch').forEach(e=>e.classList.remove('selected')); el.classList.add('selected'); }
+
+        window.finalizeCustomCart = function() {
+            const note = document.getElementById('customNote').value;
+            const link = document.getElementById('refLink').value;
+            const file = document.getElementById('refImage').files[0];
+            const sizeStr = customData.size === "Standard" ? "Standard" : `${customData.len}mm x ${customData.wid}mm`;
+            
+            cart.push({
+                ...currentProductToAdd, isCustom: true,
+                customDetails: {
+                    category: customData.category, shape: customData.shape || "Standard", size: sizeStr, color: customData.color || "Silver",
+                    note: note || "None", refImage: file ? file.name : "No Image", refLink: link || "None"
+                }
+            });
+            wizardModal.style.display = 'none';
+            alert("Customized Item Added!");
+            // Reset inputs
+            document.getElementById('customNote').value=""; document.getElementById('refLink').value=""; document.getElementById('refImage').value="";
+        }
+
+        // Render Cart UI
+        function renderCart() {
+            const list = document.getElementById('cartItemsList'); const totalEl = document.getElementById('cartTotal');
+            list.innerHTML = '';
+            if(cart.length === 0) { list.innerHTML="<div style='text-align:center; padding:20px; color:#888'>Your bag is empty.</div>"; totalEl.innerText="$0.00"; return; }
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += parseFloat(item.price.replace(/,/g, ''));
+                let details = '';
+                if(item.isCustom) {
+                    const d = item.customDetails;
+                    const link = d.refLink !== "None" ? `<a href="${d.refLink}" target="_blank" style="color:blue">Link</a>` : "None";
+                    const img = d.refImage !== "No Image" ? `<span style="color:green">Img Uploaded</span>` : "None";
+                    details = `<div class="cart-custom-badge">Customized</div>
+                               <div style="font-size:11px; color:#666; margin-top:5px; line-height:1.4;">
+                               ${d.category} | ${d.shape} | ${d.size} | ${d.color}<br>Note: ${d.note}<br>Ref: ${img} | ${link}</div>`;
+                }
+                list.innerHTML += `<div class="cart-item"><img src="${item.image}" class="cart-item-img"><div class="cart-item-details"><div style="font-weight:600; font-size:14px;">${item.name}</div><div style="font-weight:700; color:var(--primary-gold); font-size:13px;">$${item.price}</div>${details}</div><div style="cursor:pointer; color:red;" onclick="cart.splice(${index},1); renderCart()"><i class="fas fa-trash"></i></div></div>`;
+            });
+            totalEl.innerText = "$" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+        }
+        window.placeOrder = () => { if(cart.length===0)return alert("Cart Empty"); alert("Order Placed!"); cart=[]; renderCart(); cartPopup.classList.remove('open'); overlay.classList.remove('active'); resetNavToHome(); }
+
+        // --- 5. WISHLIST LOGIC ---
+        window.toggleLike = function(id, el) {
+            const prod = products.find(p=>p.id===id);
+            const idx = wishlist.findIndex(p=>p.id===id);
+            if(idx===-1) { wishlist.push(prod); el.classList.add('active'); el.querySelector('i').classList.replace('far','fas'); }
+            else { wishlist.splice(idx,1); el.classList.remove('active'); el.querySelector('i').classList.replace('fas','far'); }
+            if(document.getElementById('wishlistPopup').classList.contains('open')) renderWishlist();
+        }
+        // --- 5. WISHLIST LOGIC (Fixed Layout) ---
+        
+        function renderWishlist() {
+            const container = document.getElementById('wishlistContainer');
+            
+            if(wishlist.length === 0){ 
+                container.innerHTML = '<div class="empty-msg">No items loved yet! 💔</div>'; 
+                return; 
+            }
+            
+            let html = ''; 
+            wishlist.forEach(item => {
+                // Hum 'toggleLike' use kar rahe hain remove karne ke liye
+                // Image, Name, Price aur Remove Button ek line mein honge
+                html += `
+                    <div class="wishlist-item">
+                        <img src="${item.image}" class="wishlist-img">
+                        
+                        <div class="wishlist-details">
+                            <div class="wishlist-title">${item.name}</div>
+                            <div class="wishlist-price">$${item.price}</div>
                         </div>
                         
-                        <div class="flex justify-end">
-                            <button type="button" onclick="switchScreen('forgot')" class="text-xs font-bold text-gray-500 hover:text-primary transition-colors">Forgot Password?</button>
-                        </div>
-
-                        <button type="submit" id="login-btn" class="w-full py-4 bg-primary hover:bg-primary-dark text-black rounded-2xl font-bold text-base shadow-glow transition-transform active:scale-95 flex items-center justify-center gap-2 mt-2">
-                            Sign In
-                        </button>
-                    </form>
-
-                    <!-- Google Login (Full Width) -->
-                    <div class="mt-8">
-                        <div class="relative flex py-2 items-center">
-                            <div class="flex-grow border-t border-white/10"></div>
-                            <span class="flex-shrink-0 mx-4 text-gray-500 text-xs uppercase font-bold">Or continue with</span>
-                            <div class="flex-grow border-t border-white/10"></div>
-                        </div>
-
-                        <div class="mt-4">
-                            <button id="google-btn-login" class="social-btn group w-full">
-                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 group-hover:scale-110 transition-transform">
-                                Continue with Google
-                            </button>
+                        <!-- Remove Button (Trash Icon) -->
+                        <div class="wishlist-remove-btn" onclick="toggleLike(${item.id}, this); renderWishlist()">
+                            <i class="fas fa-trash-alt"></i>
                         </div>
                     </div>
+                `;
+            }); 
+            container.innerHTML = html;
+        }
 
-                    <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-500">Not a member yet?</p>
-                        <button onclick="switchScreen('signup')" class="text-white text-sm font-bold hover:text-primary mt-1 transition-colors">Create Account</button>
-                    </div>
-                </div>
+        // --- 6. EVENT LISTENERS ---
+        
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => loadProducts(products.filter(p=>p.isTrending)));
 
-                <!-- 2. SIGN UP FORM -->
-                <div id="signup-view" class="view-section">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-serif text-white">Create Account</h2>
-                        <p class="text-gray-400 text-sm mt-1">Join the Glow community.</p>
-                    </div>
-
-                    <form id="signup-form" class="space-y-4">
-                        <div class="modern-input-group">
-                            <input type="email" id="signup-email" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Email Address</label>
-                        </div>
-
-                        <div class="modern-input-group">
-                            <input type="tel" id="signup-phone" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Phone Number</label>
-                        </div>
-
-                        <div class="modern-input-group">
-                            <input type="password" id="signup-password" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Create Password</label>
-                        </div>
-
-                        <button type="submit" id="signup-btn" class="w-full py-4 bg-white hover:bg-gray-200 text-black rounded-2xl font-bold text-base shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 mt-4">
-                            Create Account
-                        </button>
-                    </form>
-
-                    <!-- Google Login (Signup) -->
-                    <div class="mt-8">
-                        <div class="relative flex py-2 items-center">
-                            <div class="flex-grow border-t border-white/10"></div>
-                            <span class="flex-shrink-0 mx-4 text-gray-500 text-xs uppercase font-bold">Or sign up with</span>
-                            <div class="flex-grow border-t border-white/10"></div>
-                        </div>
-
-                        <div class="mt-4">
-                            <button id="google-btn-signup" class="social-btn group w-full">
-                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 group-hover:scale-110 transition-transform">
-                                Continue with Google
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-500">Already a member?</p>
-                        <button onclick="switchScreen('login')" class="text-white text-sm font-bold hover:text-primary mt-1 transition-colors">Sign In</button>
-                    </div>
-                </div>
-
-                <!-- 3. FORGOT PASS FORM -->
-                <div id="forgot-view" class="view-section">
-                    <button onclick="switchScreen('login')" class="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
-                        <span class="material-symbols-outlined text-sm">arrow_back</span>
-                        <span class="text-xs font-bold uppercase tracking-widest">Back</span>
-                    </button>
-
-                    <div class="text-center mb-8">
-                        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary mx-auto mb-4">
-                            <span class="material-symbols-outlined text-2xl">key</span>
-                        </div>
-                        <h2 class="text-2xl font-serif text-white">Reset Password</h2>
-                        <p class="text-gray-400 text-sm mt-2">Enter your email for a recovery link.</p>
-                    </div>
-
-                    <form id="forgot-form" class="space-y-6">
-                        <div class="modern-input-group">
-                            <input type="email" id="forgot-email" class="modern-input" placeholder=" " required>
-                            <label class="modern-label">Registered Email</label>
-                        </div>
-
-                        <button type="submit" id="forgot-btn" class="w-full py-4 bg-primary hover:bg-primary-dark text-black rounded-2xl font-bold text-base transition-transform active:scale-95 flex items-center justify-center gap-2">
-                            Send Link
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 px-6 py-4 bg-[#1a1a1a] border border-white/10 text-white rounded-full shadow-2xl transition-all duration-500 opacity-0 -translate-y-10 pointer-events-none">
-        <span id="toast-icon" class="material-symbols-outlined text-primary text-xl">check_circle</span>
-        <span id="toast-msg" class="text-sm font-bold tracking-wide">Success</span>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            sendPasswordResetEmail, 
-            onAuthStateChanged,
-            GoogleAuthProvider,
-            signInWithPopup 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4",
-            authDomain: "glow-creation.firebaseapp.com",
-            projectId: "glow-creation",
-            storageBucket: "glow-creation.firebasestorage.app",
-            messagingSenderId: "236856410532",
-            appId: "1:236856410532:web:2253fb7f215f7a232f8131",
-            measurementId: "G-34FVP1W4E1"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        // --- UI HELPERS ---
-        window.switchScreen = (screenName) => {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            setTimeout(() => {
-                document.getElementById(`${screenName}-view`).classList.add('active');
-            }, 100);
-        };
-
-        const showToast = (msg, type = 'success') => {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const txt = document.getElementById('toast-msg');
-
-            txt.innerText = msg;
-            icon.innerText = type === 'success' ? 'check_circle' : 'error';
-            icon.style.color = type === 'success' ? '#8BC34A' : '#ef4444';
-            
-            toast.classList.remove('opacity-0', '-translate-y-10');
-            setTimeout(() => toast.classList.add('opacity-0', '-translate-y-10'), 3000);
-        };
-
-        const setLoading = (btnId, isLoading, defaultText) => {
-            const btn = document.getElementById(btnId);
-            if(isLoading) {
-                btn.innerHTML = `<div class="loader"></div>`;
-                btn.disabled = true;
-                btn.classList.add('opacity-70');
-            } else {
-                btn.innerHTML = defaultText;
-                btn.disabled = false;
-                btn.classList.remove('opacity-70');
-            }
-        };
-
-        // --- AUTH FUNCTIONS ---
-
-        // 1. SIGN UP
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const pass = document.getElementById('signup-password').value;
-            const phone = document.getElementById('signup-phone').value;
-
-            if(phone.length < 10) { showToast("Invalid Phone", "error"); return; }
-            setLoading('signup-btn', true);
-
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                localStorage.setItem('glowUserPhone', phone);
-                showToast("Account Created");
-                setTimeout(() => window.location.href = "home.html", 1500);
-            } catch (err) {
-                let msg = err.message;
-                if(err.code === 'auth/email-already-in-use') msg = "Email already in use";
-                if(err.code === 'auth/weak-password') msg = "Password too weak";
-                showToast(msg, "error");
-                setLoading('signup-btn', false, "Create Account");
-            }
+        // Nav Click Logic
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Reset all
+                navItems.forEach(nav => {
+                    nav.classList.remove('active');
+                    const i = nav.querySelector('i');
+                    if(i.classList.contains('fa-heart') || i.classList.contains('fa-user') || i.classList.contains('fa-comment-dots')) {
+                        i.classList.remove('fas'); i.classList.add('far');
+                    }
+                });
+                // Activate Clicked
+                this.classList.add('active');
+                const activeIcon = this.querySelector('i');
+                if(activeIcon.classList.contains('far')) { activeIcon.classList.remove('far'); activeIcon.classList.add('fas'); }
+            });
         });
 
-        // 2. LOGIN
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            setLoading('login-btn', true);
-
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                showToast("Welcome Back");
-                setTimeout(() => window.location.href = "home.html", 1000);
-            } catch (err) {
-                showToast("Invalid Credentials", "error");
-                setLoading('login-btn', false, "Sign In");
-            }
+        // Specific Nav Actions
+        document.getElementById('nav-home').addEventListener('click', () => {
+             loadProducts(products.filter(p=>p.isTrending));
+             cartPopup.classList.remove('open'); wishlistPopup.classList.remove('open'); overlay.classList.remove('active');
+             document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+             document.querySelector('.filter-chip').classList.add('active');
         });
 
-        // 3. GOOGLE LOGIN HANDLER
-        const handleGoogleLogin = async () => {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                showToast(`Welcome ${result.user.displayName || 'Back'}!`);
-                setTimeout(() => window.location.href = "home.html", 1000);
-            } catch (error) {
-                console.error(error);
-                let msg = "Login Failed";
-                if (error.code === 'auth/popup-closed-by-user') msg = "Cancelled";
-                if (error.code === 'auth/operation-not-allowed') msg = "Enable Google in Console";
-                showToast(msg, "error");
-            }
-        };
+        document.getElementById('nav-shop').addEventListener('click', () => {
+            renderCart(); cartPopup.classList.add('open'); overlay.classList.add('active');
+        });
 
-        document.getElementById('google-btn-login').onclick = handleGoogleLogin;
-        document.getElementById('google-btn-signup').onclick = handleGoogleLogin;
+        document.getElementById('nav-heart').addEventListener('click', () => {
+            renderWishlist(); wishlistPopup.classList.add('open'); overlay.classList.add('active');
+        });
 
-        // 4. FORGOT PASSWORD
-        document.getElementById('forgot-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('forgot-email').value;
-            setLoading('forgot-btn', true);
+        // Close Buttons
+        document.getElementById('closeCart').addEventListener('click', () => { cartPopup.classList.remove('open'); overlay.classList.remove('active'); resetNavToHome(); });
+        document.getElementById('closePopup').addEventListener('click', () => { wishlistPopup.classList.remove('open'); if(!cartPopup.classList.contains('open')) overlay.classList.remove('active'); resetNavToHome(); });
+        overlay.addEventListener('click', () => {
+            cartPopup.classList.remove('open'); wishlistPopup.classList.remove('open');
+            promptModal.style.display='none'; wizardModal.style.display='none';
+            overlay.classList.remove('active'); resetNavToHome();
+        });
 
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showToast("Reset Link Sent");
-                setTimeout(() => {
-                    switchScreen('login');
-                    setLoading('forgot-btn', false, "Send Link");
-                }, 3000);
-            } catch (err) {
-                showToast(err.message, "error");
-                setLoading('forgot-btn', false, "Send Link");
-            }
+        // Filters
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');
+                const t = this.innerText;
+                if(t==='All') loadProducts(products);
+                else if(t==='Trending') loadProducts(products.filter(p=>p.isTrending));
+                else if(t==='Newest') loadProducts([...products].reverse());
+                else loadProducts(products.filter(p=>p.category===t || p.name.includes(t)));
+            });
+        });
+
+        document.querySelectorAll('.cat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const c = this.querySelector('.cat-name').innerText;
+                loadProducts(products.filter(p=>p.category===c));
+            });
         });
 
     </script>
 </body>
 </html>
-
-
