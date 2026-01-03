@@ -1519,6 +1519,55 @@
 .upload-icon { font-size: 24px; color: var(--primary-gold); margin-bottom: 8px; }
 #uploadText { font-size: 12px; color: #777; }
 .img-preview { width: 100%; height: 120px; object-fit: contain; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; }
+/* --- PRODUCT DETAILS MODAL CSS --- */
+.gallery-container { position: relative; background: #f9f9f9; }
+
+.main-img-box {
+    width: 100%; height: 300px; display: flex; align-items: center; justify-content: center;
+    background: #fff; overflow: hidden;
+}
+.main-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+
+.fav-badge-detail {
+    position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
+    background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #333; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Thumbnails */
+.thumb-row {
+    display: flex; gap: 10px; padding: 15px; overflow-x: auto; scrollbar-width: none;
+}
+.thumb-img {
+    width: 60px; height: 60px; border-radius: 10px; object-fit: cover; 
+    border: 2px solid transparent; cursor: pointer; opacity: 0.7; transition: 0.2s;
+}
+.thumb-img.active { border-color: var(--primary-gold); opacity: 1; transform: scale(1.05); }
+
+/* Details Text */
+.detail-block { margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
+.detail-block h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #333; }
+
+.specs-list { list-style: none; padding: 0; }
+.specs-list li { 
+    display: flex; justify-content: space-between; font-size: 13px; 
+    padding: 8px 0; border-bottom: 1px dashed #eee; color: #555;
+}
+.specs-list li span:first-child { font-weight: 600; color: #333; }
+/* --- HIDE SCROLLBAR IN MODAL --- */
+.scroll-hide::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Webkit */
+}
+.scroll-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+/* Similar Products Scroll Styling */
+#similarProductsRow::-webkit-scrollbar { display: none; }
+#similarProductsRow { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Close Button Hover */
+.fas.fa-times:hover { color: #e74c3c; transform: scale(1.1); transition: 0.2s; }
     </style>
 </head>
 
@@ -1916,6 +1965,63 @@
                 <p style="color:#666; font-size:13px;">Thank you for shopping with Glow.</p>
             </div>
         </div>
+        <div class="modal-overlay" id="productDetailModal" style="z-index: 4000;">
+    <div class="custom-wizard" style="max-height: 90vh; width: 95%; max-width: 420px; padding: 0; overflow: hidden; display: flex; flex-direction: column; position: relative;">
+        
+        <div style="position: absolute; top: 15px; right: 15px; z-index: 20; background: rgba(255,255,255,0.8); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" onclick="closeProductModal()">
+            <i class="fas fa-times" style="font-size: 16px; color: #333;"></i>
+        </div>
+
+        <div class="scroll-hide" style="overflow-y: auto; flex: 1; padding-bottom: 20px;">
+            
+            <div class="gallery-container">
+                <div class="main-img-box" style="height: 350px;">
+                    <img id="detailMainImg" src="" alt="Main Product">
+                    <span class="fav-badge-detail" id="detailFavBtn" onclick="toggleDetailFav()" style="top: 15px; left: 15px; right: auto;">
+                        <i class="far fa-heart"></i>
+                    </span>
+                </div>
+                <div class="thumb-row" id="detailThumbRow"></div>
+            </div>
+
+            <div style="padding: 20px 20px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <div id="detailCat" style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">Category</div>
+                        <h2 id="detailTitle" style="font-size: 20px; font-family:'Playfair Display', serif; color:#222; margin-bottom:5px;">Product Name</h2>
+                    </div>
+                    <div id="detailPrice" style="font-size: 20px; font-weight:700; color:var(--primary-gold);">$0.00</div>
+                </div>
+
+                <div class="detail-block">
+                    <h4>Description</h4>
+                    <p id="detailDesc" style="color:#666; font-size:13px; line-height:1.6;">...</p>
+                </div>
+
+                <div class="detail-block">
+                    <h4>Specifications</h4>
+                    <ul class="specs-list"></ul>
+                </div>
+            </div>
+
+            <div style="padding: 20px; background: #fdfdfd; border-top: 1px solid #f0f0f0; margin-top: 20px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px;">You May Also Like ✨</h4>
+                <div id="similarProductsRow" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+                    </div>
+            </div>
+
+        </div>
+
+        <div style="padding: 15px 20px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 15px;">
+            <button class="btn-outline" style="flex:1; border-color:var(--primary-gold); color:var(--primary-gold);" onclick="openBuilder()">
+                Customize ✨
+            </button>
+            <button class="btn-fill" style="flex:1;" onclick="addToCartFromDetail()">
+                Add to Bag
+            </button>
+        </div>
+    </div>
+</div>
 
     </div> <!-- Mobile Container End -->
 
@@ -2710,7 +2816,185 @@ window.submitCustomOrder = () => {
     
     setTimeout(() => window.navAction('cart'), 500);
 };
+// --- UPDATE: Make Product Cards Clickable ---
+window.loadProducts = function(filterType = 'All') {
+    const container = document.getElementById('productContainer');
+    
+    // ... (Purana filter logic same rahega) ...
+    let displayList = [];
+    if(filterType === 'Trending' || filterType === 'All') {
+        if(filterType === 'All') displayList = products;
+        else displayList = products.filter(p => p.isTrending);
+    } else {
+        displayList = products.filter(p => p.category === filterType || p.name.includes(filterType));
+    }
+    // ...
 
+    container.innerHTML = displayList.map(p => {
+        const isLiked = window.wishlist.some(item => item.id === p.id) ? 'active' : '';
+        return `
+            <div class="product-card" onclick="openProductDetail(${p.id})"> <div class="prod-img-box">
+                    <span class="fav-icon ${isLiked}" onclick="event.stopPropagation(); toggleLike(${p.id}, this)">
+                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                    </span>
+                    <span class="cart-btn-product" onclick="event.stopPropagation(); initiateAddToCart(${p.id})">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <img src="${p.image}" loading="lazy">
+                </div>
+                <div class="prod-details">
+                    <div class="prod-title">${p.name}</div>
+                    <div class="prod-price">$${p.price}</div>
+                </div>
+            </div>`;
+    }).join('');
+};
+// --- PRODUCT DETAIL POPUP LOGIC ---
+
+let currentDetailProduct = null;
+
+// --- UPDATED: OPEN DETAILS WITH REAL DATA ---
+// --- UPDATED: OPEN DETAIL WITH SIMILAR PRODUCTS ---
+window.openProductDetail = function(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    currentDetailProduct = product;
+
+    // 1. Populate Basic Info (Same as before)
+    document.getElementById('detailTitle').innerText = product.name;
+    document.getElementById('detailPrice').innerText = "$" + product.price;
+    document.getElementById('detailCat').innerText = product.category;
+    document.getElementById('detailDesc').innerText = product.description || "No description available.";
+
+    // Images
+    const imagesList = (product.images && product.images.length > 0) ? product.images : [product.image];
+    document.getElementById('detailMainImg').src = imagesList[0];
+    document.getElementById('detailThumbRow').innerHTML = imagesList.map((img, index) => `
+        <img src="${img}" class="thumb-img ${index === 0 ? 'active' : ''}" onclick="switchDetailImage(this, '${img}')">
+    `).join('');
+
+    // Specs
+    const specList = document.querySelector('.specs-list');
+    specList.innerHTML = "";
+    if(product.specs) {
+        for (const [key, value] of Object.entries(product.specs)) {
+            specList.innerHTML += `<li><span>${key}:</span> <span>${value}</span></li>`;
+        }
+    } else {
+        specList.innerHTML = "<li><span>Info:</span> <span>Standard Specification</span></li>";
+    }
+
+    // Fav Button State
+    const isLiked = window.wishlist.some(p => p.id === product.id);
+    document.getElementById('detailFavBtn').innerHTML = isLiked ? '<i class="fas fa-heart" style="color:#e74c3c;"></i>' : '<i class="far fa-heart"></i>';
+
+    // -----------------------------------------------------
+    // 2. NEW: LOAD SIMILAR PRODUCTS
+    // -----------------------------------------------------
+    const similarContainer = document.getElementById('similarProductsRow');
+    
+    // Logic: Same category, but NOT the current product
+    const similarItems = products.filter(p => p.category === product.category && p.id !== product.id);
+    
+    if(similarItems.length === 0) {
+        similarContainer.innerHTML = "<div style='font-size:12px; color:#999;'>No similar items found.</div>";
+    } else {
+        similarContainer.innerHTML = similarItems.map(p => `
+            <div style="min-width: 120px; cursor: pointer;" onclick="openProductDetail(${p.id})">
+                <img src="${p.image}" style="width:100%; height:120px; object-fit:cover; border-radius:12px; margin-bottom:8px;">
+                <div style="font-size:12px; font-weight:600; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div>
+                <div style="font-size:12px; font-weight:700; color:var(--primary-gold);">$${p.price}</div>
+            </div>
+        `).join('');
+    }
+
+    // Show Modal
+    document.getElementById('productDetailModal').style.display = 'flex';
+};
+
+// --- UPDATED: ADD TO BAG (POPUP WON'T CLOSE) ---
+// --- UPDATED: Add to Bag (Keep Popup Open) ---
+window.addToCartFromDetail = function() {
+    // 1. Check Login
+    if(!currentUser) { 
+        document.getElementById('authModal').style.display = 'flex'; 
+        return; 
+    }
+    
+    // 2. Add Item
+    if(currentDetailProduct) {
+        // Direct Add (Simple)
+        window.cart.push({...currentDetailProduct, isCustom: false});
+        updateCartCount();
+        syncCartToCloud();
+        
+        // 3. Show Toast (Lekin Popup Close mat karo)
+        window.showToast("Added to Bag 🛍️", "Item added to your cart.", "success");
+        
+        // Note: Humne yahan closeProductModal() call nahi kiya, isliye popup khula rahega.
+    }
+};
+
+// Switch Image logic
+window.switchDetailImage = function(el, src) {
+    document.getElementById('detailMainImg').src = src;
+    document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+    el.classList.add('active');
+};
+
+// Add to Cart from Details
+
+
+// Toggle Fav from Details
+// --- FIXED: TOGGLE FAV FROM DETAILS MODAL ---
+window.toggleDetailFav = function() {
+    // 1. Check Login
+    if(!currentUser) { 
+        document.getElementById('authModal').style.display = 'flex'; 
+        return; 
+    }
+
+    if(!currentDetailProduct) return;
+
+    const product = currentDetailProduct;
+    
+    // 2. Check if already in wishlist
+    const idx = window.wishlist.findIndex(p => p.id === product.id);
+    let isLiked = false;
+
+    if(idx === -1) {
+        // Add to Wishlist
+        window.wishlist.push(product);
+        isLiked = true;
+    } else {
+        // Remove from Wishlist
+        window.wishlist.splice(idx, 1);
+        isLiked = false;
+    }
+    
+    // 3. Sync Cloud & Sidebar
+    renderWishlist(); 
+    syncWishlistToCloud();
+
+    // 4. Update UI (Detail Modal Button)
+    const favBtn = document.getElementById('detailFavBtn');
+    if(isLiked) {
+        favBtn.innerHTML = '<i class="fas fa-heart" style="color:#e74c3c;"></i>'; // Red Filled
+        window.showToast("Added to Favourites", "Saved to your wishlist", "success");
+    } else {
+        favBtn.innerHTML = '<i class="far fa-heart"></i>'; // Outline
+        window.showToast("Removed", "Removed from wishlist", "info");
+    }
+
+    // 5. Update Grid UI (Background me Home Page par bhi heart update karein)
+    // Hum Home Page reload karke icons update kar dete hain taaki sync rahe
+    window.loadProducts(document.querySelector('.filter-chip.active')?.innerText || 'All');
+};
+
+window.closeProductModal = function() {
+    document.getElementById('productDetailModal').style.display = 'none';
+};
     </script>
 </body>
 
