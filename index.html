@@ -9,6 +9,9 @@
 
     <!-- Fonts -->
     <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap"
         rel="stylesheet">
     <!-- Icons -->
@@ -1078,7 +1081,7 @@
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 5000;
+            z-index: 10000;
             /* Sabse upar */
             display: flex;
             flex-direction: column;
@@ -1455,119 +1458,590 @@
             border-radius: 50%;
             cursor: pointer;
         }
+
         /* --- PROFESSIONAL BUILDER CSS --- */
-.step-box { margin-bottom: 25px; }
-.step-label { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 12px; display: block; letter-spacing: 0.5px; }
+        .step-box {
+            margin-bottom: 25px;
+        }
 
-/* Category Grid */
-.builder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.b-opt {
-    border: 1px solid #eee; background: #fff; padding: 12px 5px; border-radius: 12px;
-    text-align: center; font-size: 11px; color: #555; cursor: pointer; transition: 0.2s;
-}
-.b-opt i { font-size: 18px; margin-bottom: 5px; color: #888; transition: 0.2s; }
-.b-opt.active { border-color: var(--primary-gold); background: #fff9ec; color: var(--primary-gold); font-weight: 600; }
-.b-opt.active i { color: var(--primary-gold); }
+        .step-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
 
-/* Shape Grid */
-.shape-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.s-opt { 
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 10px; border: 1px solid #eee; border-radius: 12px; font-size: 11px; color: #555; cursor: pointer;
-}
-.s-opt.active { border-color: var(--primary-gold); background: #fff9ec; font-weight: 600; color: var(--primary-gold); }
-.s-icon { width: 30px; height: 30px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-.s-round { border-radius: 50%; border: 2px solid #ccc; }
-.s-square { border: 2px solid #ccc; }
-.s-tri { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #ccc; }
-.s-oval { width: 30px; height: 20px; border-radius: 50%; border: 2px solid #ccc; }
-.active .s-round, .active .s-square, .active .s-oval { border-color: var(--primary-gold); }
-.active .s-tri { border-bottom-color: var(--primary-gold); }
+        /* Category Grid */
+        .builder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
 
-/* Sliders */
-.size-msg { background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; }
-.slider-box { margin-bottom: 15px; }
-.slider-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #555; }
-.slider-val { font-weight: 700; color: var(--primary-gold); }
-.gold-slider {
-    width: 100%; -webkit-appearance: none; height: 6px; background: #eee; border-radius: 5px; outline: none;
-}
-.gold-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary-gold); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
+        .b-opt {
+            border: 1px solid #eee;
+            background: #fff;
+            padding: 12px 5px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 11px;
+            color: #555;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-/* Colors */
-.color-row { display: flex; gap: 20px; justify-content: center; margin-top: 10px; }
-.c-circle { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.2s; }
-.c-circle.active { transform: scale(1.15); border-color: #333; }
-.gold { background: radial-gradient(circle at 30% 30%, #FFD700, #FDB931); }
-.silver { background: radial-gradient(circle at 30% 30%, #f5f5f5, #bdbdbd); }
-.copper { background: radial-gradient(circle at 30% 30%, #e0a986, #a86341); }
+        .b-opt i {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #888;
+            transition: 0.2s;
+        }
 
-/* Upload & Inputs */
-.input-modern { 
-    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; outline: none; transition: 0.3s; 
-}
-.input-modern:focus { border-color: var(--primary-gold); background: #fffcf5; }
+        .b-opt.active {
+            border-color: var(--primary-gold);
+            background: #fff9ec;
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
 
-.upload-zone {
-    border: 2px dashed #ddd; border-radius: 12px; padding: 20px;
-    text-align: center; margin-top: 15px; cursor: pointer; transition: 0.2s;
-    background: #fdfdfd; display: flex; flex-direction: column; align-items: center;
-}
-.upload-zone:active { background: #f0f0f0; border-color: #bbb; }
-.upload-icon { font-size: 24px; color: var(--primary-gold); margin-bottom: 8px; }
-#uploadText { font-size: 12px; color: #777; }
-.img-preview { width: 100%; height: 120px; object-fit: contain; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; }
-/* --- PRODUCT DETAILS MODAL CSS --- */
-.gallery-container { position: relative; background: #f9f9f9; }
+        .b-opt.active i {
+            color: var(--primary-gold);
+        }
 
-.main-img-box {
-    width: 100%; height: 300px; display: flex; align-items: center; justify-content: center;
-    background: #fff; overflow: hidden;
-}
-.main-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        /* Shape Grid */
+        .shape-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
 
-.fav-badge-detail {
-    position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
-    background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: #333; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+        .s-opt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #555;
+            cursor: pointer;
+        }
 
-/* Thumbnails */
-.thumb-row {
-    display: flex; gap: 10px; padding: 15px; overflow-x: auto; scrollbar-width: none;
-}
-.thumb-img {
-    width: 60px; height: 60px; border-radius: 10px; object-fit: cover; 
-    border: 2px solid transparent; cursor: pointer; opacity: 0.7; transition: 0.2s;
-}
-.thumb-img.active { border-color: var(--primary-gold); opacity: 1; transform: scale(1.05); }
+        .s-opt.active {
+            border-color: var(--primary-gold);
+            background: #fff9ec;
+            font-weight: 600;
+            color: var(--primary-gold);
+        }
 
-/* Details Text */
-.detail-block { margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
-.detail-block h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #333; }
+        .s-icon {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
 
-.specs-list { list-style: none; padding: 0; }
-.specs-list li { 
-    display: flex; justify-content: space-between; font-size: 13px; 
-    padding: 8px 0; border-bottom: 1px dashed #eee; color: #555;
-}
-.specs-list li span:first-child { font-weight: 600; color: #333; }
-/* --- HIDE SCROLLBAR IN MODAL --- */
-.scroll-hide::-webkit-scrollbar {
-    display: none; /* Chrome/Safari/Webkit */
-}
-.scroll-hide {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-}
-/* Similar Products Scroll Styling */
-#similarProductsRow::-webkit-scrollbar { display: none; }
-#similarProductsRow { -ms-overflow-style: none; scrollbar-width: none; }
+        .s-round {
+            border-radius: 50%;
+            border: 2px solid #ccc;
+        }
 
-/* Close Button Hover */
-.fas.fa-times:hover { color: #e74c3c; transform: scale(1.1); transition: 0.2s; }
+        .s-square {
+            border: 2px solid #ccc;
+        }
+
+        .s-tri {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 18px solid #ccc;
+        }
+
+        .s-oval {
+            width: 30px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+        }
+
+        .active .s-round,
+        .active .s-square,
+        .active .s-oval {
+            border-color: var(--primary-gold);
+        }
+
+        .active .s-tri {
+            border-bottom-color: var(--primary-gold);
+        }
+
+        /* Sliders */
+        .size-msg {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .slider-box {
+            margin-bottom: 15px;
+        }
+
+        .slider-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .slider-val {
+            font-weight: 700;
+            color: var(--primary-gold);
+        }
+
+        .gold-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            background: #eee;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .gold-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Colors */
+        .color-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .c-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+
+        .c-circle.active {
+            transform: scale(1.15);
+            border-color: #333;
+        }
+
+        .gold {
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FDB931);
+        }
+
+        .silver {
+            background: radial-gradient(circle at 30% 30%, #f5f5f5, #bdbdbd);
+        }
+
+        .copper {
+            background: radial-gradient(circle at 30% 30%, #e0a986, #a86341);
+        }
+
+        /* Upload & Inputs */
+        .input-modern {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-modern:focus {
+            border-color: var(--primary-gold);
+            background: #fffcf5;
+        }
+
+        .upload-zone {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #fdfdfd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .upload-zone:active {
+            background: #f0f0f0;
+            border-color: #bbb;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            color: var(--primary-gold);
+            margin-bottom: 8px;
+        }
+
+        #uploadText {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .img-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #eee;
+        }
+
+        /* --- PRODUCT DETAILS MODAL CSS --- */
+        .gallery-container {
+            position: relative;
+            background: #f9f9f9;
+        }
+
+        .main-img-box {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .main-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+
+        .fav-badge-detail {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Thumbnails */
+        .thumb-row {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .thumb-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .thumb-img.active {
+            border-color: var(--primary-gold);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* Details Text */
+        .detail-block {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .detail-block h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .specs-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .specs-list li {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            color: #555;
+        }
+
+        .specs-list li span:first-child {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* --- HIDE SCROLLBAR IN MODAL --- */
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari/Webkit */
+        }
+
+        .scroll-hide {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+        }
+
+        /* Similar Products Scroll Styling */
+        #similarProductsRow::-webkit-scrollbar {
+            display: none;
+        }
+
+        #similarProductsRow {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Close Button Hover */
+        .fas.fa-times:hover {
+            color: #e74c3c;
+            transform: scale(1.1);
+            transition: 0.2s;
+        }
+
+        /* --- PREMIUM UI V2.0 --- */
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+            --dark-bg: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Overlay (Glass Effect) */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            /* Blur Background */
+            transition: opacity 0.3s ease;
+        }
+
+        /* The Card Itself */
+        /* The Card Itself (Updated for Scroll & Logo) */
+        .custom-wizard {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            /* overflow: hidden;  <-- YE HATA DIYA */
+            max-height: 90vh;
+            /* Screen height ka 90% max */
+            overflow-y: auto;
+            /* Agar content bada ho to scroll kare */
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            /* Hide scrollbar for cleaner look */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE */
+        }
+
+        .custom-wizard::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari */
+        }
+
+        @keyframes slideUpFade {
+            from {
+                transform: translateY(50px) scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Fancy Tabs */
+        .auth-tabs-container {
+            display: flex;
+            background: #f5f5f5;
+            padding: 6px;
+            margin: 20px;
+            border-radius: 14px;
+            position: relative;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+            z-index: 2;
+        }
+
+        .auth-tab.active {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transform: scale(1.02);
+        }
+
+        /* Modern Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .custom-input {
+            width: 100%;
+            padding: 16px;
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: 0.3s;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .custom-input:focus {
+            background: #fff;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+        }
+
+        /* Luxury Buttons */
+        .btn-fill {
+            background: var(--dark-bg);
+            color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-fill:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Google Button */
+        .btn-google {
+            background: #fff;
+            border: 1px solid #eee;
+            color: #444;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.2s;
+            margin-top: 15px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-google:hover {
+            background: #fcfcfc;
+            border-color: #ddd;
+        }
+
+        /* Text Styling */
+        h3 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+        }
+
+        .sub-text {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* --- AUTH CLOSE BUTTON (Top Right) --- */
+        .auth-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #666;
+            transition: 0.3s;
+            z-index: 10;
+            /* Content ke upar rahe */
+        }
+
+        .auth-close-btn:hover {
+            background: #e0e0e0;
+            color: #000;
+            transform: rotate(90deg);
+            /* Mast animation */
+        }
     </style>
 </head>
 
@@ -1739,7 +2213,7 @@
                 </div>
                 <div class="nav-item" id="nav-orders" onclick="navAction('orders')"><i class="fas fa-box-open"></i>
                 </div>
-                
+
             </div>
         </div>
 
@@ -1778,25 +2252,82 @@
         </div>
 
         <!-- 3. Auth Modal -->
-        <div class="modal-overlay" id="authModal">
-            <div class="custom-wizard" style="text-align: center; height: auto;">
-                <div style="margin-bottom:15px; display:flex; justify-content:center;">
-                    <img src="./logo.png"
-                        style="width:60px; height:60px; object-fit:contain; border-radius:50%; background:#1a1a1a; padding:5px;">
+
+        <div class="modal-overlay" id="authModal" style="z-index: 5000;">
+            <div class="custom-wizard"
+                style="width: 90%; max-width: 400px; padding: 0; position: relative; max-height: 90vh; overflow-y: auto;">
+
+                <div class="auth-close-btn" onclick="closeAuthModal()" title="Maybe Later">
+                    <i class="fas fa-times"></i>
                 </div>
-                <h3 class="wizard-title" style="margin-bottom: 5px;">Welcome</h3>
-                <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Sign in to sync your wishlist & orders.
-                </p>
 
-                <button id="googleLoginBtn" class="google-btn">
-                    <i class="fab fa-google" style="color:#DB4437"></i> Continue with Google
-                </button>
+                <div style="text-align:center; padding-top:30px; padding-bottom: 10px;">
+                    <img src="logo.png" alt="Glow Logo"
+                        style="width: 120px; height: auto; display: block; margin: 0 auto; border-radius: 100%;">
+                </div>
 
-                <button class="btn-outline" onclick="closeAuthModal()"
-                    style="margin-top: 15px; border:none; width:auto; padding:5px 20px;">Cancel</button>
+                <div class="auth-tabs-container">
+                    <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Log In</div>
+                    <div class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Sign Up</div>
+                </div>
+
+                <div style="padding: 0 30px 40px 30px;">
+
+                    <div id="loginFormSection">
+                        <h3 style="font-size: 22px; color:#222; margin-bottom:5px;">Welcome Back</h3>
+                        <p class="sub-text">Enter your details to access your collection.</p>
+
+                        <div class="input-group">
+                            <input type="email" id="loginEmail" class="custom-input" placeholder="Email Address">
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="loginPass" class="custom-input" placeholder="Password">
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
+
+                        <div style="text-align: right; margin-bottom: 25px;">
+                            <span onclick="forgotPassword()"
+                                style="font-size: 12px; color: #666; cursor: pointer; transition:0.2s;">Forgot
+                                Password?</span>
+                        </div>
+
+                        <button class="btn-fill" style="width: 100%;" onclick="handleLogin()">Sign In</button>
+                    </div>
+
+                    <div id="signupFormSection" style="display: none;">
+                        <h3 style="font-size: 22px; color:#222; margin-bottom:5px;">Join Glow</h3>
+                        <p class="sub-text">Create an account to start customizing.</p>
+
+                        <div class="input-group">
+                            <input type="text" id="regName" class="custom-input" placeholder="Full Name">
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="regEmail" class="custom-input" placeholder="Email Address">
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="regPass" class="custom-input"
+                                placeholder="Password (Min 6 chars)">
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
+
+                        <button class="btn-fill" style="width: 100%;" onclick="handleSignUp()">Create Account</button>
+                    </div>
+
+                    <div style="margin-top: 25px; text-align: center;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 15px;">OR CONTINUE WITH</div>
+                        <button class="btn-google" id="googleLoginBtn">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+                            Google
+                        </button>
+
+                    </div>
+
+                </div>
             </div>
         </div>
-
         <!-- 4. User Profile -->
         <div class="modal-overlay" id="userProfileModal">
             <div class="custom-wizard" style="text-align: center; height: auto;">
@@ -1864,92 +2395,122 @@
             </div>
         </div>
         <div class="modal-overlay" id="customBuilderModal" style="z-index: 4200;">
-    <div class="custom-wizard" style="max-height: 90vh; width: 95%; max-width: 420px; padding: 0; border-radius: 20px;">
-        
-        <div class="popup-header" style="padding: 18px 25px; border-bottom: 1px solid #f0f0f0; background: #fff;">
-            <span class="popup-title" style="font-size: 18px; font-family: 'Playfair Display', serif;">Customize Your Glow ✨</span>
-            <span class="close-popup" onclick="closeBuilder()" style="font-size: 24px;">&times;</span>
-        </div>
+            <div class="custom-wizard"
+                style="max-height: 90vh; width: 95%; max-width: 420px; padding: 0; border-radius: 20px;">
 
-        <div style="padding: 20px 25px; overflow-y: auto; flex: 1; background: #fcfcfc;">
-            
-            <div class="step-box">
-                <label class="step-label">1. Choose Category</label>
-                <div class="builder-grid">
-                    <div class="b-opt" onclick="setCat(this, 'Ring')"><i class="fas fa-ring"></i><br>Ring</div>
-                    <div class="b-opt" onclick="setCat(this, 'Bangles')"><i class="far fa-circle"></i><br>Bangles</div>
-                    <div class="b-opt" onclick="setCat(this, 'Pendant')"><i class="far fa-gem"></i><br>Pendant</div>
-                    <div class="b-opt" onclick="setCat(this, 'Bracelet')"><i class="fas fa-link"></i><br>Bracelet</div>
-                    <div class="b-opt" onclick="setCat(this, 'Keychain')"><i class="fas fa-key"></i><br>Keychain</div>
-                    <div class="b-opt" onclick="setCat(this, 'Frame')"><i class="far fa-image"></i><br>Frame</div>
-                    <div class="b-opt" onclick="setCat(this, 'Mobile Case')"><i class="fas fa-mobile-alt"></i><br>Case</div>
-                    <div class="b-opt" onclick="setCat(this, 'Keepsake')"><i class="fas fa-heart"></i><br>Keepsake</div>
-                    <div class="b-opt" onclick="setCat(this, 'Mangalsutra')"><i class="fas fa-infinity"></i><br>M.Sutra</div>
-                </div>
-            </div>
-
-            <div class="step-box">
-                <label class="step-label">2. Select Shape</label>
-                <div class="shape-grid">
-                    <div class="s-opt" onclick="setShape(this, 'Round')"><div class="s-icon s-round"></div>Round</div>
-                    <div class="s-opt" onclick="setShape(this, 'Heart')"><div class="s-icon"><i class="fas fa-heart"></i></div>Heart</div>
-                    <div class="s-opt" onclick="setShape(this, 'Square')"><div class="s-icon s-square"></div>Square</div>
-                    <div class="s-opt" onclick="setShape(this, 'Triangle')"><div class="s-icon s-tri"></div>Triangle</div>
-                    <div class="s-opt" onclick="setShape(this, 'Oval')"><div class="s-icon s-oval"></div>Oval</div>
-                    <div class="s-opt" onclick="setShape(this, 'Infinity')"><div class="s-icon"><i class="fas fa-infinity"></i></div>Infinity</div>
-                </div>
-            </div>
-
-            <div class="step-box" id="sizeSection">
-                <label class="step-label">3. Select Size</label>
-                
-                <div id="sizeStd" class="size-msg">
-                    <i class="fas fa-check-circle"></i> Standard Size (Fit for All)
+                <div class="popup-header"
+                    style="padding: 18px 25px; border-bottom: 1px solid #f0f0f0; background: #fff;">
+                    <span class="popup-title" style="font-size: 18px; font-family: 'Playfair Display', serif;">Customize
+                        Your Glow ✨</span>
+                    <span class="close-popup" onclick="closeBuilder()" style="font-size: 24px;">&times;</span>
                 </div>
 
-                <div id="sizeCust" style="display:none;">
-                    <div class="slider-box">
-                        <div class="slider-head"><span>Length</span><span class="slider-val"><span id="txtLen">5</span> inch</span></div>
-                        <input type="range" min="1" max="24" value="5" step="0.5" class="gold-slider" oninput="document.getElementById('txtLen').innerText=this.value">
+                <div style="padding: 20px 25px; overflow-y: auto; flex: 1; background: #fcfcfc;">
+
+                    <div class="step-box">
+                        <label class="step-label">1. Choose Category</label>
+                        <div class="builder-grid">
+                            <div class="b-opt" onclick="setCat(this, 'Ring')"><i class="fas fa-ring"></i><br>Ring</div>
+                            <div class="b-opt" onclick="setCat(this, 'Bangles')"><i
+                                    class="far fa-circle"></i><br>Bangles</div>
+                            <div class="b-opt" onclick="setCat(this, 'Pendant')"><i class="far fa-gem"></i><br>Pendant
+                            </div>
+                            <div class="b-opt" onclick="setCat(this, 'Bracelet')"><i
+                                    class="fas fa-link"></i><br>Bracelet</div>
+                            <div class="b-opt" onclick="setCat(this, 'Keychain')"><i class="fas fa-key"></i><br>Keychain
+                            </div>
+                            <div class="b-opt" onclick="setCat(this, 'Frame')"><i class="far fa-image"></i><br>Frame
+                            </div>
+                            <div class="b-opt" onclick="setCat(this, 'Mobile Case')"><i
+                                    class="fas fa-mobile-alt"></i><br>Case</div>
+                            <div class="b-opt" onclick="setCat(this, 'Keepsake')"><i
+                                    class="fas fa-heart"></i><br>Keepsake</div>
+                            <div class="b-opt" onclick="setCat(this, 'Mangalsutra')"><i
+                                    class="fas fa-infinity"></i><br>M.Sutra</div>
+                        </div>
                     </div>
-                    <div class="slider-box">
-                        <div class="slider-head"><span>Breadth</span><span class="slider-val"><span id="txtWid">4</span> inch</span></div>
-                        <input type="range" min="1" max="12" value="4" step="0.5" class="gold-slider" oninput="document.getElementById('txtWid').innerText=this.value">
+
+                    <div class="step-box">
+                        <label class="step-label">2. Select Shape</label>
+                        <div class="shape-grid">
+                            <div class="s-opt" onclick="setShape(this, 'Round')">
+                                <div class="s-icon s-round"></div>Round
+                            </div>
+                            <div class="s-opt" onclick="setShape(this, 'Heart')">
+                                <div class="s-icon"><i class="fas fa-heart"></i></div>Heart
+                            </div>
+                            <div class="s-opt" onclick="setShape(this, 'Square')">
+                                <div class="s-icon s-square"></div>Square
+                            </div>
+                            <div class="s-opt" onclick="setShape(this, 'Triangle')">
+                                <div class="s-icon s-tri"></div>Triangle
+                            </div>
+                            <div class="s-opt" onclick="setShape(this, 'Oval')">
+                                <div class="s-icon s-oval"></div>Oval
+                            </div>
+                            <div class="s-opt" onclick="setShape(this, 'Infinity')">
+                                <div class="s-icon"><i class="fas fa-infinity"></i></div>Infinity
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="step-box" id="sizeSection">
+                        <label class="step-label">3. Select Size</label>
+
+                        <div id="sizeStd" class="size-msg">
+                            <i class="fas fa-check-circle"></i> Standard Size (Fit for All)
+                        </div>
+
+                        <div id="sizeCust" style="display:none;">
+                            <div class="slider-box">
+                                <div class="slider-head"><span>Length</span><span class="slider-val"><span
+                                            id="txtLen">5</span> inch</span></div>
+                                <input type="range" min="1" max="24" value="5" step="0.5" class="gold-slider"
+                                    oninput="document.getElementById('txtLen').innerText=this.value">
+                            </div>
+                            <div class="slider-box">
+                                <div class="slider-head"><span>Breadth</span><span class="slider-val"><span
+                                            id="txtWid">4</span> inch</span></div>
+                                <input type="range" min="1" max="12" value="4" step="0.5" class="gold-slider"
+                                    oninput="document.getElementById('txtWid').innerText=this.value">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <label class="step-label">4. Select Material Color</label>
+                        <div class="color-row">
+                            <div class="c-circle gold" onclick="setColor(this, 'Gold')"></div>
+                            <div class="c-circle silver" onclick="setColor(this, 'Silver')"></div>
+                            <div class="c-circle copper" onclick="setColor(this, 'Copper')"></div>
+                        </div>
+                        <div id="selectedColorName"
+                            style="text-align:center; font-size:12px; margin-top:5px; color:#666;">Select a color</div>
+                    </div>
+
+                    <div class="step-box">
+                        <label class="step-label">5. Personalization</label>
+                        <textarea id="custDesc" class="input-modern" rows="3"
+                            placeholder="Type names, dates, or specific instructions..."></textarea>
+
+                        <input type="text" id="custLink" class="input-modern"
+                            placeholder="Paste YouTube/Insta Link (Optional)" style="margin-top:10px;">
+
+                        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                            <input type="file" id="fileInput" accept="image/*" hidden onchange="handleFileSelect(this)">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <span id="uploadText">Upload Reference Image</span>
+                            <img id="previewImg" class="img-preview" style="display:none;">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="popup-footer" style="padding: 15px 25px; border-top: 1px solid #f0f0f0; background: #fff;">
+                    <button class="btn-fill" onclick="submitCustomOrder()">Add Custom Item - $999</button>
                 </div>
             </div>
-
-            <div class="step-box">
-                <label class="step-label">4. Select Material Color</label>
-                <div class="color-row">
-                    <div class="c-circle gold" onclick="setColor(this, 'Gold')"></div>
-                    <div class="c-circle silver" onclick="setColor(this, 'Silver')"></div>
-                    <div class="c-circle copper" onclick="setColor(this, 'Copper')"></div>
-                </div>
-                <div id="selectedColorName" style="text-align:center; font-size:12px; margin-top:5px; color:#666;">Select a color</div>
-            </div>
-
-            <div class="step-box">
-                <label class="step-label">5. Personalization</label>
-                <textarea id="custDesc" class="input-modern" rows="3" placeholder="Type names, dates, or specific instructions..."></textarea>
-                
-                <input type="text" id="custLink" class="input-modern" placeholder="Paste YouTube/Insta Link (Optional)" style="margin-top:10px;">
-
-                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                    <input type="file" id="fileInput" accept="image/*" hidden onchange="handleFileSelect(this)">
-                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <span id="uploadText">Upload Reference Image</span>
-                    <img id="previewImg" class="img-preview" style="display:none;">
-                </div>
-            </div>
-
         </div>
-
-        <div class="popup-footer" style="padding: 15px 25px; border-top: 1px solid #f0f0f0; background: #fff;">
-            <button class="btn-fill" onclick="submitCustomOrder()">Add Custom Item - $999</button>
-        </div>
-    </div>
-</div>
         <!-- 6. Success Modal -->
         <div class="modal-overlay" id="successModal" style="z-index: 3500;">
             <div class="custom-wizard" style="text-align: center; height: auto;">
@@ -1966,62 +2527,75 @@
             </div>
         </div>
         <div class="modal-overlay" id="productDetailModal" style="z-index: 4000;">
-    <div class="custom-wizard" style="max-height: 90vh; width: 95%; max-width: 420px; padding: 0; overflow: hidden; display: flex; flex-direction: column; position: relative;">
-        
-        <div style="position: absolute; top: 15px; right: 15px; z-index: 20; background: rgba(255,255,255,0.8); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" onclick="closeProductModal()">
-            <i class="fas fa-times" style="font-size: 16px; color: #333;"></i>
-        </div>
+            <div class="custom-wizard"
+                style="max-height: 90vh; width: 95%; max-width: 420px; padding: 0; overflow: hidden; display: flex; flex-direction: column; position: relative;">
 
-        <div class="scroll-hide" style="overflow-y: auto; flex: 1; padding-bottom: 20px;">
-            
-            <div class="gallery-container">
-                <div class="main-img-box" style="height: 350px;">
-                    <img id="detailMainImg" src="" alt="Main Product">
-                    <span class="fav-badge-detail" id="detailFavBtn" onclick="toggleDetailFav()" style="top: 15px; left: 15px; right: auto;">
-                        <i class="far fa-heart"></i>
-                    </span>
+                <div style="position: absolute; top: 15px; right: 15px; z-index: 20; background: rgba(255,255,255,0.8); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"
+                    onclick="closeProductModal()">
+                    <i class="fas fa-times" style="font-size: 16px; color: #333;"></i>
                 </div>
-                <div class="thumb-row" id="detailThumbRow"></div>
-            </div>
 
-            <div style="padding: 20px 20px 0;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div>
-                        <div id="detailCat" style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">Category</div>
-                        <h2 id="detailTitle" style="font-size: 20px; font-family:'Playfair Display', serif; color:#222; margin-bottom:5px;">Product Name</h2>
+                <div class="scroll-hide" style="overflow-y: auto; flex: 1; padding-bottom: 20px;">
+
+                    <div class="gallery-container">
+                        <div class="main-img-box" style="height: 350px;">
+                            <img id="detailMainImg" src="" alt="Main Product">
+                            <span class="fav-badge-detail" id="detailFavBtn" onclick="toggleDetailFav()"
+                                style="top: 15px; left: 15px; right: auto;">
+                                <i class="far fa-heart"></i>
+                            </span>
+                        </div>
+                        <div class="thumb-row" id="detailThumbRow"></div>
                     </div>
-                    <div id="detailPrice" style="font-size: 20px; font-weight:700; color:var(--primary-gold);">$0.00</div>
-                </div>
 
-                <div class="detail-block">
-                    <h4>Description</h4>
-                    <p id="detailDesc" style="color:#666; font-size:13px; line-height:1.6;">...</p>
-                </div>
+                    <div style="padding: 20px 20px 0;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <div id="detailCat"
+                                    style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                                    Category</div>
+                                <h2 id="detailTitle"
+                                    style="font-size: 20px; font-family:'Playfair Display', serif; color:#222; margin-bottom:5px;">
+                                    Product Name</h2>
+                            </div>
+                            <div id="detailPrice" style="font-size: 20px; font-weight:700; color:var(--primary-gold);">
+                                $0.00</div>
+                        </div>
 
-                <div class="detail-block">
-                    <h4>Specifications</h4>
-                    <ul class="specs-list"></ul>
-                </div>
-            </div>
+                        <div class="detail-block">
+                            <h4>Description</h4>
+                            <p id="detailDesc" style="color:#666; font-size:13px; line-height:1.6;">...</p>
+                        </div>
 
-            <div style="padding: 20px; background: #fdfdfd; border-top: 1px solid #f0f0f0; margin-top: 20px;">
-                <h4 style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px;">You May Also Like ✨</h4>
-                <div id="similarProductsRow" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+                        <div class="detail-block">
+                            <h4>Specifications</h4>
+                            <ul class="specs-list"></ul>
+                        </div>
                     </div>
+
+                    <div style="padding: 20px; background: #fdfdfd; border-top: 1px solid #f0f0f0; margin-top: 20px;">
+                        <h4 style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px;">You May Also
+                            Like ✨</h4>
+                        <div id="similarProductsRow"
+                            style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div
+                    style="padding: 15px 20px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 15px;">
+                    <button class="btn-outline"
+                        style="flex:1; border-color:var(--primary-gold); color:var(--primary-gold);"
+                        onclick="openBuilder()">
+                        Customize ✨
+                    </button>
+                    <button class="btn-fill" style="flex:1;" onclick="addToCartFromDetail()">
+                        Add to Bag
+                    </button>
+                </div>
             </div>
-
         </div>
-
-        <div style="padding: 15px 20px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 15px;">
-            <button class="btn-outline" style="flex:1; border-color:var(--primary-gold); color:var(--primary-gold);" onclick="openBuilder()">
-                Customize ✨
-            </button>
-            <button class="btn-fill" style="flex:1;" onclick="addToCartFromDetail()">
-                Add to Bag
-            </button>
-        </div>
-    </div>
-</div>
 
     </div> <!-- Mobile Container End -->
 
@@ -2032,7 +2606,7 @@
     <script type="module">
         // 1. IMPORTS
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-       import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, push, update, onValue, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // 2. CONFIG
@@ -2055,20 +2629,20 @@
 
         // 3. STATE
         // 3. STATE & CACHING (Fast Load ⚡)
-window.cart = JSON.parse(localStorage.getItem('localCart')) || [];
-window.wishlist = JSON.parse(localStorage.getItem('localWishlist')) || [];
-let currentProductToAdd = null;
-let currentUser = null; 
+        window.cart = JSON.parse(localStorage.getItem('localCart')) || [];
+        window.wishlist = JSON.parse(localStorage.getItem('localWishlist')) || [];
+        let currentProductToAdd = null;
+        let currentUser = null;
 
-// Initial Load - Turant dikhao!
-updateCartCount();
+        // Initial Load - Turant dikhao!
+        updateCartCount();
 
-// --- SAVE FUNCTION ---
-function saveLocally() {
-    localStorage.setItem('localCart', JSON.stringify(window.cart));
-    localStorage.setItem('localWishlist', JSON.stringify(window.wishlist));
-    updateCartCount();
-}
+        // --- SAVE FUNCTION ---
+        function saveLocally() {
+            localStorage.setItem('localCart', JSON.stringify(window.cart));
+            localStorage.setItem('localWishlist', JSON.stringify(window.wishlist));
+            updateCartCount();
+        }
 
         // --- CLOUD SYNC ---
         function syncCartToCloud() {
@@ -2221,46 +2795,46 @@ function saveLocally() {
         }
         // --- UPDATE CART RENDER (Shows Custom Details) ---
         // --- UPDATED RENDER CART (Supports Custom Images) ---
-// --- UPDATED RENDER CART (Shows Uploaded Image inside Details) ---
-window.renderCart = function() {
-    const list = document.getElementById('cartItemsList');
-    const totalEl = document.getElementById('cartTotal');
-    
-    if(window.cart.length === 0){ 
-        list.innerHTML="<div class='empty-msg'>Your bag is empty.</div>"; 
-        totalEl.innerText="$0.00"; 
-        return; 
-    }
+        // --- UPDATED RENDER CART (Shows Uploaded Image inside Details) ---
+        window.renderCart = function () {
+            const list = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('cartTotal');
 
-    let total = 0;
-    list.innerHTML = window.cart.map((item, index) => {
-        let price = parseFloat(item.price.replace(/,/g, ''));
-        total += price;
+            if (window.cart.length === 0) {
+                list.innerHTML = "<div class='empty-msg'>Your bag is empty.</div>";
+                totalEl.innerText = "$0.00";
+                return;
+            }
 
-        // --- Custom Details Block Generator ---
-        let metaHtml = '';
-        if(item.isCustomItem) {
-            
-            // Check: Agar user ne image upload ki hai to HTML banao
-            const uploadedImgHtml = item.details.uploadedImage 
-                ? `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
+            let total = 0;
+            list.innerHTML = window.cart.map((item, index) => {
+                let price = parseFloat(item.price.replace(/,/g, ''));
+                total += price;
+
+                // --- Custom Details Block Generator ---
+                let metaHtml = '';
+                if (item.isCustomItem) {
+
+                    // Check: Agar user ne image upload ki hai to HTML banao
+                    const uploadedImgHtml = item.details.uploadedImage
+                        ? `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
                      <span style="font-size:10px; color:#777; display:block; margin-bottom:4px;">Reference Image:</span>
                      <img src="${item.details.uploadedImage}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid #999;">
-                   </div>` 
-                : '';
+                   </div>`
+                        : '';
 
-            metaHtml = `
+                    metaHtml = `
                 <div style="font-size:11px; color:#444; background:#f4f4f4; padding:10px; border-radius:8px; margin-top:6px; line-height:1.5; border:1px solid #e0e0e0;">
                     <strong>Shape:</strong> ${item.details.shape} • <strong>Color:</strong> ${item.details.color}<br>
                     <strong>Size:</strong> ${item.details.size}<br>
                     <div style="color:#666; margin-top:2px; font-style:italic;">"${item.details.desc}"</div>
                     ${uploadedImgHtml} </div>
             `;
-        } else if (item.isCustom) {
-             metaHtml = `<span class="cart-custom-badge">Note: ${item.note}</span>`;
-        }
+                } else if (item.isCustom) {
+                    metaHtml = `<span class="cart-custom-badge">Note: ${item.note}</span>`;
+                }
 
-        return `
+                return `
         <div class="cart-item" style="align-items:flex-start">
             <img src="${item.image}" style="object-fit:cover; width:80px; height:80px; border-radius:10px;">
             
@@ -2274,10 +2848,10 @@ window.renderCart = function() {
                 <i class="fas fa-trash"></i>
             </div>
         </div>`;
-    }).join('');
-    
-    totalEl.innerText = "$" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
-};
+            }).join('');
+
+            totalEl.innerText = "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        };
 
         // --- CHECKOUT & ORDERS ---
         // --- 2. Update Confirm Order to match your Rules ---
@@ -2345,55 +2919,55 @@ window.renderCart = function() {
 
         // --- AUTH & LOAD ---
         // --- FAST AUTH LOADING ---
-onAuthStateChanged(auth, (user) => {
-    const btn = document.querySelector('.header-profile-btn');
-    if (user) {
-        currentUser = user;
-        // UI Turant Update karein
-        btn.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/40'}" style="width:100%; height:100%; border-radius:50%;">`;
-        document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
-        document.getElementById('userName').innerText = user.displayName;
-        document.getElementById('userEmail').innerText = user.email;
+        onAuthStateChanged(auth, (user) => {
+            const btn = document.querySelector('.header-profile-btn');
+            if (user) {
+                currentUser = user;
+                // UI Turant Update karein
+                btn.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/40'}" style="width:100%; height:100%; border-radius:50%;">`;
+                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userEmail').innerText = user.email;
 
-        // Background Sync (Local data ko clear mat karo, merge karo!)
-        get(ref(db, 'users/' + user.uid)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const cloudData = snapshot.val();
-                
-                // Smart Merge: Agar local khali hai to cloud se lo
-                if(window.cart.length === 0 && cloudData.cart) {
-                    window.cart = cloudData.cart;
-                    saveLocally();
-                }
-                if(window.wishlist.length === 0 && cloudData.wishlist) {
-                    window.wishlist = cloudData.wishlist;
-                    saveLocally();
-                }
-                updateCartCount();
+                // Background Sync (Local data ko clear mat karo, merge karo!)
+                get(ref(db, 'users/' + user.uid)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const cloudData = snapshot.val();
+
+                        // Smart Merge: Agar local khali hai to cloud se lo
+                        if (window.cart.length === 0 && cloudData.cart) {
+                            window.cart = cloudData.cart;
+                            saveLocally();
+                        }
+                        if (window.wishlist.length === 0 && cloudData.wishlist) {
+                            window.wishlist = cloudData.wishlist;
+                            saveLocally();
+                        }
+                        updateCartCount();
+                    }
+                });
+
+                // Orders Listener start kar do background me
+                window.renderOrders();
+
+            } else {
+                currentUser = null;
+                btn.innerHTML = `<i class="far fa-user"></i>`;
             }
         });
-        
-        // Orders Listener start kar do background me
-        window.renderOrders(); 
 
-    } else {
-        currentUser = null;
-        btn.innerHTML = `<i class="far fa-user"></i>`;
-    }
-});
-
-// Logout Update (Local Storage Clear karein)
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    signOut(auth).then(() => {
-        document.getElementById('userProfileModal').style.display = 'none';
-        window.cart = []; window.wishlist = [];
-        localStorage.removeItem('localCart'); // Clear Storage
-        localStorage.removeItem('localWishlist'); // Clear Storage
-        updateCartCount();
-        window.navAction('home');
-        window.showToast("Logged Out", "See you soon!", "info");
-    });
-});
+        // Logout Update (Local Storage Clear karein)
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                document.getElementById('userProfileModal').style.display = 'none';
+                window.cart = []; window.wishlist = [];
+                localStorage.removeItem('localCart'); // Clear Storage
+                localStorage.removeItem('localWishlist'); // Clear Storage
+                updateCartCount();
+                window.navAction('home');
+                window.showToast("Logged Out", "See you soon!", "info");
+            });
+        });
 
         document.getElementById('googleLoginBtn').addEventListener('click', () => {
             signInWithPopup(auth, provider).then((res) => {
@@ -2425,7 +2999,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
             }
 
             // Sirf tab loading dikhao jab list khali ho (Taaki update hone par blink na ho)
-if(list.innerHTML.trim() === "") list.innerHTML = "<div class='empty-msg'>Loading...</div>";
+            if (list.innerHTML.trim() === "") list.innerHTML = "<div class='empty-msg'>Loading...</div>";
             // Read Data
             const ordersRef = ref(db, 'users/' + currentUser.uid + '/orders');
 
@@ -2702,171 +3276,171 @@ if(list.innerHTML.trim() === "") list.innerHTML = "<div class='empty-msg'>Loadin
             }).join('');
         };
         // --- CUSTOM BUILDER LOGIC ---
-// --- PRO CUSTOM BUILDER LOGIC ---
+        // --- PRO CUSTOM BUILDER LOGIC ---
 
-// 1. STATE
-let custData = {
-    cat: '', shape: '', color: '', imageBase64: null
-};
-
-// 2. OPEN/CLOSE
-window.openBuilder = () => {
-    document.getElementById('promptModal').style.display = 'none';
-    document.getElementById('customBuilderModal').style.display = 'flex';
-    resetBuilderUI();
-};
-window.closeBuilder = () => document.getElementById('customBuilderModal').style.display = 'none';
-
-function resetBuilderUI() {
-    custData = { cat: '', shape: '', color: '', imageBase64: null };
-    document.querySelectorAll('.b-opt, .s-opt, .c-circle').forEach(e => e.classList.remove('active'));
-    document.getElementById('selectedColorName').innerText = "Select a color";
-    document.getElementById('custDesc').value = "";
-    document.getElementById('custLink').value = "";
-    document.getElementById('sizeSection').style.display = 'none';
-    document.getElementById('previewImg').style.display = 'none';
-    document.getElementById('uploadText').innerText = "Upload Reference Image";
-}
-
-// 3. SELECTION HANDLERS
-window.setCat = (el, cat) => {
-    document.querySelectorAll('.b-opt').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-    custData.cat = cat;
-
-    // Size Logic: Standard vs Custom
-    const section = document.getElementById('sizeSection');
-    section.style.display = 'block';
-    
-    // Group A: Standard Size (Ring, Bangles, Pendant, Bracelet)
-    const stdGroup = ['Ring', 'Bangles', 'Pendant', 'Bracelet'];
-    
-    if(stdGroup.includes(cat)) {
-        document.getElementById('sizeStd').style.display = 'block';
-        document.getElementById('sizeCust').style.display = 'none';
-    } else {
-        // Group B: Custom Slider (Inches)
-        document.getElementById('sizeStd').style.display = 'none';
-        document.getElementById('sizeCust').style.display = 'block';
-    }
-};
-
-window.setShape = (el, shape) => {
-    document.querySelectorAll('.s-opt').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-    custData.shape = shape;
-};
-
-window.setColor = (el, color) => {
-    document.querySelectorAll('.c-circle').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-    custData.color = color;
-    document.getElementById('selectedColorName').innerText = color + " Selected";
-};
-
-// 4. IMAGE HANDLING (File to Base64)
-window.handleFileSelect = (input) => {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        
-        // Show Preview
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('previewImg').src = e.target.result;
-            document.getElementById('previewImg').style.display = 'block';
-            document.getElementById('uploadText').innerText = "Image Selected";
-            
-            // Save Data
-            custData.imageBase64 = e.target.result;
+        // 1. STATE
+        let custData = {
+            cat: '', shape: '', color: '', imageBase64: null
         };
-        reader.readAsDataURL(file);
-    }
-};
 
-// 5. SUBMIT TO CART
-// --- UPDATED SUBMIT LOGIC (Fixes Image Issue) ---
-window.submitCustomOrder = () => {
-    // Validation
-    if(!custData.cat || !custData.shape || !custData.color) {
-        window.showToast("Incomplete", "Please select Category, Shape and Color.", "error");
-        return;
-    }
+        // 2. OPEN/CLOSE
+        window.openBuilder = () => {
+            document.getElementById('promptModal').style.display = 'none';
+            document.getElementById('customBuilderModal').style.display = 'flex';
+            resetBuilderUI();
+        };
+        window.closeBuilder = () => document.getElementById('customBuilderModal').style.display = 'none';
 
-    // 1. Determine Size String
-    let sizeFinal = "Standard (Fit for All)";
-    const stdGroup = ['Ring', 'Bangles', 'Pendant', 'Bracelet'];
-    if(!stdGroup.includes(custData.cat)) {
-        const l = document.getElementById('txtLen').innerText;
-        const b = document.getElementById('txtWid').innerText;
-        sizeFinal = `${l}" x ${b}" (Inches)`;
-    }
-
-    // 2. Select Beautiful Default Image based on Category
-    // Yeh image Cart ke LEFT side mein dikhegi (Main Product Image)
-    const categoryImages = {
-        'Ring': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=60',
-        'Bangles': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=60',
-        'Pendant': 'https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&w=500&q=60',
-        'Bracelet': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=60',
-        'Mangalsutra': 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=60',
-        'Keychain': 'https://images.unsplash.com/photo-1582562124811-2867e69f88d7?auto=format&fit=crop&w=500&q=60',
-        'Frame': 'https://images.unsplash.com/photo-1534349762913-961129fdebe2?auto=format&fit=crop&w=500&q=60',
-        'Mobile Case': 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=500&q=60',
-        'Keepsake': 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=60'
-    };
-    
-    // Agar category match na ho to fallback image
-    const mainProductImage = categoryImages[custData.cat] || "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=60";
-
-    // 3. Create Item Object
-    const newItem = {
-        id: 'CUST-' + Date.now(),
-        name: `Custom ${custData.cat}`,
-        price: "999.00",
-        
-        // MAIN CHANGE: Yahan ab default image jayegi, user ki upload nahi
-        image: mainProductImage, 
-        
-        category: custData.cat,
-        isCustomItem: true,
-        details: {
-            shape: custData.shape,
-            color: custData.color,
-            size: sizeFinal,
-            desc: document.getElementById('custDesc').value || 'No Description',
-            link: document.getElementById('custLink').value || '',
-            
-            // User ki Uploaded image yahan save hogi
-            uploadedImage: custData.imageBase64 || null 
+        function resetBuilderUI() {
+            custData = { cat: '', shape: '', color: '', imageBase64: null };
+            document.querySelectorAll('.b-opt, .s-opt, .c-circle').forEach(e => e.classList.remove('active'));
+            document.getElementById('selectedColorName').innerText = "Select a color";
+            document.getElementById('custDesc').value = "";
+            document.getElementById('custLink').value = "";
+            document.getElementById('sizeSection').style.display = 'none';
+            document.getElementById('previewImg').style.display = 'none';
+            document.getElementById('uploadText').innerText = "Upload Reference Image";
         }
-    };
 
-    // 4. Save & Close
-    window.cart.push(newItem);
-    updateCartCount();
-    syncCartToCloud();
-    closeBuilder();
-    window.showToast("Design Added! 🎨", "Your custom jewelry is in the cart.", "success");
-    
-    setTimeout(() => window.navAction('cart'), 500);
-};
-// --- UPDATE: Make Product Cards Clickable ---
-window.loadProducts = function(filterType = 'All') {
-    const container = document.getElementById('productContainer');
-    
-    // ... (Purana filter logic same rahega) ...
-    let displayList = [];
-    if(filterType === 'Trending' || filterType === 'All') {
-        if(filterType === 'All') displayList = products;
-        else displayList = products.filter(p => p.isTrending);
-    } else {
-        displayList = products.filter(p => p.category === filterType || p.name.includes(filterType));
-    }
-    // ...
+        // 3. SELECTION HANDLERS
+        window.setCat = (el, cat) => {
+            document.querySelectorAll('.b-opt').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            custData.cat = cat;
 
-    container.innerHTML = displayList.map(p => {
-        const isLiked = window.wishlist.some(item => item.id === p.id) ? 'active' : '';
-        return `
+            // Size Logic: Standard vs Custom
+            const section = document.getElementById('sizeSection');
+            section.style.display = 'block';
+
+            // Group A: Standard Size (Ring, Bangles, Pendant, Bracelet)
+            const stdGroup = ['Ring', 'Bangles', 'Pendant', 'Bracelet'];
+
+            if (stdGroup.includes(cat)) {
+                document.getElementById('sizeStd').style.display = 'block';
+                document.getElementById('sizeCust').style.display = 'none';
+            } else {
+                // Group B: Custom Slider (Inches)
+                document.getElementById('sizeStd').style.display = 'none';
+                document.getElementById('sizeCust').style.display = 'block';
+            }
+        };
+
+        window.setShape = (el, shape) => {
+            document.querySelectorAll('.s-opt').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            custData.shape = shape;
+        };
+
+        window.setColor = (el, color) => {
+            document.querySelectorAll('.c-circle').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            custData.color = color;
+            document.getElementById('selectedColorName').innerText = color + " Selected";
+        };
+
+        // 4. IMAGE HANDLING (File to Base64)
+        window.handleFileSelect = (input) => {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Show Preview
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('previewImg').style.display = 'block';
+                    document.getElementById('uploadText').innerText = "Image Selected";
+
+                    // Save Data
+                    custData.imageBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // 5. SUBMIT TO CART
+        // --- UPDATED SUBMIT LOGIC (Fixes Image Issue) ---
+        window.submitCustomOrder = () => {
+            // Validation
+            if (!custData.cat || !custData.shape || !custData.color) {
+                window.showToast("Incomplete", "Please select Category, Shape and Color.", "error");
+                return;
+            }
+
+            // 1. Determine Size String
+            let sizeFinal = "Standard (Fit for All)";
+            const stdGroup = ['Ring', 'Bangles', 'Pendant', 'Bracelet'];
+            if (!stdGroup.includes(custData.cat)) {
+                const l = document.getElementById('txtLen').innerText;
+                const b = document.getElementById('txtWid').innerText;
+                sizeFinal = `${l}" x ${b}" (Inches)`;
+            }
+
+            // 2. Select Beautiful Default Image based on Category
+            // Yeh image Cart ke LEFT side mein dikhegi (Main Product Image)
+            const categoryImages = {
+                'Ring': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=60',
+                'Bangles': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=60',
+                'Pendant': 'https://images.unsplash.com/photo-1599643478518-17488fbbcd75?auto=format&fit=crop&w=500&q=60',
+                'Bracelet': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=60',
+                'Mangalsutra': 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=60',
+                'Keychain': 'https://images.unsplash.com/photo-1582562124811-2867e69f88d7?auto=format&fit=crop&w=500&q=60',
+                'Frame': 'https://images.unsplash.com/photo-1534349762913-961129fdebe2?auto=format&fit=crop&w=500&q=60',
+                'Mobile Case': 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=500&q=60',
+                'Keepsake': 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=60'
+            };
+
+            // Agar category match na ho to fallback image
+            const mainProductImage = categoryImages[custData.cat] || "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=60";
+
+            // 3. Create Item Object
+            const newItem = {
+                id: 'CUST-' + Date.now(),
+                name: `Custom ${custData.cat}`,
+                price: "999.00",
+
+                // MAIN CHANGE: Yahan ab default image jayegi, user ki upload nahi
+                image: mainProductImage,
+
+                category: custData.cat,
+                isCustomItem: true,
+                details: {
+                    shape: custData.shape,
+                    color: custData.color,
+                    size: sizeFinal,
+                    desc: document.getElementById('custDesc').value || 'No Description',
+                    link: document.getElementById('custLink').value || '',
+
+                    // User ki Uploaded image yahan save hogi
+                    uploadedImage: custData.imageBase64 || null
+                }
+            };
+
+            // 4. Save & Close
+            window.cart.push(newItem);
+            updateCartCount();
+            syncCartToCloud();
+            closeBuilder();
+            window.showToast("Design Added! 🎨", "Your custom jewelry is in the cart.", "success");
+
+            setTimeout(() => window.navAction('cart'), 500);
+        };
+        // --- UPDATE: Make Product Cards Clickable ---
+        window.loadProducts = function (filterType = 'All') {
+            const container = document.getElementById('productContainer');
+
+            // ... (Purana filter logic same rahega) ...
+            let displayList = [];
+            if (filterType === 'Trending' || filterType === 'All') {
+                if (filterType === 'All') displayList = products;
+                else displayList = products.filter(p => p.isTrending);
+            } else {
+                displayList = products.filter(p => p.category === filterType || p.name.includes(filterType));
+            }
+            // ...
+
+            container.innerHTML = displayList.map(p => {
+                const isLiked = window.wishlist.some(item => item.id === p.id) ? 'active' : '';
+                return `
             <div class="product-card" onclick="openProductDetail(${p.id})"> <div class="prod-img-box">
                     <span class="fav-icon ${isLiked}" onclick="event.stopPropagation(); toggleLike(${p.id}, this)">
                         <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
@@ -2881,154 +3455,236 @@ window.loadProducts = function(filterType = 'All') {
                     <div class="prod-price">$${p.price}</div>
                 </div>
             </div>`;
-    }).join('');
-};
-// --- PRODUCT DETAIL POPUP LOGIC ---
+            }).join('');
+        };
+        // --- PRODUCT DETAIL POPUP LOGIC ---
 
-let currentDetailProduct = null;
+        let currentDetailProduct = null;
 
-// --- UPDATED: OPEN DETAILS WITH REAL DATA ---
-// --- UPDATED: OPEN DETAIL WITH SIMILAR PRODUCTS ---
-window.openProductDetail = function(id) {
-    const product = products.find(p => p.id === id);
-    if (!product) return;
+        // --- UPDATED: OPEN DETAILS WITH REAL DATA ---
+        // --- UPDATED: OPEN DETAIL WITH SIMILAR PRODUCTS ---
+        window.openProductDetail = function (id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
 
-    currentDetailProduct = product;
+            currentDetailProduct = product;
 
-    // 1. Populate Basic Info (Same as before)
-    document.getElementById('detailTitle').innerText = product.name;
-    document.getElementById('detailPrice').innerText = "$" + product.price;
-    document.getElementById('detailCat').innerText = product.category;
-    document.getElementById('detailDesc').innerText = product.description || "No description available.";
+            // 1. Populate Basic Info (Same as before)
+            document.getElementById('detailTitle').innerText = product.name;
+            document.getElementById('detailPrice').innerText = "$" + product.price;
+            document.getElementById('detailCat').innerText = product.category;
+            document.getElementById('detailDesc').innerText = product.description || "No description available.";
 
-    // Images
-    const imagesList = (product.images && product.images.length > 0) ? product.images : [product.image];
-    document.getElementById('detailMainImg').src = imagesList[0];
-    document.getElementById('detailThumbRow').innerHTML = imagesList.map((img, index) => `
+            // Images
+            const imagesList = (product.images && product.images.length > 0) ? product.images : [product.image];
+            document.getElementById('detailMainImg').src = imagesList[0];
+            document.getElementById('detailThumbRow').innerHTML = imagesList.map((img, index) => `
         <img src="${img}" class="thumb-img ${index === 0 ? 'active' : ''}" onclick="switchDetailImage(this, '${img}')">
     `).join('');
 
-    // Specs
-    const specList = document.querySelector('.specs-list');
-    specList.innerHTML = "";
-    if(product.specs) {
-        for (const [key, value] of Object.entries(product.specs)) {
-            specList.innerHTML += `<li><span>${key}:</span> <span>${value}</span></li>`;
-        }
-    } else {
-        specList.innerHTML = "<li><span>Info:</span> <span>Standard Specification</span></li>";
-    }
+            // Specs
+            const specList = document.querySelector('.specs-list');
+            specList.innerHTML = "";
+            if (product.specs) {
+                for (const [key, value] of Object.entries(product.specs)) {
+                    specList.innerHTML += `<li><span>${key}:</span> <span>${value}</span></li>`;
+                }
+            } else {
+                specList.innerHTML = "<li><span>Info:</span> <span>Standard Specification</span></li>";
+            }
 
-    // Fav Button State
-    const isLiked = window.wishlist.some(p => p.id === product.id);
-    document.getElementById('detailFavBtn').innerHTML = isLiked ? '<i class="fas fa-heart" style="color:#e74c3c;"></i>' : '<i class="far fa-heart"></i>';
+            // Fav Button State
+            const isLiked = window.wishlist.some(p => p.id === product.id);
+            document.getElementById('detailFavBtn').innerHTML = isLiked ? '<i class="fas fa-heart" style="color:#e74c3c;"></i>' : '<i class="far fa-heart"></i>';
 
-    // -----------------------------------------------------
-    // 2. NEW: LOAD SIMILAR PRODUCTS
-    // -----------------------------------------------------
-    const similarContainer = document.getElementById('similarProductsRow');
-    
-    // Logic: Same category, but NOT the current product
-    const similarItems = products.filter(p => p.category === product.category && p.id !== product.id);
-    
-    if(similarItems.length === 0) {
-        similarContainer.innerHTML = "<div style='font-size:12px; color:#999;'>No similar items found.</div>";
-    } else {
-        similarContainer.innerHTML = similarItems.map(p => `
+            // -----------------------------------------------------
+            // 2. NEW: LOAD SIMILAR PRODUCTS
+            // -----------------------------------------------------
+            const similarContainer = document.getElementById('similarProductsRow');
+
+            // Logic: Same category, but NOT the current product
+            const similarItems = products.filter(p => p.category === product.category && p.id !== product.id);
+
+            if (similarItems.length === 0) {
+                similarContainer.innerHTML = "<div style='font-size:12px; color:#999;'>No similar items found.</div>";
+            } else {
+                similarContainer.innerHTML = similarItems.map(p => `
             <div style="min-width: 120px; cursor: pointer;" onclick="openProductDetail(${p.id})">
                 <img src="${p.image}" style="width:100%; height:120px; object-fit:cover; border-radius:12px; margin-bottom:8px;">
                 <div style="font-size:12px; font-weight:600; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div>
                 <div style="font-size:12px; font-weight:700; color:var(--primary-gold);">$${p.price}</div>
             </div>
         `).join('');
-    }
+            }
 
-    // Show Modal
-    document.getElementById('productDetailModal').style.display = 'flex';
-};
+            // Show Modal
+            document.getElementById('productDetailModal').style.display = 'flex';
+        };
 
-// --- UPDATED: ADD TO BAG (POPUP WON'T CLOSE) ---
-// --- UPDATED: Add to Bag (Keep Popup Open) ---
-window.addToCartFromDetail = function() {
-    // 1. Check Login
-    if(!currentUser) { 
-        document.getElementById('authModal').style.display = 'flex'; 
-        return; 
-    }
-    
-    // 2. Add Item
-    if(currentDetailProduct) {
-        // Direct Add (Simple)
-        window.cart.push({...currentDetailProduct, isCustom: false});
-        updateCartCount();
-        syncCartToCloud();
-        
-        // 3. Show Toast (Lekin Popup Close mat karo)
-        window.showToast("Added to Bag 🛍️", "Item added to your cart.", "success");
-        
-        // Note: Humne yahan closeProductModal() call nahi kiya, isliye popup khula rahega.
-    }
-};
+        // --- UPDATED: ADD TO BAG (POPUP WON'T CLOSE) ---
+        // --- UPDATED: Add to Bag (Keep Popup Open) ---
+        window.addToCartFromDetail = function () {
+            // 1. Check Login
+            if (!currentUser) {
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
 
-// Switch Image logic
-window.switchDetailImage = function(el, src) {
-    document.getElementById('detailMainImg').src = src;
-    document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
-    el.classList.add('active');
-};
+            // 2. Add Item
+            if (currentDetailProduct) {
+                // Direct Add (Simple)
+                window.cart.push({ ...currentDetailProduct, isCustom: false });
+                updateCartCount();
+                syncCartToCloud();
 
-// Add to Cart from Details
+                // 3. Show Toast (Lekin Popup Close mat karo)
+                window.showToast("Added to Bag 🛍️", "Item added to your cart.", "success");
+
+                // Note: Humne yahan closeProductModal() call nahi kiya, isliye popup khula rahega.
+            }
+        };
+
+        // Switch Image logic
+        window.switchDetailImage = function (el, src) {
+            document.getElementById('detailMainImg').src = src;
+            document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+            el.classList.add('active');
+        };
+
+        // Add to Cart from Details
 
 
-// Toggle Fav from Details
-// --- FIXED: TOGGLE FAV FROM DETAILS MODAL ---
-window.toggleDetailFav = function() {
-    // 1. Check Login
-    if(!currentUser) { 
-        document.getElementById('authModal').style.display = 'flex'; 
-        return; 
-    }
+        // Toggle Fav from Details
+        // --- FIXED: TOGGLE FAV FROM DETAILS MODAL ---
+        window.toggleDetailFav = function () {
+            // 1. Check Login
+            if (!currentUser) {
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
 
-    if(!currentDetailProduct) return;
+            if (!currentDetailProduct) return;
 
-    const product = currentDetailProduct;
-    
-    // 2. Check if already in wishlist
-    const idx = window.wishlist.findIndex(p => p.id === product.id);
-    let isLiked = false;
+            const product = currentDetailProduct;
 
-    if(idx === -1) {
-        // Add to Wishlist
-        window.wishlist.push(product);
-        isLiked = true;
-    } else {
-        // Remove from Wishlist
-        window.wishlist.splice(idx, 1);
-        isLiked = false;
-    }
-    
-    // 3. Sync Cloud & Sidebar
-    renderWishlist(); 
-    syncWishlistToCloud();
+            // 2. Check if already in wishlist
+            const idx = window.wishlist.findIndex(p => p.id === product.id);
+            let isLiked = false;
 
-    // 4. Update UI (Detail Modal Button)
-    const favBtn = document.getElementById('detailFavBtn');
-    if(isLiked) {
-        favBtn.innerHTML = '<i class="fas fa-heart" style="color:#e74c3c;"></i>'; // Red Filled
-        window.showToast("Added to Favourites", "Saved to your wishlist", "success");
-    } else {
-        favBtn.innerHTML = '<i class="far fa-heart"></i>'; // Outline
-        window.showToast("Removed", "Removed from wishlist", "info");
-    }
+            if (idx === -1) {
+                // Add to Wishlist
+                window.wishlist.push(product);
+                isLiked = true;
+            } else {
+                // Remove from Wishlist
+                window.wishlist.splice(idx, 1);
+                isLiked = false;
+            }
 
-    // 5. Update Grid UI (Background me Home Page par bhi heart update karein)
-    // Hum Home Page reload karke icons update kar dete hain taaki sync rahe
-    window.loadProducts(document.querySelector('.filter-chip.active')?.innerText || 'All');
-};
+            // 3. Sync Cloud & Sidebar
+            renderWishlist();
+            syncWishlistToCloud();
 
-window.closeProductModal = function() {
-    document.getElementById('productDetailModal').style.display = 'none';
-};
+            // 4. Update UI (Detail Modal Button)
+            const favBtn = document.getElementById('detailFavBtn');
+            if (isLiked) {
+                favBtn.innerHTML = '<i class="fas fa-heart" style="color:#e74c3c;"></i>'; // Red Filled
+                window.showToast("Added to Favourites", "Saved to your wishlist", "success");
+            } else {
+                favBtn.innerHTML = '<i class="far fa-heart"></i>'; // Outline
+                window.showToast("Removed", "Removed from wishlist", "info");
+            }
+
+            // 5. Update Grid UI (Background me Home Page par bhi heart update karein)
+            // Hum Home Page reload karke icons update kar dete hain taaki sync rahe
+            window.loadProducts(document.querySelector('.filter-chip.active')?.innerText || 'All');
+        };
+
+        window.closeProductModal = function () {
+            document.getElementById('productDetailModal').style.display = 'none';
+        };
+        // --- NEW AUTH LOGIC (Login / Signup / Forgot) ---
+
+        // 1. Tab Switcher
+        window.switchAuthTab = function (tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+
+            if (tab === 'login') {
+                document.getElementById('tabLogin').classList.add('active');
+                document.getElementById('loginFormSection').style.display = 'block';
+                document.getElementById('signupFormSection').style.display = 'none';
+            } else {
+                document.getElementById('tabSignup').classList.add('active');
+                document.getElementById('loginFormSection').style.display = 'none';
+                document.getElementById('signupFormSection').style.display = 'block';
+            }
+        };
+
+        // 2. Handle Manual Login
+        window.handleLogin = function () {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+
+            if (!email || !pass) return window.showToast("Error", "Please fill all fields", "error");
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    document.getElementById('authModal').style.display = 'none';
+                    window.showToast("Welcome Back!", "Login Successful", "success");
+                })
+                .catch((error) => {
+                    window.showToast("Login Failed", error.message.replace('Firebase:', ''), "error");
+                });
+        };
+
+        // 3. Handle Sign Up (Create Account)
+        window.handleSignUp = function () {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+
+            if (!name || !email || !pass) return window.showToast("Error", "All fields are required", "error");
+            if (pass.length < 6) return window.showToast("Weak Password", "Password must be at least 6 characters", "error");
+
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then(async (userCredential) => {
+                    const user = userCredential.user;
+
+                    // A. Update Display Name in Auth
+                    await updateProfile(user, { displayName: name });
+
+                    // B. Create Entry in Database
+                    await update(ref(db, 'users/' + user.uid), {
+                        name: name,
+                        email: email,
+                        photo: "https://via.placeholder.com/100?text=" + name.charAt(0), // Default Initials Avatar
+                        lastLogin: Date.now()
+                    });
+
+                    document.getElementById('authModal').style.display = 'none';
+                    window.showToast("Account Created", "Welcome to Glow Creations!", "success");
+
+                    // Reload page to refresh name display if needed
+                    setTimeout(() => location.reload(), 1000);
+                })
+                .catch((error) => {
+                    window.showToast("Error", error.message.replace('Firebase:', ''), "error");
+                });
+        };
+
+        // 4. Forgot Password
+        window.forgotPassword = function () {
+            const email = document.getElementById('loginEmail').value;
+            if (!email) return window.showToast("Required", "Please enter your email address first.", "info");
+
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    window.showToast("Email Sent", "Check your inbox for password reset link.", "success");
+                })
+                .catch((error) => {
+                    window.showToast("Error", error.message, "error");
+                });
+        };
     </script>
 </body>
 
