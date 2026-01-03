@@ -2329,20 +2329,23 @@
             </div>
         </div>
         <!-- 4. User Profile -->
-        <div class="modal-overlay" id="userProfileModal">
-            <div class="custom-wizard" style="text-align: center; height: auto;">
-                <img id="userPhoto" src=""
-                    style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-gold); margin: 0 auto 10px; padding:2px;">
-                <h3 id="userName" style="font-size: 18px; font-weight:700; color:#333;">User Name</h3>
-                <p id="userEmail" style="color: #777; font-size: 12px;">email@example.com</p>
+        <div class="modal-overlay" id="userProfileModal" style="z-index: 5000;">
+    <div class="custom-wizard" style="width: 85%; max-width: 320px; padding: 30px 20px; text-align: center;">
 
-                <button class="logout-btn" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-                <button class="btn-outline" onclick="closeUserModal()"
-                    style="margin-top: 15px; border:none;">Close</button>
-            </div>
+        <div style="margin-bottom: 15px; display: flex; justify-content: center; position: relative;">
+            <img id="userPhoto" src="" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #D4AF37; display: none;">
         </div>
+
+        <h3 id="userName" style="font-size: 20px; font-weight: 700; margin-bottom: 5px; color: #222; font-family: 'Playfair Display', serif;">User Name</h3>
+        <div id="userEmail" style="font-size: 13px; color: #777; margin-bottom: 25px;">user@email.com</div>
+
+        <button id="logoutBtn" class="btn-fill" style="width: 100%; background: #fff0f0; color: #d32f2f; border: 1px solid #ffcdd2; margin-bottom: 15px;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        
+        <div onclick="closeUserModal()" style="font-size: 13px; color: #999; cursor: pointer; text-decoration: underline;">Close</div>
+    </div>
+</div>
 
         <!-- 5. Checkout Modal -->
         <div class="modal-overlay" id="checkoutModal">
@@ -2919,42 +2922,74 @@
 
         // --- AUTH & LOAD ---
         // --- FAST AUTH LOADING ---
-        onAuthStateChanged(auth, (user) => {
-            const btn = document.querySelector('.header-profile-btn');
-            if (user) {
-                currentUser = user;
-                // UI Turant Update karein
-                btn.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/40'}" style="width:100%; height:100%; border-radius:50%;">`;
-                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userEmail').innerText = user.email;
+        // --- UPDATED AUTH STATE LISTENER (Fixes Broken Image) ---
+onAuthStateChanged(auth, (user) => {
+    const btn = document.querySelector('.header-profile-btn');
+    
+    if (user) {
+        currentUser = user;
+        
+        // 1. Photo Logic (Image or Initials)
+        const photoURL = user.photoURL;
+        const name = user.displayName || user.email || "U";
+        const initial = name.charAt(0).toUpperCase();
 
-                // Background Sync (Local data ko clear mat karo, merge karo!)
-                get(ref(db, 'users/' + user.uid)).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const cloudData = snapshot.val();
+        let profileHtml = '';
+        if (photoURL) {
+            // Agar photo hai
+            profileHtml = `<img src="${photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+            // Agar photo nahi hai -> Show First Letter
+            profileHtml = `<div style="width:100%; height:100%; border-radius:50%; background:#1a1a1a; color:#D4AF37; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; border:1px solid #D4AF37;">${initial}</div>`;
+        }
 
-                        // Smart Merge: Agar local khali hai to cloud se lo
-                        if (window.cart.length === 0 && cloudData.cart) {
-                            window.cart = cloudData.cart;
-                            saveLocally();
-                        }
-                        if (window.wishlist.length === 0 && cloudData.wishlist) {
-                            window.wishlist = cloudData.wishlist;
-                            saveLocally();
-                        }
-                        updateCartCount();
-                    }
-                });
+        // 2. Update Header Button
+        btn.innerHTML = profileHtml;
 
-                // Orders Listener start kar do background me
-                window.renderOrders();
-
+        // 3. Update User Modal (Agar khula ho)
+        const modalPhoto = document.getElementById('userPhoto');
+        if(modalPhoto) {
+            if(photoURL) {
+                modalPhoto.src = photoURL;
+                modalPhoto.style.display = 'block';
+                // Hide any text fallback if existing
+                if(modalPhoto.nextElementSibling && modalPhoto.nextElementSibling.classList.contains('fallback-avatar')) {
+                    modalPhoto.nextElementSibling.style.display = 'none';
+                }
             } else {
-                currentUser = null;
-                btn.innerHTML = `<i class="far fa-user"></i>`;
+                modalPhoto.style.display = 'none'; // Hide img tag
+                // Check if fallback div exists, else create
+                let fallback = modalPhoto.parentElement.querySelector('.fallback-avatar');
+                if(!fallback) {
+                    fallback = document.createElement('div');
+                    fallback.className = 'fallback-avatar';
+                    fallback.style.cssText = "width:80px; height:80px; border-radius:50%; background:#1a1a1a; color:#D4AF37; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:30px; margin:0 auto; border:2px solid #D4AF37;";
+                    modalPhoto.parentElement.appendChild(fallback);
+                }
+                fallback.innerText = initial;
+                fallback.style.display = 'flex';
+            }
+        }
+        
+        if(document.getElementById('userName')) document.getElementById('userName').innerText = user.displayName || "User";
+        if(document.getElementById('userEmail')) document.getElementById('userEmail').innerText = user.email;
+
+        // ... Baaki ka sync logic same rahega ...
+        get(ref(db, 'users/' + user.uid)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const cloudData = snapshot.val();
+                if(window.cart.length === 0 && cloudData.cart) { window.cart = cloudData.cart; saveLocally(); }
+                if(window.wishlist.length === 0 && cloudData.wishlist) { window.wishlist = cloudData.wishlist; saveLocally(); }
+                updateCartCount();
             }
         });
+        window.renderOrders(); 
+
+    } else {
+        currentUser = null;
+        btn.innerHTML = `<i class="far fa-user"></i>`;
+    }
+});
 
         // Logout Update (Local Storage Clear karein)
         document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -3621,56 +3656,77 @@
         };
 
         // 2. Handle Manual Login
-        window.handleLogin = function () {
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPass').value;
+       // --- UPDATED LOGIN (With Loading Indicator) ---
+window.handleLogin = function() {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+    const btn = document.querySelector('#loginFormSection button'); // Select the login button
 
-            if (!email || !pass) return window.showToast("Error", "Please fill all fields", "error");
+    if(!email || !pass) return window.showToast("Error", "Please fill all fields", "error");
 
-            signInWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    document.getElementById('authModal').style.display = 'none';
-                    window.showToast("Welcome Back!", "Login Successful", "success");
-                })
-                .catch((error) => {
-                    window.showToast("Login Failed", error.message.replace('Firebase:', ''), "error");
-                });
-        };
+    // 1. Show Loading
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
 
-        // 3. Handle Sign Up (Create Account)
-        window.handleSignUp = function () {
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const pass = document.getElementById('regPass').value;
+    signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+            document.getElementById('authModal').style.display = 'none';
+            window.showToast("Welcome Back!", "Login Successful", "success");
+        })
+        .catch((error) => {
+            window.showToast("Login Failed", error.message.replace('Firebase:', ''), "error");
+        })
+        .finally(() => {
+            // 2. Reset Button (Chahe success ho ya fail)
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            btn.style.opacity = "1";
+        });
+};
 
-            if (!name || !email || !pass) return window.showToast("Error", "All fields are required", "error");
-            if (pass.length < 6) return window.showToast("Weak Password", "Password must be at least 6 characters", "error");
+// --- UPDATED SIGNUP (With Loading Indicator) ---
+window.handleSignUp = function() {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const pass = document.getElementById('regPass').value;
+    const btn = document.querySelector('#signupFormSection button'); // Select signup button
 
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then(async (userCredential) => {
-                    const user = userCredential.user;
+    if(!name || !email || !pass) return window.showToast("Error", "All fields are required", "error");
+    if(pass.length < 6) return window.showToast("Weak Password", "Password must be at least 6 characters", "error");
 
-                    // A. Update Display Name in Auth
-                    await updateProfile(user, { displayName: name });
+    // 1. Show Loading
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
 
-                    // B. Create Entry in Database
-                    await update(ref(db, 'users/' + user.uid), {
-                        name: name,
-                        email: email,
-                        photo: "https://via.placeholder.com/100?text=" + name.charAt(0), // Default Initials Avatar
-                        lastLogin: Date.now()
-                    });
+    createUserWithEmailAndPassword(auth, email, pass)
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            await updateProfile(user, { displayName: name });
+            await update(ref(db, 'users/' + user.uid), {
+                name: name,
+                email: email,
+                photo: null, // Photo null rakhenge taaki initial logic chale
+                lastLogin: Date.now()
+            });
 
-                    document.getElementById('authModal').style.display = 'none';
-                    window.showToast("Account Created", "Welcome to Glow Creations!", "success");
-
-                    // Reload page to refresh name display if needed
-                    setTimeout(() => location.reload(), 1000);
-                })
-                .catch((error) => {
-                    window.showToast("Error", error.message.replace('Firebase:', ''), "error");
-                });
-        };
+            document.getElementById('authModal').style.display = 'none';
+            window.showToast("Account Created", "Welcome to Glow Creations!", "success");
+            setTimeout(()=> location.reload(), 1000); 
+        })
+        .catch((error) => {
+            window.showToast("Error", error.message.replace('Firebase:', ''), "error");
+        })
+        .finally(() => {
+            // 2. Reset Button
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            btn.style.opacity = "1";
+        });
+};
 
         // 4. Forgot Password
         window.forgotPassword = function () {
