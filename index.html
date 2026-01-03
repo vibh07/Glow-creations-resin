@@ -2032,7 +2032,7 @@
     <script type="module">
         // 1. IMPORTS
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+       import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, push, update, onValue, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // 2. CONFIG
@@ -2049,14 +2049,26 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        setPersistence(auth, browserLocalPersistence).catch((error) => console.error(error));
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
         // 3. STATE
-        window.cart = [];
-        window.wishlist = [];
-        let currentProductToAdd = null;
-        let currentUser = null;
+        // 3. STATE & CACHING (Fast Load ⚡)
+window.cart = JSON.parse(localStorage.getItem('localCart')) || [];
+window.wishlist = JSON.parse(localStorage.getItem('localWishlist')) || [];
+let currentProductToAdd = null;
+let currentUser = null; 
+
+// Initial Load - Turant dikhao!
+updateCartCount();
+
+// --- SAVE FUNCTION ---
+function saveLocally() {
+    localStorage.setItem('localCart', JSON.stringify(window.cart));
+    localStorage.setItem('localWishlist', JSON.stringify(window.wishlist));
+    updateCartCount();
+}
 
         // --- CLOUD SYNC ---
         function syncCartToCloud() {
@@ -2332,34 +2344,56 @@ window.renderCart = function() {
         };
 
         // --- AUTH & LOAD ---
-        onAuthStateChanged(auth, (user) => {
-            const btn = document.querySelector('.header-profile-btn');
-            if (user) {
-                currentUser = user;
-                btn.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/40'}" style="width:100%; height:100%; border-radius:50%;">`;
-                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userEmail').innerText = user.email;
+        // --- FAST AUTH LOADING ---
+onAuthStateChanged(auth, (user) => {
+    const btn = document.querySelector('.header-profile-btn');
+    if (user) {
+        currentUser = user;
+        // UI Turant Update karein
+        btn.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/40'}" style="width:100%; height:100%; border-radius:50%;">`;
+        document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
+        document.getElementById('userName').innerText = user.displayName;
+        document.getElementById('userEmail').innerText = user.email;
 
-                // Load User Data
-                const userRef = ref(db, 'users/' + user.uid);
-                get(userRef).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        window.cart = data.cart || [];
-                        window.wishlist = data.wishlist || [];
-                        updateCartCount();
-                        if (document.getElementById('wishlistPopup').classList.contains('open')) renderWishlist();
-                        window.loadProducts('Trending');
-                    }
-                });
-            } else {
-                currentUser = null;
-                btn.innerHTML = `<i class="far fa-user"></i>`;
-                window.cart = []; window.wishlist = []; updateCartCount();
-                window.loadProducts('Trending');
+        // Background Sync (Local data ko clear mat karo, merge karo!)
+        get(ref(db, 'users/' + user.uid)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const cloudData = snapshot.val();
+                
+                // Smart Merge: Agar local khali hai to cloud se lo
+                if(window.cart.length === 0 && cloudData.cart) {
+                    window.cart = cloudData.cart;
+                    saveLocally();
+                }
+                if(window.wishlist.length === 0 && cloudData.wishlist) {
+                    window.wishlist = cloudData.wishlist;
+                    saveLocally();
+                }
+                updateCartCount();
             }
         });
+        
+        // Orders Listener start kar do background me
+        window.renderOrders(); 
+
+    } else {
+        currentUser = null;
+        btn.innerHTML = `<i class="far fa-user"></i>`;
+    }
+});
+
+// Logout Update (Local Storage Clear karein)
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    signOut(auth).then(() => {
+        document.getElementById('userProfileModal').style.display = 'none';
+        window.cart = []; window.wishlist = [];
+        localStorage.removeItem('localCart'); // Clear Storage
+        localStorage.removeItem('localWishlist'); // Clear Storage
+        updateCartCount();
+        window.navAction('home');
+        window.showToast("Logged Out", "See you soon!", "info");
+    });
+});
 
         document.getElementById('googleLoginBtn').addEventListener('click', () => {
             signInWithPopup(auth, provider).then((res) => {
@@ -2390,8 +2424,8 @@ window.renderCart = function() {
                 return;
             }
 
-            list.innerHTML = "<div class='empty-msg'>Loading...</div>";
-
+            // Sirf tab loading dikhao jab list khali ho (Taaki update hone par blink na ho)
+if(list.innerHTML.trim() === "") list.innerHTML = "<div class='empty-msg'>Loading...</div>";
             // Read Data
             const ordersRef = ref(db, 'users/' + currentUser.uid + '/orders');
 
