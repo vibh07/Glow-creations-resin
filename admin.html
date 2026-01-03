@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Glow Admin Panel - Pro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --admin-gold: #996515; --admin-dark: #1a1a1a; --bg: #f4f6f8; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+
+        /* === MOBILE HAMBURGER === */
+        .mobile-header {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--admin-dark); z-index: 100; align-items: center; padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .menu-toggle { color: var(--admin-gold); font-size: 24px; cursor: pointer; }
+        .mobile-brand { color: white; margin-left: 15px; font-weight: 700; font-size: 18px; }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 250px; background: var(--admin-dark); color: white;
+            display: flex; flex-direction: column; padding: 20px;
+            transition: 0.3s; z-index: 1000;
+        }
+        .brand { font-size: 20px; font-weight: 700; color: var(--admin-gold); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .menu-item {
+            padding: 12px 15px; border-radius: 8px; margin-bottom: 5px; cursor: pointer; color: #aaa; transition: 0.2s;
+        }
+        .menu-item:hover, .menu-item.active { background: rgba(153, 101, 21, 0.2); color: var(--admin-gold); }
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 900;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; position: relative; }
+        
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-val { font-size: 24px; font-weight: 700; color: var(--admin-dark); }
+        .stat-label { font-size: 12px; color: #777; }
+
+        /* Table Area */
+        .table-container { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 800px; /* Force scroll on mobile */ }
+        th { text-align: left; padding: 15px; color: #555; border-bottom: 2px solid #eee; font-weight: 600; white-space: nowrap; }
+        td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
+        
+        .item-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+        .item-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #eee; }
+        .custom-badge { background: #fdf6e7; color: #8a6d3b; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+        .ref-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 2px solid var(--admin-gold); cursor: pointer; transition: 0.2s; }
+        
+        /* Customers Avatar */
+        .cust-avatar { width: 35px; height: 35px; border-radius: 50%; background: #eee; object-fit: cover; vertical-align: middle; margin-right: 10px; }
+
+        /* Login Screen */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--admin-dark); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-box {
+            background: white; padding: 30px; border-radius: 20px; text-align: center;
+            width: 90%; max-width: 380px;
+        }
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 13px; outline: none;
+        }
+        .login-btn {
+            background: var(--admin-dark); color: white; border: none; padding: 12px; width: 100%;
+            border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 15px;
+        }
+        .g-btn {
+            background: #fff; border: 1px solid #ddd; padding: 12px; width: 100%;
+            border-radius: 8px; font-weight: 600; color: #444; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        /* Image Modal */
+        .img-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .modal-img { max-width: 95%; max-height: 80%; border-radius: 10px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; }
+
+        /* === MOBILE RESPONSIVENESS === */
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar { position: fixed; left: -260px; height: 100%; top: 60px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+            .sidebar.active { left: 0; }
+            .brand { display: none; } /* Hide sidebar logo on mobile */
+            .main-content { padding: 80px 15px 15px 15px; } /* Top padding for header */
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } /* 2 cols on mobile */
+            .sidebar-overlay.active { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-header">
+        <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+        <div class="mobile-brand">Glow Admin</div>
+    </div>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2 style="color:var(--admin-gold); margin-bottom:5px;"><i class="fas fa-gem"></i></h2>
+            <h3 style="margin-bottom:20px; color:#333;">Admin Access</h3>
+            
+            <input type="email" id="emailInput" class="login-input" placeholder="Admin Email">
+            <input type="password" id="passInput" class="login-input" placeholder="Password">
+            <button class="login-btn" id="emailLoginBtn">Login</button>
+            <div style="font-size:11px; color:#999; margin:10px 0;">OR</div>
+            <button class="g-btn" id="adminLoginBtn"><i class="fab fa-google" style="color:#DB4437"></i> Google Login</button>
+            <div id="loginMsg" style="margin-top:15px; color:#d32f2f; font-size:12px;"></div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand"><i class="fas fa-gem"></i> Glow Admin</div>
+        
+        <div class="menu-item active" id="tab-orders" onclick="switchTab('orders')">
+            <i class="fas fa-shopping-bag"></i> &nbsp; All Orders
+        </div>
+        <div class="menu-item" id="tab-customers" onclick="switchTab('customers')">
+            <i class="fas fa-users"></i> &nbsp; Customers
+        </div>
+        
+        <div style="flex:1"></div>
+        <div class="menu-item" id="adminLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+
+    <div class="main-content">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="totalRev">$0</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="totalCust">0</div>
+                <div class="stat-label">Total Customers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="pendingOrders">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3 id="pageTitle">Recent Orders 📦</h3>
+            </div>
+            
+            <table id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items & Customization</th>
+                        <th>Ref Img</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody"></tbody>
+            </table>
+
+            <table id="customersTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Contact</th>
+                        <th>Joined</th>
+                        <th>Total Orders</th>
+                        <th>Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody id="customersTableBody"></tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="img-modal" id="imageModal" onclick="this.style.display='none'">
+        <span class="close-modal">&times;</span>
+        <img class="modal-img" id="fullSizeImg">
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, signInWithEmailAndPassword, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUB2MY4FyAai9FgZ-6EZP9K9nmsUk5mb4",
+            authDomain: "glow-creation.firebaseapp.com",
+            databaseURL: "https://glow-creation-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "glow-creation",
+            storageBucket: "glow-creation.firebasestorage.app",
+            messagingSenderId: "236856410532",
+            appId: "1:236856410532:web:2253fb7f215f7a232f8131"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const provider = new GoogleAuthProvider();
+
+        // ============================================
+        // 🔒 ADMIN EMAIL (YAHAN APNA EMAIL DALEIN)
+        // ============================================
+        const ALLOWED_ADMIN_EMAIL = "shaswatgcp2023@gmail.com"; 
+        // ============================================
+
+        // GLOBAL DATA STORE
+        let globalUsers = {};
+        let globalOrders = [];
+
+        // 1. AUTH & INIT
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email.toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase()) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                initData();
+            } else if (user) {
+                document.getElementById('loginMsg').innerText = "Access Denied.";
+                signOut(auth);
+            } else {
+                document.getElementById('loginOverlay').style.display = 'flex';
+            }
+        });
+
+        // 2. DATA FETCHING
+        function initData() {
+            const usersRef = ref(db, 'users');
+            document.getElementById('ordersTableBody').innerHTML = "<tr><td colspan='6'>Loading Data...</td></tr>";
+
+            onValue(usersRef, (snapshot) => {
+                if(!snapshot.exists()) return;
+
+                globalUsers = snapshot.val();
+                globalOrders = [];
+
+                // Process Users & Orders
+                Object.keys(globalUsers).forEach(userId => {
+                    const u = globalUsers[userId];
+                    u.uid = userId; // Store ID
+                    
+                    if(u.orders) {
+                        Object.values(u.orders).forEach(order => {
+                            order.fullAddress = u.address || order.address; 
+                            order.customerPhone = u.phone || order.phone;
+                            order.customerName = u.name || order.customerName || 'Guest';
+                            order.dbPath = `users/${userId}/orders/${order.orderId}`;
+                            globalOrders.push(order);
+                        });
+                    }
+                });
+
+                // Sort Orders
+                globalOrders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                updateStats();
+                renderOrdersTable(); // Default View
+                // Pre-calculate customer stats? Done in render function.
+            });
+        }
+
+        // 3. RENDER ORDERS
+        window.renderOrdersTable = () => {
+            const tbody = document.getElementById('ordersTableBody');
+            tbody.innerHTML = '';
+            
+            globalOrders.forEach(order => {
+                let itemsHtml = (order.items || []).map(item => {
+                    let meta = '';
+                    if(item.isCustomItem || item.isFullCustom) {
+                        const d = item.details || {};
+                        meta = `<div style="font-size:10px; color:#666; margin-top:3px; padding-left:5px; border-left:2px solid #996515;">
+                            <b>${d.shape||''} ${d.color||''}</b><br>${d.size||''}
+                        </div>`;
+                    }
+                    return `<div class="item-row">
+                        <img src="${item.image}" class="item-img">
+                        <div><div style="font-weight:500">${item.name}</div>${meta}</div>
+                    </div>`;
+                }).join('');
+
+                let refImg = '-';
+                // Check if any item has uploaded image
+                const customItem = (order.items||[]).find(i => i.details && i.details.uploadedImage);
+                if(customItem) {
+                    refImg = `<img src="${customItem.details.uploadedImage}" class="ref-thumb" onclick="window.viewImage(this.src)">`;
+                }
+
+                const safeId = (order.orderId && order.orderId.length>5) ? order.orderId.substr(4,6) : 'ERR';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>#${safeId}</b><br><span style="font-size:10px; color:#999">${order.orderDate}</span></td>
+                    <td>
+                        <b>${order.customerName}</b><br>
+                        <span style="font-size:11px; color:#666">${order.phone}</span>
+                    </td>
+                    <td>${itemsHtml}</td>
+                    <td style="text-align:center">${refImg}</td>
+                    <td style="font-weight:700; color:#996515">${order.totalAmount}</td>
+                    <td>
+                        <select onchange="window.updateStatus('${order.dbPath}', this.value)" style="padding:5px; border-radius:5px; border:1px solid #ddd;">
+                            <option ${order.status==='Processing'?'selected':''}>Processing</option>
+                            <option ${order.status==='Shipped'?'selected':''}>Shipped</option>
+                            <option ${order.status==='Delivered'?'selected':''}>Delivered</option>
+                        </select>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        // 4. RENDER CUSTOMERS
+        window.renderCustomersTable = () => {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = '';
+
+            Object.values(globalUsers).forEach(user => {
+                const orderCount = user.orders ? Object.keys(user.orders).length : 0;
+                
+                // Calculate Total Spent
+                let totalSpent = 0;
+                if(user.orders) {
+                    Object.values(user.orders).forEach(o => {
+                        let price = parseFloat((o.totalAmount || "0").replace(/[$,]/g, ''));
+                        if(!isNaN(price)) totalSpent += price;
+                    });
+                }
+
+                // Date Join
+                const dateJoined = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <img src="${user.photo || 'https://via.placeholder.com/40'}" class="cust-avatar">
+                        <b>${user.name || 'Guest User'}</b>
+                    </td>
+                    <td>
+                        <div style="font-size:12px;">${user.email || '-'}</div>
+                        <div style="font-size:11px; color:#666;">${user.phone || '-'}</div>
+                    </td>
+                    <td>${dateJoined}</td>
+                    <td style="text-align:center"><span style="background:#f4f6f8; padding:2px 8px; border-radius:10px; font-weight:600;">${orderCount}</span></td>
+                    <td style="font-weight:700; color:#2e7d32">$${totalSpent.toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        // 5. HELPERS
+        function updateStats() {
+            document.getElementById('totalOrders').innerText = globalOrders.length;
+            document.getElementById('totalCust').innerText = Object.keys(globalUsers).length;
+            document.getElementById('pendingOrders').innerText = globalOrders.filter(o => o.status !== 'Delivered').length;
+            
+            let total = 0;
+            globalOrders.forEach(o => {
+                let price = parseFloat((o.totalAmount||"0").replace(/[$,]/g, ''));
+                if(!isNaN(price)) total += price;
+            });
+            document.getElementById('totalRev').innerText = "$" + total.toLocaleString();
+        }
+
+        window.switchTab = (tab) => {
+            // UI Toggle
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById('tab-'+tab).classList.add('active');
+            
+            // Mobile Sidebar Close
+            window.toggleSidebar(); 
+
+            if(tab === 'orders') {
+                document.getElementById('pageTitle').innerText = 'Recent Orders 📦';
+                document.getElementById('ordersTable').style.display = 'table';
+                document.getElementById('customersTable').style.display = 'none';
+                window.renderOrdersTable();
+            } else {
+                document.getElementById('pageTitle').innerText = 'Registered Customers 👥';
+                document.getElementById('ordersTable').style.display = 'none';
+                document.getElementById('customersTable').style.display = 'table';
+                window.renderCustomersTable();
+            }
+        };
+
+        // Mobile Toggle
+        window.toggleSidebar = () => {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            if(sb.style.left === '0px') {
+                sb.style.left = '-260px';
+                overlay.style.display = 'none';
+            } else {
+                sb.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        };
+
+        window.viewImage = (src) => {
+            document.getElementById('fullSizeImg').src = src;
+            document.getElementById('imageModal').style.display = 'flex';
+        };
+
+        window.updateStatus = (path, val) => {
+            if(confirm("Status change to "+val+"?")) update(ref(db, path), {status: val});
+        };
+
+        // Auth Buttons
+        document.getElementById('adminLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
+        document.getElementById('emailLoginBtn').addEventListener('click', () => {
+            const e = document.getElementById('emailInput').value;
+            const p = document.getElementById('passInput').value;
+            signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
+        });
+        document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
+    </script>
+</body>
+</html>
