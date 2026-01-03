@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Glow Admin Panel - Pro</title>
+    <title>Glow Admin - Power Mode</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --admin-gold: #996515; --admin-dark: #1a1a1a; --bg: #f4f6f8; }
+        :root { --admin-gold: #996515; --admin-dark: #1a1a1a; --bg: #f4f6f8; --danger: #e74c3c; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
         body { background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
@@ -50,16 +50,38 @@
 
         /* Table Area */
         .table-container { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 800px; /* Force scroll on mobile */ }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
         th { text-align: left; padding: 15px; color: #555; border-bottom: 2px solid #eee; font-weight: 600; white-space: nowrap; }
         td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
         
+        /* New Checkbox & Delete Styles */
+        .check-col { width: 40px; text-align: center; }
+        .custom-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--admin-gold); }
+        
+        .bulk-actions {
+            display: none; align-items: center; gap: 15px;
+            background: #fff5f5; padding: 10px 15px; border-radius: 8px;
+            border: 1px solid #ffcdd2; margin-bottom: 15px;
+        }
+        .bulk-btn {
+            background: var(--danger); color: white; border: none; padding: 8px 15px;
+            border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .bulk-btn:hover { background: #c0392b; }
+
+        .btn-icon-del {
+            width: 30px; height: 30px; background: #fff0f0; color: var(--danger);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s; border: none;
+        }
+        .btn-icon-del:hover { background: var(--danger); color: white; }
+
+        /* Item Row Styling */
         .item-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
         .item-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #eee; }
         .custom-badge { background: #fdf6e7; color: #8a6d3b; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
         .ref-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 2px solid var(--admin-gold); cursor: pointer; transition: 0.2s; }
-        
-        /* Customers Avatar */
         .cust-avatar { width: 35px; height: 35px; border-radius: 50%; background: #eee; object-fit: cover; vertical-align: middle; margin-right: 10px; }
 
         /* Login Screen */
@@ -72,19 +94,9 @@
             background: white; padding: 30px; border-radius: 20px; text-align: center;
             width: 90%; max-width: 380px;
         }
-        .login-input {
-            width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;
-            border-radius: 8px; font-size: 13px; outline: none;
-        }
-        .login-btn {
-            background: var(--admin-dark); color: white; border: none; padding: 12px; width: 100%;
-            border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 15px;
-        }
-        .g-btn {
-            background: #fff; border: 1px solid #ddd; padding: 12px; width: 100%;
-            border-radius: 8px; font-weight: 600; color: #444; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .login-btn { background: var(--admin-dark); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 15px; }
+        .g-btn { background: #fff; border: 1px solid #ddd; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; color: #444; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
         /* Image Modal */
         .img-modal {
@@ -99,9 +111,9 @@
             .mobile-header { display: flex; }
             .sidebar { position: fixed; left: -260px; height: 100%; top: 60px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
             .sidebar.active { left: 0; }
-            .brand { display: none; } /* Hide sidebar logo on mobile */
-            .main-content { padding: 80px 15px 15px 15px; } /* Top padding for header */
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } /* 2 cols on mobile */
+            .brand { display: none; }
+            .main-content { padding: 80px 15px 15px 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .sidebar-overlay.active { display: block; }
         }
     </style>
@@ -164,20 +176,30 @@
         </div>
 
         <div class="table-container">
-            <div class="table-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <h3 id="pageTitle">Recent Orders 📦</h3>
+            <div class="table-header" style="display:flex; flex-direction:column; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <h3 id="pageTitle">Recent Orders 📦</h3>
+                </div>
+                
+                <div class="bulk-actions" id="bulkActionDiv">
+                    <span style="font-size:13px; color:#d32f2f;"><b id="selectedCount">0</b> items selected</span>
+                    <button class="bulk-btn" onclick="window.bulkDelete()">
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                </div>
             </div>
             
             <table id="ordersTable">
                 <thead>
                     <tr>
+                        <th class="check-col"><input type="checkbox" class="custom-checkbox" onchange="window.toggleAll(this)"></th>
                         <th>Order ID</th>
                         <th>Customer</th>
                         <th>Items & Customization</th>
                         <th>Ref Img</th>
                         <th>Total</th>
                         <th>Status</th>
-                    </tr>
+                        <th>Action</th> </tr>
                 </thead>
                 <tbody id="ordersTableBody"></tbody>
             </table>
@@ -206,7 +228,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, signInWithEmailAndPassword, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // CONFIG
         const firebaseConfig = {
@@ -225,7 +247,7 @@
         const provider = new GoogleAuthProvider();
 
         // ============================================
-        // 🔒 ADMIN EMAIL (YAHAN APNA EMAIL DALEIN)
+        // 🔒 ADMIN EMAIL (IMPORTANT)
         // ============================================
         const ALLOWED_ADMIN_EMAIL = "shaswatgcp2023@gmail.com"; 
         // ============================================
@@ -250,10 +272,13 @@
         // 2. DATA FETCHING
         function initData() {
             const usersRef = ref(db, 'users');
-            document.getElementById('ordersTableBody').innerHTML = "<tr><td colspan='6'>Loading Data...</td></tr>";
+            document.getElementById('ordersTableBody').innerHTML = "<tr><td colspan='8'>Loading Data...</td></tr>";
 
             onValue(usersRef, (snapshot) => {
-                if(!snapshot.exists()) return;
+                if(!snapshot.exists()) {
+                     document.getElementById('ordersTableBody').innerHTML = "<tr><td colspan='8'>No Orders Found</td></tr>";
+                     return;
+                }
 
                 globalUsers = snapshot.val();
                 globalOrders = [];
@@ -261,13 +286,14 @@
                 // Process Users & Orders
                 Object.keys(globalUsers).forEach(userId => {
                     const u = globalUsers[userId];
-                    u.uid = userId; // Store ID
+                    u.uid = userId; 
                     
                     if(u.orders) {
                         Object.values(u.orders).forEach(order => {
                             order.fullAddress = u.address || order.address; 
                             order.customerPhone = u.phone || order.phone;
                             order.customerName = u.name || order.customerName || 'Guest';
+                            // Store Exact Firebase Path for Deletion
                             order.dbPath = `users/${userId}/orders/${order.orderId}`;
                             globalOrders.push(order);
                         });
@@ -278,15 +304,21 @@
                 globalOrders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
                 updateStats();
-                renderOrdersTable(); // Default View
-                // Pre-calculate customer stats? Done in render function.
+                if(document.getElementById('tab-orders').classList.contains('active')) {
+                    renderOrdersTable();
+                } else {
+                    renderCustomersTable();
+                }
             });
         }
 
-        // 3. RENDER ORDERS
+        // 3. RENDER ORDERS (With Checkboxes)
         window.renderOrdersTable = () => {
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = '';
+            
+            // Hide Bulk Bar initially
+            document.getElementById('bulkActionDiv').style.display = 'none';
             
             globalOrders.forEach(order => {
                 let itemsHtml = (order.items || []).map(item => {
@@ -304,7 +336,6 @@
                 }).join('');
 
                 let refImg = '-';
-                // Check if any item has uploaded image
                 const customItem = (order.items||[]).find(i => i.details && i.details.uploadedImage);
                 if(customItem) {
                     refImg = `<img src="${customItem.details.uploadedImage}" class="ref-thumb" onclick="window.viewImage(this.src)">`;
@@ -314,6 +345,9 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+                    <td class="check-col">
+                        <input type="checkbox" class="custom-checkbox order-check" value="${order.dbPath}" onchange="window.updateBulkState()">
+                    </td>
                     <td><b>#${safeId}</b><br><span style="font-size:10px; color:#999">${order.orderDate}</span></td>
                     <td>
                         <b>${order.customerName}</b><br>
@@ -329,6 +363,11 @@
                             <option ${order.status==='Delivered'?'selected':''}>Delivered</option>
                         </select>
                     </td>
+                    <td>
+                        <button class="btn-icon-del" onclick="window.deleteSingle('${order.dbPath}')" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -341,8 +380,6 @@
 
             Object.values(globalUsers).forEach(user => {
                 const orderCount = user.orders ? Object.keys(user.orders).length : 0;
-                
-                // Calculate Total Spent
                 let totalSpent = 0;
                 if(user.orders) {
                     Object.values(user.orders).forEach(o => {
@@ -350,8 +387,6 @@
                         if(!isNaN(price)) totalSpent += price;
                     });
                 }
-
-                // Date Join
                 const dateJoined = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : '-';
 
                 const tr = document.createElement('tr');
@@ -372,12 +407,63 @@
             });
         };
 
-        // 5. HELPERS
+        // 5. DELETE & BULK LOGIC
+        
+        // Single Delete
+        window.deleteSingle = (path) => {
+            if(confirm("⚠️ Are you sure you want to permanently delete this order?")) {
+                remove(ref(db, path))
+                .then(() => alert("Order Deleted Successfully"))
+                .catch(e => alert("Error: " + e.message));
+            }
+        };
+
+        // Toggle All Checkboxes
+        window.toggleAll = (source) => {
+            document.querySelectorAll('.order-check').forEach(c => c.checked = source.checked);
+            window.updateBulkState();
+        };
+
+        // Update Bulk Bar Visibility
+        window.updateBulkState = () => {
+            const checked = document.querySelectorAll('.order-check:checked');
+            const bulkDiv = document.getElementById('bulkActionDiv');
+            if(checked.length > 0) {
+                bulkDiv.style.display = 'flex';
+                document.getElementById('selectedCount').innerText = checked.length;
+            } else {
+                bulkDiv.style.display = 'none';
+            }
+        };
+
+        // Bulk Delete Function
+        window.bulkDelete = () => {
+            const checked = document.querySelectorAll('.order-check:checked');
+            if(checked.length === 0) return;
+
+            if(confirm(`⚠️ WARNING: You are about to DELETE ${checked.length} orders permanently from the database. Continue?`)) {
+                
+                // Create updates object for multi-path update (Faster)
+                const updates = {};
+                checked.forEach(c => {
+                    updates[c.value] = null; // Setting to null deletes in Firebase
+                });
+
+                update(ref(db), updates)
+                .then(() => {
+                    alert("Selected Orders Deleted!");
+                    document.getElementById('bulkActionDiv').style.display = 'none';
+                })
+                .catch(e => alert("Error deleting: " + e.message));
+            }
+        };
+
+
+        // 6. HELPERS
         function updateStats() {
             document.getElementById('totalOrders').innerText = globalOrders.length;
             document.getElementById('totalCust').innerText = Object.keys(globalUsers).length;
             document.getElementById('pendingOrders').innerText = globalOrders.filter(o => o.status !== 'Delivered').length;
-            
             let total = 0;
             globalOrders.forEach(o => {
                 let price = parseFloat((o.totalAmount||"0").replace(/[$,]/g, ''));
@@ -387,27 +473,25 @@
         }
 
         window.switchTab = (tab) => {
-            // UI Toggle
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             document.getElementById('tab-'+tab).classList.add('active');
-            
-            // Mobile Sidebar Close
             window.toggleSidebar(); 
 
             if(tab === 'orders') {
                 document.getElementById('pageTitle').innerText = 'Recent Orders 📦';
                 document.getElementById('ordersTable').style.display = 'table';
                 document.getElementById('customersTable').style.display = 'none';
-                window.renderOrdersTable();
+                document.getElementById('bulkActionDiv').style.display = 'none'; // Reset bulk
+                renderOrdersTable();
             } else {
                 document.getElementById('pageTitle').innerText = 'Registered Customers 👥';
                 document.getElementById('ordersTable').style.display = 'none';
                 document.getElementById('customersTable').style.display = 'table';
-                window.renderCustomersTable();
+                document.getElementById('bulkActionDiv').style.display = 'none'; // Hide bulk
+                renderCustomersTable();
             }
         };
 
-        // Mobile Toggle
         window.toggleSidebar = () => {
             const sb = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
